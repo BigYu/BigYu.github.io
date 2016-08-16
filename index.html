@@ -19,7 +19,7 @@
     <link rel="alternative" href="/atom.xml" title="Yucong&#39;s Blog" type="application/atom+xml">
   
   
-    <link rel="icon" href="//favicon.png">
+    <link rel="icon" href="/assets/img/favicon.ico">
   
   <link rel="stylesheet" href="/css/style.css">
 </head>
@@ -89,6 +89,8 @@
 				        
 							<li><a href="/tags/Frameworks">Frameworks &amp; Libraries</a></li>
 				        
+							<li><a href="/tags/Javascript">Javascript</a></li>
+				        
 						</ul>
 					</nav>
 					<nav class="header-nav">
@@ -113,7 +115,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Frameworks/" style="font-size: 10px;">Frameworks</a>
+						<a href="/tags/Frameworks/" style="font-size: 20px;">Frameworks</a> <a href="/tags/Javascript/" style="font-size: 10px;">Javascript</a>
 					</div>
 				</section>
 				
@@ -159,6 +161,8 @@
 		        
 					<li><a href="/tags/Frameworks">Frameworks &amp; Libraries</a></li>
 		        
+					<li><a href="/tags/Javascript">Javascript</a></li>
+		        
 		        <div class="clearfix"></div>
 				</ul>
 			</nav>
@@ -184,6 +188,70 @@
 </nav>
 
       <div class="body-wrap">
+  
+    <article id="post-underscore-1" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/08/16/underscore-1/" class="article-date">
+  	<time datetime="2016-08-16T06:33:40.000Z" itemprop="datePublished">2016-08-16</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/16/underscore-1/">underscore源码阅读笔记（1）： optimizeCb</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Internal function that returns an efficient (for current engines) version</span></div><div class="line"><span class="comment">// of the passed-in callback, to be repeatedly applied in other Underscore</span></div><div class="line"><span class="comment">// functions.</span></div><div class="line"><span class="keyword">var</span> optimizeCb = <span class="function"><span class="keyword">function</span>(<span class="params">func, context, argCount</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (context === <span class="keyword">void</span> <span class="number">0</span>) <span class="keyword">return</span> func;</div><div class="line">  <span class="keyword">switch</span> (argCount == <span class="literal">null</span> ? <span class="number">3</span> : argCount) &#123;</div><div class="line">    <span class="keyword">case</span> <span class="number">1</span>: <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">value</span>) </span>&#123;</div><div class="line">      <span class="keyword">return</span> func.call(context, value);</div><div class="line">    &#125;;</div><div class="line">    <span class="keyword">case</span> <span class="number">2</span>: <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">value, other</span>) </span>&#123;</div><div class="line">      <span class="keyword">return</span> func.call(context, value, other);</div><div class="line">    &#125;;</div><div class="line">    <span class="keyword">case</span> <span class="number">3</span>: <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">value, index, collection</span>) </span>&#123;</div><div class="line">      <span class="keyword">return</span> func.call(context, value, index, collection);</div><div class="line">    &#125;;</div><div class="line">    <span class="keyword">case</span> <span class="number">4</span>: <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">accumulator, value, index, collection</span>) </span>&#123;</div><div class="line">      <span class="keyword">return</span> func.call(context, accumulator, value, index, collection);</div><div class="line">    &#125;;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> func.apply(context, <span class="built_in">arguments</span>);</div><div class="line">  &#125;;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>这里主要做了两个地方的优化可以注意：</p>
+<ul>
+<li><p>避免使用arguments，尽量使用指定参数</p>
+</li>
+<li><p>尽量用call而不是apply</p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Javascript/">Javascript</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
   
     <article id="post-jQuery-Delegate-events" class="article article-type-post" itemscope itemprop="blogPost">
   
