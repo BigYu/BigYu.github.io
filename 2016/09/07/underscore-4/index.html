@@ -4,18 +4,27 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>underscore源码阅读笔记（1）： optimizeCb | Yucong&#39;s Blog</title>
+  <title>underscore源码阅读笔记（4）： eq(cont.) | Yucong&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="1234567891011121314151617181920212223// Internal function that returns an efficient (for current engines) version// of the passed-in callback, to be repeatedly applied in other Underscore// functions.">
+  <meta name="description" content="javascript判断变量类型的方法
+javascript中 一切皆对象
+
+12345678910111213141516171819202122console.log(toString.call([123]));//[object Array]console.log(toString.call(&apos;123&apos;));//[object String]console.log(toString.call">
 <meta property="og:type" content="article">
-<meta property="og:title" content="underscore源码阅读笔记（1）： optimizeCb">
-<meta property="og:url" content="http://yoursite.com/2016/08/16/underscore-1/index.html">
+<meta property="og:title" content="underscore源码阅读笔记（4）： eq(cont.)">
+<meta property="og:url" content="http://yoursite.com/2016/09/07/underscore-4/index.html">
 <meta property="og:site_name" content="Yucong's Blog">
-<meta property="og:description" content="1234567891011121314151617181920212223// Internal function that returns an efficient (for current engines) version// of the passed-in callback, to be repeatedly applied in other Underscore// functions.">
-<meta property="og:updated_time" content="2016-08-16T07:04:06.316Z">
+<meta property="og:description" content="javascript判断变量类型的方法
+javascript中 一切皆对象
+
+12345678910111213141516171819202122console.log(toString.call([123]));//[object Array]console.log(toString.call(&apos;123&apos;));//[object String]console.log(toString.call">
+<meta property="og:updated_time" content="2016-09-07T03:16:24.820Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="underscore源码阅读笔记（1）： optimizeCb">
-<meta name="twitter:description" content="1234567891011121314151617181920212223// Internal function that returns an efficient (for current engines) version// of the passed-in callback, to be repeatedly applied in other Underscore// functions.">
+<meta name="twitter:title" content="underscore源码阅读笔记（4）： eq(cont.)">
+<meta name="twitter:description" content="javascript判断变量类型的方法
+javascript中 一切皆对象
+
+12345678910111213141516171819202122console.log(toString.call([123]));//[object Array]console.log(toString.call(&apos;123&apos;));//[object String]console.log(toString.call">
   
     <link rel="alternative" href="/atom.xml" title="Yucong&#39;s Blog" type="application/atom+xml">
   
@@ -188,11 +197,11 @@
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="post-underscore-1" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-underscore-4" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/08/16/underscore-1/" class="article-date">
-  	<time datetime="2016-08-16T06:33:40.000Z" itemprop="datePublished">2016-08-16</time>
+      <a href="/2016/09/07/underscore-4/" class="article-date">
+  	<time datetime="2016-09-07T03:01:11.000Z" itemprop="datePublished">2016-09-07</time>
 </a>
     </div>
   
@@ -205,7 +214,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      underscore源码阅读笔记（1）： optimizeCb
+      underscore源码阅读笔记（4）： eq(cont.)
     </h1>
   
 
@@ -214,7 +223,7 @@
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Javascript/">Javascript</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javascript/">javascript</a></li></ul>
 	</div>
 
         
@@ -225,14 +234,22 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Internal function that returns an efficient (for current engines) version</span></div><div class="line"><span class="comment">// of the passed-in callback, to be repeatedly applied in other Underscore</span></div><div class="line"><span class="comment">// functions.</span></div><div class="line"><span class="keyword">var</span> optimizeCb = <span class="function"><span class="keyword">function</span>(<span class="params">func, context, argCount</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (context === <span class="keyword">void</span> <span class="number">0</span>) <span class="keyword">return</span> func;</div><div class="line">  <span class="keyword">switch</span> (argCount == <span class="literal">null</span> ? <span class="number">3</span> : argCount) &#123;</div><div class="line">    <span class="keyword">case</span> <span class="number">1</span>: <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">value</span>) </span>&#123;</div><div class="line">      <span class="keyword">return</span> func.call(context, value);</div><div class="line">    &#125;;</div><div class="line">    <span class="keyword">case</span> <span class="number">2</span>: <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">value, other</span>) </span>&#123;</div><div class="line">      <span class="keyword">return</span> func.call(context, value, other);</div><div class="line">    &#125;;</div><div class="line">    <span class="keyword">case</span> <span class="number">3</span>: <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">value, index, collection</span>) </span>&#123;</div><div class="line">      <span class="keyword">return</span> func.call(context, value, index, collection);</div><div class="line">    &#125;;</div><div class="line">    <span class="keyword">case</span> <span class="number">4</span>: <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">accumulator, value, index, collection</span>) </span>&#123;</div><div class="line">      <span class="keyword">return</span> func.call(context, accumulator, value, index, collection);</div><div class="line">    &#125;;</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> func.apply(context, <span class="built_in">arguments</span>);</div><div class="line">  &#125;;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<p>这里主要做了两个地方的优化可以注意：</p>
+        <h2 id="javascript判断变量类型的方法"><a href="#javascript判断变量类型的方法" class="headerlink" title="javascript判断变量类型的方法"></a>javascript判断变量类型的方法</h2><blockquote>
+<p>javascript中 一切皆对象</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(toString.call([<span class="number">123</span>]));<span class="comment">//[object Array]</span></div><div class="line"><span class="built_in">console</span>.log(toString.call(<span class="string">'123'</span>));<span class="comment">//[object String]</span></div><div class="line"><span class="built_in">console</span>.log(toString.call(&#123;a: <span class="string">'123'</span>&#125;));<span class="comment">//[object Object]</span></div><div class="line"><span class="built_in">console</span>.log(toString.call(<span class="regexp">/123/</span>));<span class="comment">//[object RegExp]</span></div><div class="line"><span class="built_in">console</span>.log(toString.call(<span class="number">123</span>));<span class="comment">//[object Number]</span></div><div class="line"><span class="built_in">console</span>.log(toString.call(<span class="literal">undefined</span>));<span class="comment">//[object Undefined]</span></div><div class="line"><span class="built_in">console</span>.log(toString.call(<span class="literal">null</span>));<span class="comment">//[object Null]</span></div><div class="line"><span class="string">``</span><span class="string">`javascrip</span></div><div class="line"></div><div class="line">## eq函数中不同类型的“相等”判断</div><div class="line"></div><div class="line">### RegExp和string</div><div class="line"></div><div class="line">`<span class="string">``</span>javascript</div><div class="line"><span class="comment">// Strings, numbers, regular expressions, dates, and booleans are compared by value.</span></div><div class="line"><span class="keyword">case</span> <span class="string">'[object RegExp]'</span>:</div><div class="line"><span class="comment">// RegExps are coerced to strings for comparison (Note: '' + /a/i === '/a/i')</span></div><div class="line"><span class="keyword">case</span> <span class="string">'[object String]'</span>:</div><div class="line">  <span class="comment">// Primitives and their corresponding object wrappers are equivalent; thus, `"5"` is</span></div><div class="line">  <span class="comment">// equivalent to `new String("5")`.</span></div><div class="line">  <span class="keyword">return</span> <span class="string">''</span> + a === <span class="string">''</span> + b;</div><div class="line">·</div></pre></td></tr></table></figure>
+<p><strong> 以下“相等”均表示eq返回true </strong></p>
 <ul>
-<li><p>避免使用arguments，尽量使用指定参数</p>
-</li>
-<li><p>尽量用call而不是apply</p>
-</li>
+<li>一个正则表达式 加上’’ 仍让与原来相等</li>
+<li>“abc”和new String(‘abc’)是相等的</li>
 </ul>
+<h3 id="Number"><a href="#Number" class="headerlink" title="Number"></a>Number</h3><p>·<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">case</span> <span class="string">'[object Number]'</span>:</div><div class="line">        <span class="comment">// `NaN`s are equivalent, but non-reflexive.</span></div><div class="line">        <span class="comment">// Object(NaN) is equivalent to NaN</span></div><div class="line">        <span class="keyword">if</span> (+a !== +a) <span class="keyword">return</span> +b !== +b;</div><div class="line">        <span class="comment">// An `egal` comparison is performed for other numeric values.</span></div><div class="line">        <span class="keyword">return</span> +a === <span class="number">0</span> ? <span class="number">1</span> / +a === <span class="number">1</span> / b : +a === +b;</div></pre></td></tr></table></figure></p>
+<ul>
+<li>js中 +NaN === +NaN 为false</li>
+<li>Object(NaN)和NaN相等</li>
+</ul>
+<h3 id="Date-Boolean"><a href="#Date-Boolean" class="headerlink" title="Date/Boolean"></a>Date/Boolean</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">case &apos;[object Date]&apos;:</div><div class="line">case &apos;[object Boolean]&apos;:</div><div class="line">  // Coerce dates and booleans to numeric primitive values. Dates are compared by their</div><div class="line">  // millisecond representations. Note that invalid dates with millisecond representations</div><div class="line">  // of `NaN` are not equivalent.</div><div class="line">  return +a === +b;</div></pre></td></tr></table></figure>
+<p>To be continued</p>
 
       
     </div>
@@ -242,18 +259,9 @@
     
 <nav id="article-nav">
   
-    <a href="/2016/08/17/underscore-2/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          underscore源码阅读笔记（2）： reduce
-        
-      </div>
-    </a>
   
-  
-    <a href="/2016/08/01/jQuery-Delegate-events/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">jquery 为动态添加的元素绑定事件</div>
+    <a href="/2016/09/02/css-position/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">css中的定位</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
