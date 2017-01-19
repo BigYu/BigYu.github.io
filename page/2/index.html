@@ -197,6 +197,76 @@
 
       <div class="body-wrap">
   
+    <article id="post-underscore-2" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/08/17/underscore-2/" class="article-date">
+  	<time datetime="2016-08-17T02:01:07.000Z" itemprop="datePublished">2016-08-17</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/08/17/underscore-2/">underscore源码阅读笔记（2）： reduce</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>reduce和reduceRight的实现：</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// **Reduce** builds up a single result from a list of values, aka `inject`,</span></div><div class="line"><span class="comment">// or `foldl`.</span></div><div class="line">_.reduce = _.foldl = _.inject = createReduce(<span class="number">1</span>);</div><div class="line"></div><div class="line"><span class="comment">// The right-associative version of reduce, also known as `foldr`.</span></div><div class="line">_.reduceRight = _.foldr = createReduce(<span class="number">-1</span>);</div></pre></td></tr></table></figure>
+<ul>
+<li>核心：createReduce - 这是一个function decorator:</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Create a reducing function iterating left or right.</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">createReduce</span>(<span class="params">dir</span>) </span>&#123;</div><div class="line">  <span class="comment">// Optimized iterator function as using arguments.length</span></div><div class="line">  <span class="comment">// in the main function will deoptimize the, see #1991.</span></div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">iterator</span>(<span class="params">obj, iteratee, memo, keys, index, length</span>) </span>&#123;</div><div class="line">    <span class="keyword">for</span> (; index &gt;= <span class="number">0</span> &amp;&amp; index &lt; length; index += dir) &#123;</div><div class="line">      <span class="keyword">var</span> currentKey = keys ? keys[index] : index;</div><div class="line">      memo = iteratee(memo, obj[currentKey], currentKey, obj);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> memo;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">obj, iteratee, memo, context</span>) </span>&#123;</div><div class="line">    iteratee = optimizeCb(iteratee, context, <span class="number">4</span>);</div><div class="line">    <span class="keyword">var</span> keys = !isArrayLike(obj) &amp;&amp; _.keys(obj),</div><div class="line">        length = (keys || obj).length,</div><div class="line">        index = dir &gt; <span class="number">0</span> ? <span class="number">0</span> : length - <span class="number">1</span>;</div><div class="line">    <span class="comment">// Determine the initial value if none is provided.</span></div><div class="line">    <span class="keyword">if</span> (<span class="built_in">arguments</span>.length &lt; <span class="number">3</span>) &#123;</div><div class="line">      memo = obj[keys ? keys[index] : index];</div><div class="line">      index += dir;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> iterator(obj, iteratee, memo, keys, index, length);</div><div class="line">  &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>Optimized iterator function as using arguments.length in the main function will deoptimize the, see #1991.</p>
+</blockquote>
+<p>换我这种人来写，肯定就是用arguments.length来取一下，然后开开心心的开始for循环了，嘿嘿嘿</p>
+<h3 id="195行到198行在干嘛？"><a href="#195行到198行在干嘛？" class="headerlink" title="195行到198行在干嘛？"></a>195行到198行在干嘛？</h3><p>如果没有传初始值，则把第一个值作为初始值，同时移动一下初始迭代位置</p>
+<h3 id="191行"><a href="#191行" class="headerlink" title="191行"></a>191行</h3><p>同时支持数组和集合。可以借鉴：）</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Javascript/">Javascript</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-underscore-1" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">

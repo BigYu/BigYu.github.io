@@ -4,17 +4,30 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>Archives: 2017 | Yucong&#39;s Blog</title>
+  <title>如何配置github ssh连接 | Yucong&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="No matter where we are going, it starts from where we are">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Yucong's Blog">
-<meta property="og:url" content="http://yoursite.com/archives/2017/index.html">
+  <meta name="description" content="测试ssh连接是否正常1ssh -T git@coding.net
+配置ssh连接1. 打开gitbash2. 生成public key用以下命令 邮箱换成自己的
+1ssh-keygen -t rsa -b 4096 -C &quot;your_email@example.com&quot;
+一路回车就行了
+3. 找到生成的public key添加到github首先找到公钥文件id_rsa.pub，默认目录为C:/U">
+<meta property="og:type" content="article">
+<meta property="og:title" content="如何配置github ssh连接">
+<meta property="og:url" content="http://yoursite.com/2017/01/19/github-ssh-config/index.html">
 <meta property="og:site_name" content="Yucong's Blog">
-<meta property="og:description" content="No matter where we are going, it starts from where we are">
+<meta property="og:description" content="测试ssh连接是否正常1ssh -T git@coding.net
+配置ssh连接1. 打开gitbash2. 生成public key用以下命令 邮箱换成自己的
+1ssh-keygen -t rsa -b 4096 -C &quot;your_email@example.com&quot;
+一路回车就行了
+3. 找到生成的public key添加到github首先找到公钥文件id_rsa.pub，默认目录为C:/U">
+<meta property="og:updated_time" content="2017-01-19T08:28:43.629Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Yucong's Blog">
-<meta name="twitter:description" content="No matter where we are going, it starts from where we are">
+<meta name="twitter:title" content="如何配置github ssh连接">
+<meta name="twitter:description" content="测试ssh连接是否正常1ssh -T git@coding.net
+配置ssh连接1. 打开gitbash2. 生成public key用以下命令 邮箱换成自己的
+1ssh-keygen -t rsa -b 4096 -C &quot;your_email@example.com&quot;
+一路回车就行了
+3. 找到生成的public key添加到github首先找到公钥文件id_rsa.pub，默认目录为C:/U">
   
     <link rel="alternative" href="/atom.xml" title="Yucong&#39;s Blog" type="application/atom+xml">
   
@@ -195,80 +208,91 @@
 	</div>
 </nav>
 
-      <div class="body-wrap">
+      <div class="body-wrap"><article id="post-github-ssh-config" class="article article-type-post" itemscope itemprop="blogPost">
   
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/01/19/github-ssh-config/" class="archive-article-date">
-  	<time datetime="2017-01-19T08:24:06.000Z" itemprop="datePublished">Jan 19</time>
+    <div class="article-meta">
+      <a href="/2017/01/19/github-ssh-config/" class="article-date">
+  	<time datetime="2017-01-19T08:24:06.000Z" itemprop="datePublished">2017-01-19</time>
 </a>
-        </div>
-    	 
+    </div>
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/01/19/github-ssh-config/">如何配置github ssh连接</a>
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      如何配置github ssh连接
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+        
 
-        </div>
         <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
+      </div>
+      
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/01/19/html-input/" class="archive-article-date">
-  	<time datetime="2017-01-19T08:12:32.000Z" itemprop="datePublished">Jan 19</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/01/19/html-input/">html input</a>
-    </h1>
-  
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="测试ssh连接是否正常"><a href="#测试ssh连接是否正常" class="headerlink" title="测试ssh连接是否正常"></a>测试ssh连接是否正常</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh -T git@coding.net</div></pre></td></tr></table></figure>
+<h2 id="配置ssh连接"><a href="#配置ssh连接" class="headerlink" title="配置ssh连接"></a>配置ssh连接</h2><h3 id="1-打开gitbash"><a href="#1-打开gitbash" class="headerlink" title="1. 打开gitbash"></a>1. 打开gitbash</h3><h3 id="2-生成public-key"><a href="#2-生成public-key" class="headerlink" title="2. 生成public key"></a>2. 生成public key</h3><p>用以下命令 邮箱换成自己的</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh-keygen -t rsa -b 4096 -C <span class="string">"your_email@example.com"</span></div></pre></td></tr></table></figure>
+<p>一路回车就行了</p>
+<h3 id="3-找到生成的public-key添加到github"><a href="#3-找到生成的public-key添加到github" class="headerlink" title="3. 找到生成的public key添加到github"></a>3. 找到生成的public key添加到github</h3><p>首先找到公钥文件id_rsa.pub，默认目录为C:/Users/[username]/.ssh，用文本编辑器打开并复制</p>
+<p><a href="https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/" target="_blank" rel="external">然后参考这里</a></p>
+<h3 id="到这里就ok了"><a href="#到这里就ok了" class="headerlink" title="到这里就ok了"></a>到这里就ok了</h3><p>可以找repo pull/push一下试一试了</p>
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/html/">html</a></li></ul>
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/01/19/html-input/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">html input</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
 	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
 
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
 
-    
+
+
+
+
 
 </div>
       <footer id="footer">
@@ -294,8 +318,8 @@
 		mathjax: true,
 		animate: true,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
