@@ -4,36 +4,24 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>jquery 为动态添加的元素绑定事件 | Yucong&#39;s Blog</title>
+  <title>html input | Yucong&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="live函数已经被废弃了！！
-如果直接写click函数的话，只能把事件绑定在已经存在的元素上，不能绑定在动态添加的元素上
-尝试过重新调用，结果是重复触发。。。
-###可以用delegate来实现
-1.delegate( selector, eventType, handler )
-例如：
-1234$(&apos;someUlSelector&apos;).delegate(&apos;someLiSelector&apos;, &apos;cli">
+  <meta name="description" content="在html5中 对于可以用accept属性指定接收的文件类型。
+Snytax1&amp;lt;input accept=&quot;file_extension|audio/*|video/*|image/*|media_type&quot;&amp;gt;
+To specify more than one value, separate the values with a comma (e.g. .">
 <meta property="og:type" content="article">
-<meta property="og:title" content="jquery 为动态添加的元素绑定事件">
-<meta property="og:url" content="http://yoursite.com/2016/08/01/jQuery-Delegate-events/index.html">
+<meta property="og:title" content="html input">
+<meta property="og:url" content="http://yoursite.com/2017/01/19/html-input/index.html">
 <meta property="og:site_name" content="Yucong's Blog">
-<meta property="og:description" content="live函数已经被废弃了！！
-如果直接写click函数的话，只能把事件绑定在已经存在的元素上，不能绑定在动态添加的元素上
-尝试过重新调用，结果是重复触发。。。
-###可以用delegate来实现
-1.delegate( selector, eventType, handler )
-例如：
-1234$(&apos;someUlSelector&apos;).delegate(&apos;someLiSelector&apos;, &apos;cli">
-<meta property="og:updated_time" content="2016-08-01T07:46:52.433Z">
+<meta property="og:description" content="在html5中 对于可以用accept属性指定接收的文件类型。
+Snytax1&amp;lt;input accept=&quot;file_extension|audio/*|video/*|image/*|media_type&quot;&amp;gt;
+To specify more than one value, separate the values with a comma (e.g. .">
+<meta property="og:updated_time" content="2017-01-19T08:15:46.772Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="jquery 为动态添加的元素绑定事件">
-<meta name="twitter:description" content="live函数已经被废弃了！！
-如果直接写click函数的话，只能把事件绑定在已经存在的元素上，不能绑定在动态添加的元素上
-尝试过重新调用，结果是重复触发。。。
-###可以用delegate来实现
-1.delegate( selector, eventType, handler )
-例如：
-1234$(&apos;someUlSelector&apos;).delegate(&apos;someLiSelector&apos;, &apos;cli">
+<meta name="twitter:title" content="html input">
+<meta name="twitter:description" content="在html5中 对于可以用accept属性指定接收的文件类型。
+Snytax1&amp;lt;input accept=&quot;file_extension|audio/*|video/*|image/*|media_type&quot;&amp;gt;
+To specify more than one value, separate the values with a comma (e.g. .">
   
     <link rel="alternative" href="/atom.xml" title="Yucong&#39;s Blog" type="application/atom+xml">
   
@@ -214,11 +202,11 @@
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="post-jQuery-Delegate-events" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-html-input" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/08/01/jQuery-Delegate-events/" class="article-date">
-  	<time datetime="2016-08-01T07:45:46.000Z" itemprop="datePublished">2016-08-01</time>
+      <a href="/2017/01/19/html-input/" class="article-date">
+  	<time datetime="2017-01-19T08:12:32.000Z" itemprop="datePublished">2017-01-19</time>
 </a>
     </div>
   
@@ -231,7 +219,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      jquery 为动态添加的元素绑定事件
+      html input
     </h1>
   
 
@@ -240,7 +228,7 @@
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Frameworks/">Frameworks</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/html/">html</a></li></ul>
 	</div>
 
         
@@ -251,13 +239,9 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><strong>live函数已经被废弃了！！</strong></p>
-<p>如果直接写click函数的话，只能把事件绑定在已经存在的元素上，不能绑定在动态添加的元素上</p>
-<p>尝试过重新调用，结果是重复触发。。。</p>
-<p>###可以用delegate来实现</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">.delegate( selector, eventType, handler )</div></pre></td></tr></table></figure>
-<p>例如：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">'someUlSelector'</span>).delegate(<span class="string">'someLiSelector'</span>, <span class="string">'click'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="comment">//codes...</span></div><div class="line">    <span class="comment">//$(this) for the current jquery instance of the element</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+        <p>在html5中 对于<input type="file">可以用accept属性指定接收的文件类型。</p>
+<h3 id="Snytax"><a href="#Snytax" class="headerlink" title="Snytax"></a>Snytax</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">accept</span>=<span class="string">"file_extension|audio/*|video/*|image/*|media_type"</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>To specify more than one value, separate the values with a comma (e.g. <input accept="audio/*,video/*,image/*">.</p>
 
       
     </div>
@@ -267,18 +251,9 @@
     
 <nav id="article-nav">
   
-    <a href="/2016/08/16/underscore-1/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          underscore源码阅读笔记（1）： optimizeCb
-        
-      </div>
-    </a>
   
-  
-    <a href="/2016/08/01/React-notes/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">What I learn after first glance on ReactJs</div>
+    <a href="/2016/12/14/vue-2/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">vue-2</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
