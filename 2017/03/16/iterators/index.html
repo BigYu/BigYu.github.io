@@ -4,27 +4,18 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>event flow | Yucong&#39;s Blog</title>
+  <title>iterators &amp; for...of... es6迭代器 | Yucong&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="流 Flow - 事件流 event flow简单来说 流就是具有方向的数据事件流所描述的就是从页面中接受事件的顺序。
-事件冒泡事件冒泡即事件开始时，由最具体的元素接收（也就是事件发生所在的节点），然后逐级传播到较为不具体的节点
-事件捕获当某个事件发生时，父元素应该更早接收到事件，具体元素则最后接收到事件
-addEventListener1element.addEventListener(even">
+  <meta name="description" content="用for…in…一定要小心！！12345678910111213141516171819var myArray = [1, 2, 3, 4, 5];for (var index in myArray) &amp;#123; // never do this!!  console.log(myArray[index]);&amp;#125;- index不是number而是string，说不定就让自己掉进 &apos;2&apos;">
 <meta property="og:type" content="article">
-<meta property="og:title" content="event flow">
-<meta property="og:url" content="http://yoursite.com/2017/03/15/event-flow/index.html">
+<meta property="og:title" content="iterators & for...of... es6迭代器">
+<meta property="og:url" content="http://yoursite.com/2017/03/16/iterators/index.html">
 <meta property="og:site_name" content="Yucong's Blog">
-<meta property="og:description" content="流 Flow - 事件流 event flow简单来说 流就是具有方向的数据事件流所描述的就是从页面中接受事件的顺序。
-事件冒泡事件冒泡即事件开始时，由最具体的元素接收（也就是事件发生所在的节点），然后逐级传播到较为不具体的节点
-事件捕获当某个事件发生时，父元素应该更早接收到事件，具体元素则最后接收到事件
-addEventListener1element.addEventListener(even">
-<meta property="og:updated_time" content="2017-03-16T13:48:07.024Z">
+<meta property="og:description" content="用for…in…一定要小心！！12345678910111213141516171819var myArray = [1, 2, 3, 4, 5];for (var index in myArray) &amp;#123; // never do this!!  console.log(myArray[index]);&amp;#125;- index不是number而是string，说不定就让自己掉进 &apos;2&apos;">
+<meta property="og:updated_time" content="2017-03-20T08:11:36.881Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="event flow">
-<meta name="twitter:description" content="流 Flow - 事件流 event flow简单来说 流就是具有方向的数据事件流所描述的就是从页面中接受事件的顺序。
-事件冒泡事件冒泡即事件开始时，由最具体的元素接收（也就是事件发生所在的节点），然后逐级传播到较为不具体的节点
-事件捕获当某个事件发生时，父元素应该更早接收到事件，具体元素则最后接收到事件
-addEventListener1element.addEventListener(even">
+<meta name="twitter:title" content="iterators & for...of... es6迭代器">
+<meta name="twitter:description" content="用for…in…一定要小心！！12345678910111213141516171819var myArray = [1, 2, 3, 4, 5];for (var index in myArray) &amp;#123; // never do this!!  console.log(myArray[index]);&amp;#125;- index不是number而是string，说不定就让自己掉进 &apos;2&apos;">
   
     <link rel="alternative" href="/atom.xml" title="Yucong&#39;s Blog" type="application/atom+xml">
   
@@ -205,11 +196,11 @@ addEventListener1element.addEventListener(even">
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="post-event-flow" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-iterators" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/03/15/event-flow/" class="article-date">
-  	<time datetime="2017-03-15T02:23:36.000Z" itemprop="datePublished">2017-03-15</time>
+      <a href="/2017/03/16/iterators/" class="article-date">
+  	<time datetime="2017-03-16T14:01:56.000Z" itemprop="datePublished">2017-03-16</time>
 </a>
     </div>
   
@@ -222,7 +213,7 @@ addEventListener1element.addEventListener(even">
         
   
     <h1 class="article-title" itemprop="name">
-      event flow
+      iterators &amp; for...of... es6迭代器
     </h1>
   
 
@@ -238,12 +229,16 @@ addEventListener1element.addEventListener(even">
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="流-Flow-事件流-event-flow"><a href="#流-Flow-事件流-event-flow" class="headerlink" title="流 Flow - 事件流 event flow"></a>流 Flow - 事件流 event flow</h3><p>简单来说 流就是<strong>具有方向的数据</strong><br>事件流所描述的就是从页面中接受事件的顺序。</p>
-<h3 id="事件冒泡"><a href="#事件冒泡" class="headerlink" title="事件冒泡"></a>事件冒泡</h3><p>事件冒泡即事件开始时，由最具体的元素接收（也就是事件发生所在的节点），然后逐级传播到较为不具体的节点</p>
-<h3 id="事件捕获"><a href="#事件捕获" class="headerlink" title="事件捕获"></a>事件捕获</h3><p>当某个事件发生时，父元素应该更早接收到事件，具体元素则最后接收到事件</p>
-<h3 id="addEventListener"><a href="#addEventListener" class="headerlink" title="addEventListener"></a>addEventListener</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">element.addEventListener(event, <span class="function"><span class="keyword">function</span>, <span class="title">useCapture</span>)</span></div></pre></td></tr></table></figure>
-<p>第一个参数是需要绑定的事件，第二个参数是触发事件后要执行的函数。而第三个参数默认值是false，表示在事件冒泡的阶段调用事件处理函数，如果参数为true，则表示在事件捕获阶段调用处理函数</p>
-<h3 id="DOM-事件流"><a href="#DOM-事件流" class="headerlink" title="DOM 事件流"></a>DOM 事件流</h3><h4 id="事件捕获阶段"><a href="#事件捕获阶段" class="headerlink" title="事件捕获阶段"></a>事件捕获阶段</h4><h4 id="处于目标阶段"><a href="#处于目标阶段" class="headerlink" title="处于目标阶段"></a>处于目标阶段</h4><h4 id="事件冒泡阶段"><a href="#事件冒泡阶段" class="headerlink" title="事件冒泡阶段"></a>事件冒泡阶段</h4><h3 id="阻止事件冒泡"><a href="#阻止事件冒泡" class="headerlink" title="阻止事件冒泡"></a>阻止事件冒泡</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">event.stopPropagation()</div></pre></td></tr></table></figure>
+        <h3 id="用for…in…一定要小心！！"><a href="#用for…in…一定要小心！！" class="headerlink" title="用for…in…一定要小心！！"></a>用for…in…一定要小心！！</h3><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">var myArray = [1, 2, 3, 4, 5];</div><div class="line"></div><div class="line">for (var index in myArray) &#123; // never do this!!</div><div class="line">  console.log(myArray[index]);</div><div class="line">&#125;</div><div class="line"></div><div class="line">- index不是number而是string，说不定就让自己掉进 '2' + 1 == ‘21’ 这样的bug里了</div><div class="line">- for-in还会作用于自定义属性（myArray.name这种）</div><div class="line">- 有些时候顺序是随机的</div><div class="line"></div><div class="line">** 简而言之，for-in是为普通对象设计的，你可以遍历得到字符串类型的键，因此不适用于数组遍历 **</div><div class="line"></div><div class="line">### .forEach的局限</div><div class="line"></div><div class="line">```javascript</div><div class="line">myArray.forEach(funciton(val) &#123;</div><div class="line">  console.log(val);</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>不能使用break语句中断循环，也不能使用return语句返回到外层函数</p>
+<h3 id="for…of-in-es6"><a href="#for…of-in-es6" class="headerlink" title="for…of in es6"></a>for…of in es6</h3><ul>
+<li>正确响应break, continue</li>
+<li>避免for…in的缺点</li>
+<li>除了Array, 还可以遍历String, map, set</li>
+</ul>
+<h3 id="迭代器对象"><a href="#迭代器对象" class="headerlink" title="迭代器对象"></a>迭代器对象</h3><p>for-of循环语句通过方法调用来遍历各种集合。数组、Maps对象、Sets对象以及其它在我们讨论的对象有一个共同点，它们都有一个迭代器方法。</p>
+<p>你可以给任意类型的对象添加迭代器方法。</p>
+<p>当你为对象添加myObject.toString()方法后，就可以将对象转化为字符串，同样地，当你向任意对象添加myObject<a href="">Symbol.iterator</a>方法，就可以遍历这个对象了</p>
 
       
     </div>
@@ -253,18 +248,9 @@ addEventListener1element.addEventListener(even">
     
 <nav id="article-nav">
   
-    <a href="/2017/03/16/iterators/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          iterators &amp; for...of... es6迭代器
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017/01/19/github-ssh-config/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">如何配置github ssh连接</div>
+    <a href="/2017/03/15/event-flow/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">event flow</div>
       <strong class="article-nav-caption">></strong>
     </a>
   

@@ -197,6 +197,68 @@
 
       <div class="body-wrap">
   
+    <article id="post-iterators" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/03/16/iterators/" class="article-date">
+  	<time datetime="2017-03-16T14:01:56.000Z" itemprop="datePublished">2017-03-16</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/16/iterators/">iterators &amp; for...of... es6迭代器</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="用for…in…一定要小心！！"><a href="#用for…in…一定要小心！！" class="headerlink" title="用for…in…一定要小心！！"></a>用for…in…一定要小心！！</h3><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">var myArray = [1, 2, 3, 4, 5];</div><div class="line"></div><div class="line">for (var index in myArray) &#123; // never do this!!</div><div class="line">  console.log(myArray[index]);</div><div class="line">&#125;</div><div class="line"></div><div class="line">- index不是number而是string，说不定就让自己掉进 '2' + 1 == ‘21’ 这样的bug里了</div><div class="line">- for-in还会作用于自定义属性（myArray.name这种）</div><div class="line">- 有些时候顺序是随机的</div><div class="line"></div><div class="line">** 简而言之，for-in是为普通对象设计的，你可以遍历得到字符串类型的键，因此不适用于数组遍历 **</div><div class="line"></div><div class="line">### .forEach的局限</div><div class="line"></div><div class="line">```javascript</div><div class="line">myArray.forEach(funciton(val) &#123;</div><div class="line">  console.log(val);</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>不能使用break语句中断循环，也不能使用return语句返回到外层函数</p>
+<h3 id="for…of-in-es6"><a href="#for…of-in-es6" class="headerlink" title="for…of in es6"></a>for…of in es6</h3><ul>
+<li>正确响应break, continue</li>
+<li>避免for…in的缺点</li>
+<li>除了Array, 还可以遍历String, map, set</li>
+</ul>
+<h3 id="迭代器对象"><a href="#迭代器对象" class="headerlink" title="迭代器对象"></a>迭代器对象</h3><p>for-of循环语句通过方法调用来遍历各种集合。数组、Maps对象、Sets对象以及其它在我们讨论的对象有一个共同点，它们都有一个迭代器方法。</p>
+<p>你可以给任意类型的对象添加迭代器方法。</p>
+<p>当你为对象添加myObject.toString()方法后，就可以将对象转化为字符串，同样地，当你向任意对象添加myObject<a href="">Symbol.iterator</a>方法，就可以遍历这个对象了</p>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-event-flow" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -844,81 +906,6 @@
       
 	<div class="article-tag tagcloud">
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/css/">css</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-underscore-3" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/08/22/underscore-3/" class="article-date">
-  	<time datetime="2016-08-22T06:16:09.000Z" itemprop="datePublished">2016-08-22</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/08/22/underscore-3/">underscore源码阅读笔记（3）： eq</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="eq-函数源码："><a href="#eq-函数源码：" class="headerlink" title="eq 函数源码："></a>eq 函数源码：</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Internal recursive comparison function for `isEqual`.</span></div><div class="line"><span class="keyword">var</span> eq = <span class="function"><span class="keyword">function</span>(<span class="params">a, b, aStack, bStack</span>) </span>&#123;</div><div class="line">  <span class="comment">// Identical objects are equal. `0 === -0`, but they aren't identical.</span></div><div class="line">  <span class="comment">// See the [Harmony `egal` proposal](http://wiki.ecmascript.org/doku.php?id=harmony:egal).</span></div><div class="line">  <span class="keyword">if</span> (a === b) <span class="keyword">return</span> a !== <span class="number">0</span> || <span class="number">1</span> / a === <span class="number">1</span> / b;</div><div class="line">  <span class="comment">// A strict comparison is necessary because `null == undefined`.</span></div><div class="line">  <span class="keyword">if</span> (a == <span class="literal">null</span> || b == <span class="literal">null</span>) <span class="keyword">return</span> a === b;</div><div class="line">  <span class="comment">// Unwrap any wrapped objects.</span></div><div class="line">  <span class="keyword">if</span> (a <span class="keyword">instanceof</span> _) a = a._wrapped;</div><div class="line">  <span class="keyword">if</span> (b <span class="keyword">instanceof</span> _) b = b._wrapped;</div><div class="line">  <span class="comment">// Compare `[[Class]]` names.</span></div><div class="line">  <span class="keyword">var</span> className = toString.call(a);</div><div class="line">  <span class="keyword">if</span> (className !== toString.call(b)) <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">  <span class="keyword">switch</span> (className) &#123;</div><div class="line">    <span class="comment">// Strings, numbers, regular expressions, dates, and booleans are compared by value.</span></div><div class="line">    <span class="keyword">case</span> <span class="string">'[object RegExp]'</span>:</div><div class="line">    <span class="comment">// RegExps are coerced to strings for comparison (Note: '' + /a/i === '/a/i')</span></div><div class="line">    <span class="keyword">case</span> <span class="string">'[object String]'</span>:</div><div class="line">      <span class="comment">// Primitives and their corresponding object wrappers are equivalent; thus, `"5"` is</span></div><div class="line">      <span class="comment">// equivalent to `new String("5")`.</span></div><div class="line">      <span class="keyword">return</span> <span class="string">''</span> + a === <span class="string">''</span> + b;</div><div class="line">    <span class="keyword">case</span> <span class="string">'[object Number]'</span>:</div><div class="line">      <span class="comment">// `NaN`s are equivalent, but non-reflexive.</span></div><div class="line">      <span class="comment">// Object(NaN) is equivalent to NaN</span></div><div class="line">      <span class="keyword">if</span> (+a !== +a) <span class="keyword">return</span> +b !== +b;</div><div class="line">      <span class="comment">// An `egal` comparison is performed for other numeric values.</span></div><div class="line">      <span class="keyword">return</span> +a === <span class="number">0</span> ? <span class="number">1</span> / +a === <span class="number">1</span> / b : +a === +b;</div><div class="line">    <span class="keyword">case</span> <span class="string">'[object Date]'</span>:</div><div class="line">    <span class="keyword">case</span> <span class="string">'[object Boolean]'</span>:</div><div class="line">      <span class="comment">// Coerce dates and booleans to numeric primitive values. Dates are compared by their</span></div><div class="line">      <span class="comment">// millisecond representations. Note that invalid dates with millisecond representations</span></div><div class="line">      <span class="comment">// of `NaN` are not equivalent.</span></div><div class="line">      <span class="keyword">return</span> +a === +b;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="keyword">var</span> areArrays = className === <span class="string">'[object Array]'</span>;</div><div class="line">  <span class="keyword">if</span> (!areArrays) &#123;</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">typeof</span> a != <span class="string">'object'</span> || <span class="keyword">typeof</span> b != <span class="string">'object'</span>) <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line"></div><div class="line">    <span class="comment">// Objects with different constructors are not equivalent, but `Object`s or `Array`s</span></div><div class="line">    <span class="comment">// from different frames are.</span></div><div class="line">    <span class="keyword">var</span> aCtor = a.constructor, bCtor = b.constructor;</div><div class="line">    <span class="keyword">if</span> (aCtor !== bCtor &amp;&amp; !(_.isFunction(aCtor) &amp;&amp; aCtor <span class="keyword">instanceof</span> aCtor &amp;&amp;</div><div class="line">                             _.isFunction(bCtor) &amp;&amp; bCtor <span class="keyword">instanceof</span> bCtor)</div><div class="line">                        &amp;&amp; (<span class="string">'constructor'</span> <span class="keyword">in</span> a &amp;&amp; <span class="string">'constructor'</span> <span class="keyword">in</span> b)) &#123;</div><div class="line">      <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="comment">// Assume equality for cyclic structures. The algorithm for detecting cyclic</span></div><div class="line">  <span class="comment">// structures is adapted from ES 5.1 section 15.12.3, abstract operation `JO`.</span></div><div class="line"></div><div class="line">  <span class="comment">// Initializing stack of traversed objects.</span></div><div class="line">  <span class="comment">// It's done here since we only need them for objects and arrays comparison.</span></div><div class="line">  aStack = aStack || [];</div><div class="line">  bStack = bStack || [];</div><div class="line">  <span class="keyword">var</span> length = aStack.length;</div><div class="line">  <span class="keyword">while</span> (length--) &#123;</div><div class="line">    <span class="comment">// Linear search. Performance is inversely proportional to the number of</span></div><div class="line">    <span class="comment">// unique nested structures.</span></div><div class="line">    <span class="keyword">if</span> (aStack[length] === a) <span class="keyword">return</span> bStack[length] === b;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="comment">// Add the first object to the stack of traversed objects.</span></div><div class="line">  aStack.push(a);</div><div class="line">  bStack.push(b);</div><div class="line"></div><div class="line">  <span class="comment">// Recursively compare objects and arrays.</span></div><div class="line">  <span class="keyword">if</span> (areArrays) &#123;</div><div class="line">    <span class="comment">// Compare array lengths to determine if a deep comparison is necessary.</span></div><div class="line">    length = a.length;</div><div class="line">    <span class="keyword">if</span> (length !== b.length) <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">    <span class="comment">// Deep compare the contents, ignoring non-numeric properties.</span></div><div class="line">    <span class="keyword">while</span> (length--) &#123;</div><div class="line">      <span class="keyword">if</span> (!eq(a[length], b[length], aStack, bStack)) <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">    &#125;</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="comment">// Deep compare objects.</span></div><div class="line">    <span class="keyword">var</span> keys = _.keys(a), key;</div><div class="line">    length = keys.length;</div><div class="line">    <span class="comment">// Ensure that both objects contain the same number of properties before comparing deep equality.</span></div><div class="line">    <span class="keyword">if</span> (_.keys(b).length !== length) <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">    <span class="keyword">while</span> (length--) &#123;</div><div class="line">      <span class="comment">// Deep compare each member</span></div><div class="line">      key = keys[length];</div><div class="line">      <span class="keyword">if</span> (!(_.has(b, key) &amp;&amp; eq(a[key], b[key], aStack, bStack))) <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">  <span class="comment">// Remove the first object from the stack of traversed objects.</span></div><div class="line">  aStack.pop();</div><div class="line">  bStack.pop();</div><div class="line">  <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Perform a deep comparison to check if two objects are equal.</span></div><div class="line">_.isEqual = <span class="function"><span class="keyword">function</span>(<span class="params">a, b</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> eq(a, b);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<ul>
-<li>0 和 -0 的不同判断</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Identical objects are equal. `0 === -0`, but they aren't identical.</span></div><div class="line"><span class="comment">// See the [Harmony `egal` proposal](http://wiki.ecmascript.org/doku.php?id=harmony:egal).</span></div><div class="line"><span class="keyword">if</span> (a === b) <span class="keyword">return</span> a !== <span class="number">0</span> || <span class="number">1</span> / a === <span class="number">1</span> / b;</div></pre></td></tr></table></figure>
-<p>在这里判断时，因为1/0会得到Infinite，而1/-0会得到-Infinite,而 Infinite === - Infinite会得到false，所以_.isEqual(0, -0)会得到false，尽管0 === -0会得到true。更加详细的说明作者在comments中提供了有详细解释的链接。</p>
-<ul>
-<li>_.isEqual(null, undefined) 会得到false</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// A strict comparison is necessary because `null == undefined`.</span></div><div class="line"><span class="keyword">if</span> (a == <span class="literal">null</span> || b == <span class="literal">null</span>) <span class="keyword">return</span> a === b;</div></pre></td></tr></table></figure>
-<ul>
-<li>开始根据Classname来进行深度比较</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Compare `[[Class]]` names.</span></div><div class="line"><span class="keyword">var</span> className = toString.call(a);</div><div class="line"><span class="keyword">if</span> (className !== toString.call(b)) <span class="keyword">return</span> <span class="literal">false</span>;</div></pre></td></tr></table></figure>
-<p>这里会有一个很自然的疑问：下面那一行if是用来干嘛的？上面刚刚赋值，难道这里还会有以外吗？<br>会！</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[] !== [] <span class="comment">// it is true!</span></div></pre></td></tr></table></figure>
-<p>之后就会根据不同的class（或者说type吧）进行不同的比较</p>
-<p>未完待续</p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Javascript/">Javascript</a></li></ul>
 	</div>
 
       
