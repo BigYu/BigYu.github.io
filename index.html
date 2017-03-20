@@ -70,7 +70,7 @@
 						<li>Tags</li>
 						
 						
-						<li>About</li>
+						<li>Über</li>
 						
 					</ul>
 				</div>
@@ -119,7 +119,7 @@
 				
 				<section class="switch-part switch-part2">
 					<div class="widget tagcloud" id="js-tagcloud">
-						<a href="/tags/Dom/" style="font-size: 10px;">Dom</a> <a href="/tags/Frameworks/" style="font-size: 16.67px;">Frameworks</a> <a href="/tags/Javascript/" style="font-size: 20px;">Javascript</a> <a href="/tags/Vue-js/" style="font-size: 10px;">Vue.js</a> <a href="/tags/css/" style="font-size: 13.33px;">css</a> <a href="/tags/html/" style="font-size: 10px;">html</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/随笔/" style="font-size: 10px;">随笔</a>
+						<a href="/tags/Dom/" style="font-size: 10px;">Dom</a> <a href="/tags/ES6/" style="font-size: 13.33px;">ES6</a> <a href="/tags/Frameworks/" style="font-size: 16.67px;">Frameworks</a> <a href="/tags/Javascript/" style="font-size: 20px;">Javascript</a> <a href="/tags/Vue-js/" style="font-size: 10px;">Vue.js</a> <a href="/tags/css/" style="font-size: 13.33px;">css</a> <a href="/tags/html/" style="font-size: 10px;">html</a> <a href="/tags/javascript/" style="font-size: 10px;">javascript</a> <a href="/tags/随笔/" style="font-size: 10px;">随笔</a>
 					</div>
 				</section>
 				
@@ -197,6 +197,74 @@
 
       <div class="body-wrap">
   
+    <article id="post-destructuring" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/03/20/destructuring/" class="article-date">
+  	<time datetime="2017-03-20T13:18:57.000Z" itemprop="datePublished">2017-03-20</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/20/destructuring/">ES^ - destructuring 整体析构赋值</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这个汉化——“ 整体析构赋值”——是抄的，我真的翻译不来。。。</p>
+<h3 id="Array"><a href="#Array" class="headerlink" title="Array"></a>Array</h3><p>// list matching</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> [a, ,b] = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];</div><div class="line"></div><div class="line">a === <span class="number">1</span>;</div><div class="line">b === <span class="number">3</span>;</div></pre></td></tr></table></figure>
+<h3 id="Object"><a href="#Object" class="headerlink" title="Object"></a>Object</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> obj = &#123; a: <span class="number">1</span>, b: <span class="number">2</span>, c: <span class="number">3</span>&#125;;</div><div class="line"><span class="keyword">const</span> &#123;a, c&#125; = obj;</div><div class="line"></div><div class="line">a === <span class="number">1</span>;</div><div class="line">c === <span class="number">3</span>;</div></pre></td></tr></table></figure>
+<h3 id="function-parameters"><a href="#function-parameters" class="headerlink" title="function parameters"></a>function parameters</h3><ul>
+<li>Can be used in parameter position</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">g</span>(<span class="params">&#123;name: x&#125;</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(x);</div><div class="line">&#125;</div><div class="line">g(&#123;name: <span class="number">5</span>&#125;)</div></pre></td></tr></table></figure>
+<ul>
+<li>Work with default args</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">r</span>(<span class="params">&#123;x, y, w = 10, h = 10&#125;</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> x + y + w + h;</div><div class="line">&#125;</div><div class="line">r(&#123;x:<span class="number">1</span>, y:<span class="number">2</span>&#125;) === <span class="number">23</span></div></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ES6/">ES6</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Javascript/">Javascript</a></li></ul>
+	</div>
+
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
+  
     <article id="post-iterators" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
@@ -249,7 +317,7 @@
       
       
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Javascript/">Javascript</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ES6/">ES6</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Javascript/">Javascript</a></li></ul>
 	</div>
 
       
@@ -867,71 +935,6 @@
       
 	<div class="article-tag tagcloud">
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javascript/">javascript</a></li></ul>
-	</div>
-
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-css-position" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/09/02/css-position/" class="article-date">
-  	<time datetime="2016-09-02T12:30:06.000Z" itemprop="datePublished">2016-09-02</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/09/02/css-position/">css中的定位</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>css的position属性定义元素的定位类型，Position属性有四个值：static、fixed、absolute和relative。主流的浏览器都是支持所有值的。</p>
-<p><strong> 著名坑爹货：任何的版本的 Internet Explorer （包括 IE8）都不支持属性值 “inherit”。 </strong></p>
-<h2 id="static"><a href="#static" class="headerlink" title="static"></a>static</h2><p>默认值 表示一个元素不会被positioned 仍然放在正常文档流中（“正常”是什么东西见上一篇关于浮动的）</p>
-<h2 id="relative"><a href="#relative" class="headerlink" title="relative"></a>relative</h2><p>基本的表现和static一样 不同的是可以用top bottom left right属性来控制元素位置的偏移</p>
-<h2 id="fixed"><a href="#fixed" class="headerlink" title="fixed"></a>fixed</h2><p>相对于视窗定位 就是说 即使页面滚动 元素的位置仍然不会改变</p>
-<h2 id="absulote"><a href="#absulote" class="headerlink" title="absulote"></a>absulote</h2><p>absolute 与 fixed 的表现类似，除了它不是相对于视窗而是相对于最近的“positioned”祖先元素。如果绝对定位（position属性的值为absolute）的元素没有“positioned”祖先元素，那么它是相对于文档的 body 元素，并且它会随着页面滚动而移动。</p>
-<blockquote>
-<p>一个“positioned”元素是指position 值不是 static 的元素。</p>
-</blockquote>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/css/">css</a></li></ul>
 	</div>
 
       
