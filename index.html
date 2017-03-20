@@ -32,7 +32,7 @@
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
 			
-			<img lazy-src="/assets/img/513050829605537286.jpg" class="js-avatar">
+			<img lazy-src="/assets/img/avatar.jpg" class="js-avatar">
 			
 		</a>
 
@@ -149,7 +149,7 @@
 		<header id="header" class="inner">
 			<div class="profilepic">
 				
-					<img lazy-src="/assets/img/513050829605537286.jpg" class="js-avatar">
+					<img lazy-src="/assets/img/avatar.jpg" class="js-avatar">
 				
 			</div>
 			<hgroup>
@@ -302,7 +302,17 @@
 <h3 id="事件捕获"><a href="#事件捕获" class="headerlink" title="事件捕获"></a>事件捕获</h3><p>当某个事件发生时，父元素应该更早接收到事件，具体元素则最后接收到事件</p>
 <h3 id="addEventListener"><a href="#addEventListener" class="headerlink" title="addEventListener"></a>addEventListener</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">element.addEventListener(event, <span class="function"><span class="keyword">function</span>, <span class="title">useCapture</span>)</span></div></pre></td></tr></table></figure>
 <p>第一个参数是需要绑定的事件，第二个参数是触发事件后要执行的函数。而第三个参数默认值是false，表示在事件冒泡的阶段调用事件处理函数，如果参数为true，则表示在事件捕获阶段调用处理函数</p>
-<h3 id="DOM-事件流"><a href="#DOM-事件流" class="headerlink" title="DOM 事件流"></a>DOM 事件流</h3><h4 id="事件捕获阶段"><a href="#事件捕获阶段" class="headerlink" title="事件捕获阶段"></a>事件捕获阶段</h4><h4 id="处于目标阶段"><a href="#处于目标阶段" class="headerlink" title="处于目标阶段"></a>处于目标阶段</h4><h4 id="事件冒泡阶段"><a href="#事件冒泡阶段" class="headerlink" title="事件冒泡阶段"></a>事件冒泡阶段</h4><h3 id="阻止事件冒泡"><a href="#阻止事件冒泡" class="headerlink" title="阻止事件冒泡"></a>阻止事件冒泡</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">event.stopPropagation()</div></pre></td></tr></table></figure>
+<h3 id="DOM-事件流"><a href="#DOM-事件流" class="headerlink" title="DOM 事件流"></a>DOM 事件流</h3><ul>
+<li><p>事件捕获阶段</p>
+</li>
+<li><p>处于目标阶段</p>
+</li>
+<li><p>事件冒泡阶段</p>
+</li>
+<li><p>阻止事件冒泡</p>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">event.stopPropagation()</div></pre></td></tr></table></figure>
 
       
     </div>
