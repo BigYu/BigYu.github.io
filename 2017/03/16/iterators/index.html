@@ -6,16 +6,25 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <title>iterators &amp; for...of... es6迭代器 | Yucong&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="用for…in…一定要小心！！12345678910111213141516171819var myArray = [1, 2, 3, 4, 5];for (var index in myArray) &amp;#123; // never do this!!  console.log(myArray[index]);&amp;#125;- index不是number而是string，说不定就让自己掉进 &apos;2&apos;">
+  <meta name="description" content="用for…in…一定要小心！！12345var myArray = [1, 2, 3, 4, 5];for (var index in myArray) &amp;#123; // never do this!!  console.log(myArray[index]);&amp;#125;
+
+index不是number而是string，说不定就让自己掉进 ‘2’ + 1 == ‘21’ 这样的bug里了
+for">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iterators & for...of... es6迭代器">
 <meta property="og:url" content="http://yoursite.com/2017/03/16/iterators/index.html">
 <meta property="og:site_name" content="Yucong's Blog">
-<meta property="og:description" content="用for…in…一定要小心！！12345678910111213141516171819var myArray = [1, 2, 3, 4, 5];for (var index in myArray) &amp;#123; // never do this!!  console.log(myArray[index]);&amp;#125;- index不是number而是string，说不定就让自己掉进 &apos;2&apos;">
-<meta property="og:updated_time" content="2017-03-20T08:11:36.881Z">
+<meta property="og:description" content="用for…in…一定要小心！！12345var myArray = [1, 2, 3, 4, 5];for (var index in myArray) &amp;#123; // never do this!!  console.log(myArray[index]);&amp;#125;
+
+index不是number而是string，说不定就让自己掉进 ‘2’ + 1 == ‘21’ 这样的bug里了
+for">
+<meta property="og:updated_time" content="2017-03-20T08:16:06.628Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iterators & for...of... es6迭代器">
-<meta name="twitter:description" content="用for…in…一定要小心！！12345678910111213141516171819var myArray = [1, 2, 3, 4, 5];for (var index in myArray) &amp;#123; // never do this!!  console.log(myArray[index]);&amp;#125;- index不是number而是string，说不定就让自己掉进 &apos;2&apos;">
+<meta name="twitter:description" content="用for…in…一定要小心！！12345var myArray = [1, 2, 3, 4, 5];for (var index in myArray) &amp;#123; // never do this!!  console.log(myArray[index]);&amp;#125;
+
+index不是number而是string，说不定就让自己掉进 ‘2’ + 1 == ‘21’ 这样的bug里了
+for">
   
     <link rel="alternative" href="/atom.xml" title="Yucong&#39;s Blog" type="application/atom+xml">
   
@@ -71,7 +80,7 @@
 						<li>Tags</li>
 						
 						
-						<li>Über</li>
+						<li>About</li>
 						
 					</ul>
 				</div>
@@ -229,7 +238,14 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="用for…in…一定要小心！！"><a href="#用for…in…一定要小心！！" class="headerlink" title="用for…in…一定要小心！！"></a>用for…in…一定要小心！！</h3><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">var myArray = [1, 2, 3, 4, 5];</div><div class="line"></div><div class="line">for (var index in myArray) &#123; // never do this!!</div><div class="line">  console.log(myArray[index]);</div><div class="line">&#125;</div><div class="line"></div><div class="line">- index不是number而是string，说不定就让自己掉进 '2' + 1 == ‘21’ 这样的bug里了</div><div class="line">- for-in还会作用于自定义属性（myArray.name这种）</div><div class="line">- 有些时候顺序是随机的</div><div class="line"></div><div class="line">** 简而言之，for-in是为普通对象设计的，你可以遍历得到字符串类型的键，因此不适用于数组遍历 **</div><div class="line"></div><div class="line">### .forEach的局限</div><div class="line"></div><div class="line">```javascript</div><div class="line">myArray.forEach(funciton(val) &#123;</div><div class="line">  console.log(val);</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+        <h3 id="用for…in…一定要小心！！"><a href="#用for…in…一定要小心！！" class="headerlink" title="用for…in…一定要小心！！"></a>用for…in…一定要小心！！</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> myArray = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];</div><div class="line"></div><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> index <span class="keyword">in</span> myArray) &#123; <span class="comment">// never do this!!</span></div><div class="line">  <span class="built_in">console</span>.log(myArray[index]);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>index不是number而是string，说不定就让自己掉进 ‘2’ + 1 == ‘21’ 这样的bug里了</li>
+<li>for-in还会作用于自定义属性（myArray.name这种）</li>
+<li>有些时候顺序是随机的</li>
+</ul>
+<p><strong> 简而言之，for-in是为普通对象设计的，你可以遍历得到字符串类型的键，因此不适用于数组遍历 </strong></p>
+<h3 id="forEach的局限"><a href="#forEach的局限" class="headerlink" title=".forEach的局限"></a>.forEach的局限</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">myArray.forEach(funciton(val) &#123;</div><div class="line">  <span class="built_in">console</span>.log(val);</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
 <p>不能使用break语句中断循环，也不能使用return语句返回到外层函数</p>
 <h3 id="for…of-in-es6"><a href="#for…of-in-es6" class="headerlink" title="for…of in es6"></a>for…of in es6</h3><ul>
 <li>正确响应break, continue</li>
@@ -239,6 +255,7 @@
 <h3 id="迭代器对象"><a href="#迭代器对象" class="headerlink" title="迭代器对象"></a>迭代器对象</h3><p>for-of循环语句通过方法调用来遍历各种集合。数组、Maps对象、Sets对象以及其它在我们讨论的对象有一个共同点，它们都有一个迭代器方法。</p>
 <p>你可以给任意类型的对象添加迭代器方法。</p>
 <p>当你为对象添加myObject.toString()方法后，就可以将对象转化为字符串，同样地，当你向任意对象添加myObject<a href="">Symbol.iterator</a>方法，就可以遍历这个对象了</p>
+<p>for-of循环首先调用集合的<a href="">Symbol.iterator</a>方法，紧接着返回一个新的迭代器对象。迭代器对象可以是任意具有.next()方法的对象；for-of循环将重复调用这个方法，每次循环调用一次</p>
 
       
     </div>
