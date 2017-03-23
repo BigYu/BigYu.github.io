@@ -4,30 +4,24 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>html input | Yucong&#39;s Blog</title>
+  <title>Javascript中的稀疏数组 sparse arrays vs. 密集数组 dense arrays | Yucong&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="在html5中 对于
-1&amp;lt;input type=&quot;file&quot;&amp;gt;
-可以用accept属性指定接收的文件类型。
-Snytax1&amp;lt;input accept=&quot;file_extension|audio/*|video/*|image/*|media_type&quot;&amp;gt;
-To specify more than one value, separate the values with a c">
+  <meta name="description" content="大多数情况下，javascript中的数组是稀疏数组（其实就是k-v pairs），也就是说a[0], a[100]存在，但是a[1]到a[99]可能都不存在。
+不存在，不是说存在但是是undefined,就是真正的不存在:如果用foreach访问并console.log，会发现根本没有这么一项，而不是输出一个undefined
+实际上,JavaScript并没有常规的数组,所有的数组其实就是个对">
 <meta property="og:type" content="article">
-<meta property="og:title" content="html input">
-<meta property="og:url" content="http://yoursite.com/2017/01/19/html-input/index.html">
+<meta property="og:title" content="Javascript中的稀疏数组 sparse arrays vs. 密集数组 dense arrays">
+<meta property="og:url" content="http://yoursite.com/2017/03/21/dense-arrays/index.html">
 <meta property="og:site_name" content="Yucong's Blog">
-<meta property="og:description" content="在html5中 对于
-1&amp;lt;input type=&quot;file&quot;&amp;gt;
-可以用accept属性指定接收的文件类型。
-Snytax1&amp;lt;input accept=&quot;file_extension|audio/*|video/*|image/*|media_type&quot;&amp;gt;
-To specify more than one value, separate the values with a c">
-<meta property="og:updated_time" content="2017-01-19T08:29:30.297Z">
+<meta property="og:description" content="大多数情况下，javascript中的数组是稀疏数组（其实就是k-v pairs），也就是说a[0], a[100]存在，但是a[1]到a[99]可能都不存在。
+不存在，不是说存在但是是undefined,就是真正的不存在:如果用foreach访问并console.log，会发现根本没有这么一项，而不是输出一个undefined
+实际上,JavaScript并没有常规的数组,所有的数组其实就是个对">
+<meta property="og:updated_time" content="2017-03-23T06:09:27.267Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="html input">
-<meta name="twitter:description" content="在html5中 对于
-1&amp;lt;input type=&quot;file&quot;&amp;gt;
-可以用accept属性指定接收的文件类型。
-Snytax1&amp;lt;input accept=&quot;file_extension|audio/*|video/*|image/*|media_type&quot;&amp;gt;
-To specify more than one value, separate the values with a c">
+<meta name="twitter:title" content="Javascript中的稀疏数组 sparse arrays vs. 密集数组 dense arrays">
+<meta name="twitter:description" content="大多数情况下，javascript中的数组是稀疏数组（其实就是k-v pairs），也就是说a[0], a[100]存在，但是a[1]到a[99]可能都不存在。
+不存在，不是说存在但是是undefined,就是真正的不存在:如果用foreach访问并console.log，会发现根本没有这么一项，而不是输出一个undefined
+实际上,JavaScript并没有常规的数组,所有的数组其实就是个对">
   
     <link rel="alternative" href="/atom.xml" title="Yucong&#39;s Blog" type="application/atom+xml">
   
@@ -208,11 +202,11 @@ To specify more than one value, separate the values with a c">
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="post-html-input" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-dense-arrays" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/01/19/html-input/" class="article-date">
-  	<time datetime="2017-01-19T08:12:32.000Z" itemprop="datePublished">2017-01-19</time>
+      <a href="/2017/03/21/dense-arrays/" class="article-date">
+  	<time datetime="2017-03-21T06:49:41.000Z" itemprop="datePublished">2017-03-21</time>
 </a>
     </div>
   
@@ -225,7 +219,7 @@ To specify more than one value, separate the values with a c">
         
   
     <h1 class="article-title" itemprop="name">
-      html input
+      Javascript中的稀疏数组 sparse arrays vs. 密集数组 dense arrays
     </h1>
   
 
@@ -234,7 +228,7 @@ To specify more than one value, separate the values with a c">
       <div class="article-info article-info-post">
         
 	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/html/">html</a></li></ul>
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javascript/">javascript</a></li></ul>
 	</div>
 
         
@@ -245,12 +239,24 @@ To specify more than one value, separate the values with a c">
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>在html5中 对于</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span>&gt;</span></div></pre></td></tr></table></figure>
-<p>可以用accept属性指定接收的文件类型。</p>
-<h3 id="Snytax"><a href="#Snytax" class="headerlink" title="Snytax"></a>Snytax</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">accept</span>=<span class="string">"file_extension|audio/*|video/*|image/*|media_type"</span>&gt;</span></div></pre></td></tr></table></figure>
-<p>To specify more than one value, separate the values with a comma (e.g.</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">accept</span>=<span class="string">"audio/*,video/*,image/*"</span> /&gt;</span></div></pre></td></tr></table></figure>
+        <p>大多数情况下，javascript中的数组是稀疏数组（其实就是k-v pairs），也就是说a[0], a[100]存在，但是a[1]到a[99]可能都不存在。</p>
+<p>不存在，不是说存在但是是undefined,就是真正的不存在:如果用foreach访问并console.log，会发现根本没有这么一项，而不是输出一个undefined</p>
+<p>实际上,JavaScript并没有常规的数组,所有的数组其实就是个对象,只不过会自动管理一些”数字”属性和length属性罢了.说的更直接一点,JavaScript中的数组根本没有索引,因为索引应该是数字,而JavaScript中数组的索引其实是字符串.arr[1]其实就是arr[“1”],给arr[“1000”] = 1,arr.length也会自动变为1001.这些表现的根本原因就是,JavaScript中的对象就是字符串到任意值的键值对.注意键只能是字符串</p>
+<h3 id="sparse-arrays"><a href="#sparse-arrays" class="headerlink" title="sparse arrays"></a>sparse arrays</h3><ul>
+<li>得到一个稀疏数组</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> sparseArr1 = <span class="keyword">new</span> <span class="built_in">Array</span>(<span class="number">3</span>);</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> sparseArr2 = [];</div><div class="line"></div><div class="line">sparseArr2[<span class="number">0</span>] = <span class="number">1</span>;</div><div class="line">sparseArr2[<span class="number">100</span>] = <span class="number">100</span>;</div></pre></td></tr></table></figure>
+<ul>
+<li>遍历稀疏数组，所有的“空隙”会被跳过<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> sparseArr2 = [];</div><div class="line"></div><div class="line">sparseArr2[<span class="number">0</span>] = <span class="number">1</span>;</div><div class="line">sparseArr2[<span class="number">100</span>] = <span class="number">100</span>;</div><div class="line"></div><div class="line">sparseArr2.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">index, val</span>) </span>&#123; <span class="built_in">console</span>.log(index); <span class="built_in">console</span>.log(val) &#125;) <span class="comment">// output: 1 0 100 100</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="dense-arrays"><a href="#dense-arrays" class="headerlink" title="dense arrays"></a>dense arrays</h3><ul>
+<li>得到一个密集数组</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Array</span>(<span class="literal">undefined</span>, <span class="literal">undefined</span>, <span class="literal">undefined</span>)</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> denseArr1 = <span class="built_in">Array</span>.apply(<span class="literal">null</span>, <span class="built_in">Array</span>(<span class="number">3</span>))；</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> denseArr2 = <span class="built_in">Array</span>.apply(<span class="literal">null</span>, <span class="built_in">Array</span>(<span class="number">3</span>)).map(<span class="built_in">Function</span>.prototype.call.bind(<span class="built_in">Number</span>))</div></pre></td></tr></table></figure>
 
       
     </div>
@@ -260,18 +266,9 @@ To specify more than one value, separate the values with a c">
     
 <nav id="article-nav">
   
-    <a href="/2017/01/19/github-ssh-config/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          如何配置github ssh连接
-        
-      </div>
-    </a>
   
-  
-    <a href="/2016/12/13/vuejs-1/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Vue.js学习 - 创建第一个应用</div>
+    <a href="/2017/03/20/destructuring/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">ES6 - destructuring 整体析构赋值</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
