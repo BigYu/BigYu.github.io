@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" >
+  <title>Backbone model- on vs listenTo | Yucong&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="发现好久没有写blog了 要捡回来这个好习惯：）
+今天遇到了一个bug，给一个全局的（不要吐槽,legacy code留下来的全局的东西没那么好消灭干净）添加了一个事件的callback，大致代码是这样
+123aGlobalModel.on(&apos;a-event&apos;, () =&amp;gt; &amp;#123;  someView.doSomething();&amp;#125;);
+原因是，someView被remove">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Backbone model- on vs listenTo">
+<meta property="og:url" content="http://yoursite.com/2017/07/10/on-vs-listenTo/index.html">
+<meta property="og:site_name" content="Yucong's Blog">
+<meta property="og:description" content="发现好久没有写blog了 要捡回来这个好习惯：）
+今天遇到了一个bug，给一个全局的（不要吐槽,legacy code留下来的全局的东西没那么好消灭干净）添加了一个事件的callback，大致代码是这样
+123aGlobalModel.on(&apos;a-event&apos;, () =&amp;gt; &amp;#123;  someView.doSomething();&amp;#125;);
+原因是，someView被remove">
+<meta property="og:updated_time" content="2017-07-10T09:33:21.001Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Backbone model- on vs listenTo">
+<meta name="twitter:description" content="发现好久没有写blog了 要捡回来这个好习惯：）
+今天遇到了一个bug，给一个全局的（不要吐槽,legacy code留下来的全局的东西没那么好消灭干净）添加了一个事件的callback，大致代码是这样
+123aGlobalModel.on(&apos;a-event&apos;, () =&amp;gt; &amp;#123;  someView.doSomething();&amp;#125;);
+原因是，someView被remove">
+  
+    <link rel="alternative" href="/atom.xml" title="Yucong&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/assets/img/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+	<header id="header" class="inner">
+		<a href="/" class="profilepic">
+			
+			<img lazy-src="/assets/img/avatar.jpg" class="js-avatar">
+			
+		</a>
+
+		<hgroup>
+		  <h1 class="header-author"><a href="/">体力劳动者</a></h1>
+		</hgroup>
+
+		
+
+		
+			<div class="switch-btn">
+				<div class="icon">
+					<div class="icon-ctn">
+						<div class="icon-wrap icon-house" data-idx="0">
+							<div class="birdhouse"></div>
+							<div class="birdhouse_holes"></div>
+						</div>
+						<div class="icon-wrap icon-ribbon hide" data-idx="1">
+							<div class="ribbon"></div>
+						</div>
+						
+						
+						<div class="icon-wrap icon-me hide" data-idx="3">
+							<div class="user"></div>
+							<div class="shoulder"></div>
+						</div>
+						
+					</div>
+
+				</div>
+				<div class="tips-box hide">
+					<div class="tips-arrow"></div>
+					<ul class="tips-inner">
+						<li>Menu</li>
+						<li>Tags</li>
+						
+						
+						<li>Über</li>
+						
+					</ul>
+				</div>
+			</div>
+		
+
+		<div class="switch-area">
+			<div class="switch-wrap">
+				<section class="switch-part switch-part1">
+					<nav class="header-menu">
+						<ul>
+						
+							<li><a href="/">Home</a></li>
+				        
+							<li><a href="/archives">All</a></li>
+				        
+							<li><a href="/tags/Frameworks">Frameworks &amp; Libraries</a></li>
+				        
+							<li><a href="/tags/Javascript">Javascript</a></li>
+				        
+							<li><a href="/tags/css">Css</a></li>
+				        
+							<li><a href="/tags/随笔">随笔</a></li>
+				        
+						</ul>
+					</nav>
+					<nav class="header-nav">
+						<div class="social">
+							
+								<a class="github" target="_blank" href="https://github.com/BigYu" title="github">github</a>
+					        
+								<a class="weibo" target="_blank" href="http://weibo.com/1798448072" title="weibo">weibo</a>
+					        
+								<a class="zhihu" target="_blank" href="https://www.zhihu.com/people/jin-yu-cong" title="zhihu">zhihu</a>
+					        
+								<a class="mail" target="_blank" href="mailto:jinyucong911@outlook.com" title="mail">mail</a>
+					        
+								<a class="facebook" target="_blank" href="https://www.facebook.com/profile.php?id=100007633386209" title="facebook">facebook</a>
+					        
+								<a class="twitter" target="_blank" href="https://twitter.com/TinyJYC" title="twitter">twitter</a>
+					        
+						</div>
+					</nav>
+				</section>
+
+				
+				<section class="switch-part switch-part2">
+					<div class="widget tagcloud" id="js-tagcloud">
+						<a href="/tags/Backbone/" style="font-size: 10px;">Backbone</a> <a href="/tags/Dom/" style="font-size: 10px;">Dom</a> <a href="/tags/ES6/" style="font-size: 10px;">ES6</a> <a href="/tags/ES6-ES2015/" style="font-size: 13.33px;">ES6(ES2015)</a> <a href="/tags/Events/" style="font-size: 10px;">Events</a> <a href="/tags/Framework/" style="font-size: 10px;">Framework</a> <a href="/tags/Frameworks/" style="font-size: 16.67px;">Frameworks</a> <a href="/tags/Javascript/" style="font-size: 20px;">Javascript</a> <a href="/tags/Vue-js/" style="font-size: 10px;">Vue.js</a> <a href="/tags/css/" style="font-size: 13.33px;">css</a> <a href="/tags/html/" style="font-size: 10px;">html</a> <a href="/tags/javascript/" style="font-size: 13.33px;">javascript</a> <a href="/tags/随笔/" style="font-size: 10px;">随笔</a>
+					</div>
+				</section>
+				
+
+				
+
+				
+				
+				<section class="switch-part switch-part3">
+				
+					<div id="js-aboutme">No matter where we are going, it starts from where we are</div>
+				</section>
+				
+			</div>
+		</div>
+	</header>
+</div>
+
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+  	<div class="overlay">
+  		<div class="slider-trigger"></div>
+  		<h1 class="header-author js-mobile-header hide">体力劳动者</h1>
+  	</div>
+	<div class="intrude-less">
+		<header id="header" class="inner">
+			<div class="profilepic">
+				
+					<img lazy-src="/assets/img/avatar.jpg" class="js-avatar">
+				
+			</div>
+			<hgroup>
+			  <h1 class="header-author">体力劳动者</h1>
+			</hgroup>
+			
+			<nav class="header-menu">
+				<ul>
+				
+					<li><a href="/">Home</a></li>
+		        
+					<li><a href="/archives">All</a></li>
+		        
+					<li><a href="/tags/Frameworks">Frameworks &amp; Libraries</a></li>
+		        
+					<li><a href="/tags/Javascript">Javascript</a></li>
+		        
+					<li><a href="/tags/css">Css</a></li>
+		        
+					<li><a href="/tags/随笔">随笔</a></li>
+		        
+		        <div class="clearfix"></div>
+				</ul>
+			</nav>
+			<nav class="header-nav">
+				<div class="social">
+					
+						<a class="github" target="_blank" href="https://github.com/BigYu" title="github">github</a>
+			        
+						<a class="weibo" target="_blank" href="http://weibo.com/1798448072" title="weibo">weibo</a>
+			        
+						<a class="zhihu" target="_blank" href="https://www.zhihu.com/people/jin-yu-cong" title="zhihu">zhihu</a>
+			        
+						<a class="mail" target="_blank" href="mailto:jinyucong911@outlook.com" title="mail">mail</a>
+			        
+						<a class="facebook" target="_blank" href="https://www.facebook.com/profile.php?id=100007633386209" title="facebook">facebook</a>
+			        
+						<a class="twitter" target="_blank" href="https://twitter.com/TinyJYC" title="twitter">twitter</a>
+			        
+				</div>
+			</nav>
+		</header>				
+	</div>
+</nav>
+
+      <div class="body-wrap"><article id="post-on-vs-listenTo" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/07/10/on-vs-listenTo/" class="article-date">
+  	<time datetime="2017-07-10T09:06:50.000Z" itemprop="datePublished">2017-07-10</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Backbone model- on vs listenTo
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+	<div class="article-tag tagcloud">
+		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Backbone/">Backbone</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Events/">Events</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Framework/">Framework</a></li></ul>
+	</div>
+
+        
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>发现好久没有写blog了 要捡回来这个好习惯：）</p>
+<p>今天遇到了一个bug，给一个全局的（不要吐槽,legacy code留下来的全局的东西没那么好消灭干净）添加了一个事件的callback，大致代码是这样</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">aGlobalModel.on(<span class="string">'a-event'</span>, () =&gt; &#123;</div><div class="line">  someView.doSomething();</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>原因是，someView被remove的时候，忘了call gGlabal.off. Ok, 加上off逻辑当然不难，但是：</p>
+<ol>
+<li>直接call off会清理掉所有的handler。这坑爹货是全局的。。。。</li>
+<li>可以指定off哪一个callback，所以这个callback会被传来传去。。比方说有很多处会remove的情况。on 并不是在someView里定义的。</li>
+</ol>
+<p>事实上，listenTo是一个更好的选择。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">someView.listenTo(aGlobalModel, <span class="string">'a-event'</span>, () =&gt; &#123;</div><div class="line">  <span class="comment">// ...code</span></div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>当someView的remove被call到的时候 会自动的执行stopListening.</p>
+<h3 id="看一下Backbone源码"><a href="#看一下Backbone源码" class="headerlink" title="看一下Backbone源码"></a>看一下Backbone源码</h3><ul>
+<li>on</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Bind an event to a `callback` function. Passing `"all"` will bind</span></div><div class="line"><span class="comment">// the callback to all events fired.</span></div><div class="line">Events.on = <span class="function"><span class="keyword">function</span>(<span class="params">name, callback, context</span>) </span>&#123;</div><div class="line">  <span class="keyword">this</span>._events = eventsApi(onApi, <span class="keyword">this</span>._events || &#123;&#125;, name, callback, &#123;</div><div class="line">    context: context,</div><div class="line">    ctx: <span class="keyword">this</span>,</div><div class="line">    listening: _listening</div><div class="line">  &#125;);</div><div class="line"></div><div class="line">  <span class="keyword">if</span> (_listening) &#123;</div><div class="line">    <span class="keyword">var</span> listeners = <span class="keyword">this</span>._listeners || (<span class="keyword">this</span>._listeners = &#123;&#125;);</div><div class="line">    listeners[_listening.id] = _listening;</div><div class="line">    <span class="comment">// Allow the listening to use a counter, instead of tracking</span></div><div class="line">    <span class="comment">// callbacks for library interop</span></div><div class="line">    _listening.interop = <span class="literal">false</span>;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<ul>
+<li>listenTo</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Inversion-of-control versions of `on`. Tell *this* object to listen to</span></div><div class="line"><span class="comment">// an event in another object... keeping track of what it's listening to</span></div><div class="line"><span class="comment">// for easier unbinding later.</span></div><div class="line">Events.listenTo = <span class="function"><span class="keyword">function</span>(<span class="params">obj, name, callback</span>) </span>&#123;</div><div class="line">  <span class="keyword">if</span> (!obj) <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">  <span class="keyword">var</span> id = obj._listenId || (obj._listenId = _.uniqueId(<span class="string">'l'</span>));</div><div class="line">  <span class="keyword">var</span> listeningTo = <span class="keyword">this</span>._listeningTo || (<span class="keyword">this</span>._listeningTo = &#123;&#125;);</div><div class="line">  <span class="keyword">var</span> listening = _listening = listeningTo[id];</div><div class="line"></div><div class="line">  <span class="comment">// This object is not listening to any other events on `obj` yet.</span></div><div class="line">  <span class="comment">// Setup the necessary references to track the listening callbacks.</span></div><div class="line">  <span class="keyword">if</span> (!listening) &#123;</div><div class="line">    <span class="keyword">this</span>._listenId || (<span class="keyword">this</span>._listenId = _.uniqueId(<span class="string">'l'</span>));</div><div class="line">    listening = _listening = listeningTo[id] = <span class="keyword">new</span> Listening(<span class="keyword">this</span>, obj);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="comment">// Bind callbacks on obj.</span></div><div class="line">  <span class="keyword">var</span> error = tryCatchOn(obj, name, callback, <span class="keyword">this</span>);</div><div class="line">  _listening = <span class="keyword">void</span> <span class="number">0</span>;</div><div class="line"></div><div class="line">  <span class="keyword">if</span> (error) <span class="keyword">throw</span> error;</div><div class="line">  <span class="comment">// If the target obj is not Backbone.Events, track events manually.</span></div><div class="line">  <span class="keyword">if</span> (listening.interop) listening.on(name, callback);</div><div class="line"></div><div class="line">  <span class="keyword">return</span> <span class="keyword">this</span>;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>上述代码中用到的eventsApi,是标准的事件，回调迭代器：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Iterates over the standard `event, callback` (as well as the fancy multiple</span></div><div class="line"><span class="comment">// space-separated events `"change blur", callback` and jQuery-style event</span></div><div class="line"><span class="comment">// maps `&#123;event: callback&#125;`).</span></div><div class="line"><span class="keyword">var</span> eventsApi = <span class="function"><span class="keyword">function</span>(<span class="params">iteratee, events, name, callback, opts</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> i = <span class="number">0</span>, names;</div><div class="line">  <span class="keyword">if</span> (name &amp;&amp; <span class="keyword">typeof</span> name === <span class="string">'object'</span>) &#123;</div><div class="line">    <span class="comment">// Handle event maps.</span></div><div class="line">    <span class="keyword">if</span> (callback !== <span class="keyword">void</span> <span class="number">0</span> &amp;&amp; <span class="string">'context'</span> <span class="keyword">in</span> opts &amp;&amp; opts.context === <span class="keyword">void</span> <span class="number">0</span>) opts.context = callback;</div><div class="line">    <span class="keyword">for</span> (names = _.keys(name); i &lt; names.length ; i++) &#123;</div><div class="line">      events = eventsApi(iteratee, events, names[i], name[names[i]], opts);</div><div class="line">    &#125;</div><div class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (name &amp;&amp; eventSplitter.test(name)) &#123;</div><div class="line">    <span class="comment">// Handle space-separated event names by delegating them individually.</span></div><div class="line">    <span class="keyword">for</span> (names = name.split(eventSplitter); i &lt; names.length; i++) &#123;</div><div class="line">      events = iteratee(events, names[i], callback, opts);</div><div class="line">    &#125;</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    <span class="comment">// Finally, standard events.</span></div><div class="line">    events = iteratee(events, name, callback, opts);</div><div class="line">  &#125;</div><div class="line">  <span class="keyword">return</span> events;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/03/24/es6-generator/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">es6-generator</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<div class="share_jia">
+	<!-- JiaThis Button BEGIN -->
+	<div class="jiathis_style">
+		<span class="jiathis_txt">Share to: &nbsp; </span>
+		<a class="jiathis_button_facebook"></a> 
+    <a class="jiathis_button_twitter"></a>
+    <a class="jiathis_button_plus"></a> 
+    <a class="jiathis_button_tsina"></a>
+		<a class="jiathis_button_cqq"></a>
+		<a class="jiathis_button_douban"></a>
+		<a class="jiathis_button_weixin"></a>
+		<a class="jiathis_button_tumblr"></a>
+    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
+	</div>
+	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
+	<!-- JiaThis Button END -->
+</div>
+
+
+
+
+
+
+
+
+</div>
+      <footer id="footer">
+  <div class="outer">
+    <div id="footer-info">
+    	<div class="footer-left">
+    		&copy; 2017 体力劳动者
+    	</div>
+      	<div class="footer-right">
+      		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
+      	</div>
+    </div>
+  </div>
+</footer>
+    </div>
+    
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+
+<script>
+	var yiliaConfig = {
+		fancybox: true,
+		mathjax: true,
+		animate: true,
+		isHome: false,
+		isPost: true,
+		isArchive: false,
+		isTag: false,
+		isCategory: false,
+		open_in_new: false,
+		root: ''
+	}
+</script>
+<script src="http://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+  </div>
+</body>
+</html>

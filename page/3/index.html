@@ -4,30 +4,17 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>ES6 - destructuring 整体析构赋值 | Yucong&#39;s Blog</title>
+  <title>Yucong&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="这个汉化——“ 整体析构赋值”——是抄的，我真的翻译不来。。。
-Array// list matching
-1234const [a, ,b] = [1,2,3];a === 1;b === 3;
-Object12345const obj = &amp;#123; a: 1, b: 2, c: 3&amp;#125;;const &amp;#123;a, c&amp;#125; = obj;a === 1;c === 3;
-fu">
-<meta property="og:type" content="article">
-<meta property="og:title" content="ES6 - destructuring 整体析构赋值">
-<meta property="og:url" content="http://yoursite.com/2017/03/20/destructuring/index.html">
+  <meta name="description" content="No matter where we are going, it starts from where we are">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Yucong's Blog">
+<meta property="og:url" content="http://yoursite.com/page/3/index.html">
 <meta property="og:site_name" content="Yucong's Blog">
-<meta property="og:description" content="这个汉化——“ 整体析构赋值”——是抄的，我真的翻译不来。。。
-Array// list matching
-1234const [a, ,b] = [1,2,3];a === 1;b === 3;
-Object12345const obj = &amp;#123; a: 1, b: 2, c: 3&amp;#125;;const &amp;#123;a, c&amp;#125; = obj;a === 1;c === 3;
-fu">
-<meta property="og:updated_time" content="2017-03-24T08:56:38.188Z">
+<meta property="og:description" content="No matter where we are going, it starts from where we are">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ES6 - destructuring 整体析构赋值">
-<meta name="twitter:description" content="这个汉化——“ 整体析构赋值”——是抄的，我真的翻译不来。。。
-Array// list matching
-1234const [a, ,b] = [1,2,3];a === 1;b === 3;
-Object12345const obj = &amp;#123; a: 1, b: 2, c: 3&amp;#125;;const &amp;#123;a, c&amp;#125; = obj;a === 1;c === 3;
-fu">
+<meta name="twitter:title" content="Yucong's Blog">
+<meta name="twitter:description" content="No matter where we are going, it starts from where we are">
   
     <link rel="alternative" href="/atom.xml" title="Yucong&#39;s Blog" type="application/atom+xml">
   
@@ -208,11 +195,13 @@ fu">
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="post-destructuring" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap">
+  
+    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/03/20/destructuring/" class="article-date">
-  	<time datetime="2017-03-20T13:18:57.000Z" itemprop="datePublished">2017-03-20</time>
+      <a href="/2016/07/31/hello-world/" class="article-date">
+  	<time datetime="2016-07-31T10:19:21.655Z" itemprop="datePublished">2016-07-31</time>
 </a>
     </div>
   
@@ -224,86 +213,43 @@ fu">
       <header class="article-header">
         
   
-    <h1 class="article-title" itemprop="name">
-      ES6 - destructuring 整体析构赋值
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/07/31/hello-world/">Hello World</a>
     </h1>
   
 
       </header>
       
-      <div class="article-info article-info-post">
-        
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ES6-ES2015/">ES6(ES2015)</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Javascript/">Javascript</a></li></ul>
-	</div>
-
-        
-
-        <div class="clearfix"></div>
-      </div>
-      
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>这个汉化——“ 整体析构赋值”——是抄的，我真的翻译不来。。。</p>
-<h3 id="Array"><a href="#Array" class="headerlink" title="Array"></a>Array</h3><p>// list matching</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> [a, ,b] = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];</div><div class="line"></div><div class="line">a === <span class="number">1</span>;</div><div class="line">b === <span class="number">3</span>;</div></pre></td></tr></table></figure>
-<h3 id="Object"><a href="#Object" class="headerlink" title="Object"></a>Object</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> obj = &#123; a: <span class="number">1</span>, b: <span class="number">2</span>, c: <span class="number">3</span>&#125;;</div><div class="line"><span class="keyword">const</span> &#123;a, c&#125; = obj;</div><div class="line"></div><div class="line">a === <span class="number">1</span>;</div><div class="line">c === <span class="number">3</span>;</div></pre></td></tr></table></figure>
-<h3 id="function-parameters"><a href="#function-parameters" class="headerlink" title="function parameters"></a>function parameters</h3><ul>
-<li>Can be used in parameter position</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">g</span>(<span class="params">&#123;name: x&#125;</span>) </span>&#123;</div><div class="line">  <span class="built_in">console</span>.log(x);</div><div class="line">&#125;</div><div class="line">g(&#123;name: <span class="number">5</span>&#125;)</div></pre></td></tr></table></figure>
-<ul>
-<li>Work with default args</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">r</span>(<span class="params">&#123;x, y, w = 10, h = 10&#125;</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> x + y + w + h;</div><div class="line">&#125;</div><div class="line">r(&#123;x:<span class="number">1</span>, y:<span class="number">2</span>&#125;) === <span class="number">23</span></div></pre></td></tr></table></figure>
+        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
 
       
     </div>
     
-  </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2017/03/21/dense-arrays/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          Javascript中的稀疏数组 sparse arrays vs. 密集数组 dense arrays
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2017/03/16/iterators/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">iterators &amp; for...of... es6迭代器</div>
-      <strong class="article-nav-caption">></strong>
-    </a>
-  
-</nav>
+    <div class="article-info article-info-index">
+      
+      
+      
 
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
   
 </article>
 
 
-<div class="share_jia">
-	<!-- JiaThis Button BEGIN -->
-	<div class="jiathis_style">
-		<span class="jiathis_txt">Share to: &nbsp; </span>
-		<a class="jiathis_button_facebook"></a> 
-    <a class="jiathis_button_twitter"></a>
-    <a class="jiathis_button_plus"></a> 
-    <a class="jiathis_button_tsina"></a>
-		<a class="jiathis_button_cqq"></a>
-		<a class="jiathis_button_douban"></a>
-		<a class="jiathis_button_weixin"></a>
-		<a class="jiathis_button_tumblr"></a>
-    <a href="http://www.jiathis.com/share" class="jiathis jiathis_txt jtico jtico_jiathis" target="_blank"></a>
-	</div>
-	<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js?uid=1405949716054953" charset="utf-8"></script>
-	<!-- JiaThis Button END -->
-</div>
 
 
 
@@ -311,7 +257,12 @@ fu">
 
 
 
-
+  
+  
+    <nav id="page-nav">
+      <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
+    </nav>
+  
 </div>
       <footer id="footer">
   <div class="outer">
@@ -335,8 +286,8 @@ fu">
 		fancybox: true,
 		mathjax: true,
 		animate: true,
-		isHome: false,
-		isPost: true,
+		isHome: true,
+		isPost: false,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,
