@@ -70,7 +70,7 @@
 						<li>Tags</li>
 						
 						
-						<li>Über</li>
+						<li>About</li>
 						
 					</ul>
 				</div>
@@ -196,6 +196,78 @@
 </nav>
 
       <div class="body-wrap">
+  
+    <article id="post-defineObject-and-observable-watch" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/09/27/defineObject-and-observable-watch/" class="article-date">
+  	<time datetime="2017-09-27T12:26:26.000Z" itemprop="datePublished">2017-09-27</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/09/27/defineObject-and-observable-watch/">defineProperty and observable/watch</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Object-defineProperty"><a href="#Object-defineProperty" class="headerlink" title="Object.defineProperty"></a>Object.defineProperty</h1><p>在js中我们用可以用这样几种方法定义属性：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">foo.bar = <span class="string">'abc'</span>;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">foo[<span class="string">'bar'</span>] = <span class="string">'abc'</span>;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Object</span>.defineProperty(foo, <span class="string">'bar'</span>, &#123;</div><div class="line">  value: <span class="string">'abc'</span>,</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>defineProperty(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty" target="_blank" rel="external">MDN链接</a>)这种方法，最麻烦，最强大.</p>
+<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Object</span>.defineProperty(obj, prop, descriptor)</div></pre></td></tr></table></figure>
+<h2 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h2><ul>
+<li>obj: 需要被操作的目标对象</li>
+<li>prop: 目标对象需要定义或修改的属性的名称</li>
+<li>descriptor: 将被定义或修改的属性的描述符。</li>
+</ul>
+<h2 id="返回值"><a href="#返回值" class="headerlink" title="返回值"></a>返回值</h2><p>被传递给函数的对象</p>
+<h2 id="descriptor"><a href="#descriptor" class="headerlink" title="descriptor"></a>descriptor</h2><p>之前列出来的比较简单的两种写法，是通过赋值来创建并显示在属性枚举中（<code>for...in</code>或<code>Object.keys</code>），可以被修改，也可以被删除。使用definePropery,可以控制这些：</p>
+<ul>
+<li>configurable: 这个值为true时，descriptor才可以被修改，同时这个property也能从obj上被删除。默认为false。</li>
+<li>enumerable: 这个值为true时，才可以出现在<code>for...in</code>或者<code>Object.keys</code>中</li>
+<li>value: property的值。默认undefined。</li>
+<li>writable: 这个值为true时，propery才能被赋值运算符改变。默认false。</li>
+<li>get/set: 就跟其他的getter/setter差不多，包括es6的getter/setter</li>
+</ul>
+
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+</article>
+
+
+
+
+
+
+
+
+
   
     <article id="post-on-vs-listenTo" class="article article-type-post" itemscope itemprop="blogPost">
   
@@ -852,65 +924,6 @@
 		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Frameworks/">Frameworks</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Vue-js/">Vue.js</a></li></ul>
 	</div>
 
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-    
-  </div>
-  
-</article>
-
-
-
-
-
-
-
-
-
-  
-    <article id="post-underscore-5" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2016/12/03/underscore-5/" class="article-date">
-  	<time datetime="2016-12-03T06:03:34.000Z" itemprop="datePublished">2016-12-03</time>
-</a>
-    </div>
-  
-  <div class="article-inner">
-    
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/12/03/underscore-5/">underscore源码阅读笔记（5）： defer</a>
-    </h1>
-  
-
-      </header>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这周被邪恶的knockout狠狠的坑了一次，解决方法是用defer函数让ko的binding让调用栈结束之后进行。于是看了一下源码，了解一下defer的实现。</p>
-<h2 id="defer"><a href="#defer" class="headerlink" title="defer"></a>defer</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">_.defer = _.partial(_.delay, _, <span class="number">1</span>);</div></pre></td></tr></table></figure>
-<h2 id="partial"><a href="#partial" class="headerlink" title="partial"></a>partial</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Partially apply a function by creating a version that has had some of its</span></div><div class="line"><span class="comment">// arguments pre-filled, without changing its dynamic `this` context. _ acts</span></div><div class="line"><span class="comment">// as a placeholder, allowing any combination of arguments to be pre-filled.</span></div><div class="line">_.partial = <span class="function"><span class="keyword">function</span>(<span class="params">func</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> boundArgs = slice.call(<span class="built_in">arguments</span>, <span class="number">1</span>);</div><div class="line">  <span class="keyword">var</span> bound = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> position = <span class="number">0</span>, length = boundArgs.length;</div><div class="line">    <span class="keyword">var</span> args = <span class="built_in">Array</span>(length);</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; length; i++) &#123;</div><div class="line">      args[i] = boundArgs[i] === _ ? <span class="built_in">arguments</span>[position++] : boundArgs[i];</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">while</span> (position &lt; <span class="built_in">arguments</span>.length) args.push(<span class="built_in">arguments</span>[position++]);</div><div class="line">    <span class="keyword">return</span> executeBound(func, bound, <span class="keyword">this</span>, <span class="keyword">this</span>, args);</div><div class="line">  &#125;;</div><div class="line">  <span class="keyword">return</span></div></pre></td></tr></table></figure>
-<p>Partially apply a function by filling in any number of its arguments, without changing its dynamic this value. A close cousin of bind. You may pass _ in your list of arguments to specify an argument that should not be pre-filled, but left open to supply at call-time.</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> subtract = <span class="function"><span class="keyword">function</span>(<span class="params">a, b</span>) </span>&#123; <span class="keyword">return</span> b - a; &#125;;</div><div class="line">sub5 = _.partial(subtract, <span class="number">5</span>);</div><div class="line">sub5(<span class="number">20</span>);</div><div class="line">=&gt; <span class="number">15</span></div><div class="line"></div><div class="line"><span class="comment">// Using a placeholder</span></div><div class="line">subFrom20 = _.partial(subtract, _, <span class="number">20</span>);</div><div class="line">subFrom20(<span class="number">5</span>);</div><div class="line">=&gt; <span class="number">15</span></div></pre></td></tr></table></figure>
-<h2 id="delay"><a href="#delay" class="headerlink" title="delay"></a>delay</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Delays a function for the given number of milliseconds, and then calls</span></div><div class="line"><span class="comment">// it with the arguments supplied.</span></div><div class="line">_.delay = <span class="function"><span class="keyword">function</span>(<span class="params">func, wait</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> args = slice.call(<span class="built_in">arguments</span>, <span class="number">2</span>);</div><div class="line">  <span class="keyword">return</span> setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="keyword">return</span> func.apply(<span class="literal">null</span>, args);</div><div class="line">  &#125;, wait);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<p><strong> setTimeout() will run asynchronously after finishing current execution block.  </strong></p>
-
-      
-    </div>
-    
-    <div class="article-info article-info-index">
-      
-      
       
 
       

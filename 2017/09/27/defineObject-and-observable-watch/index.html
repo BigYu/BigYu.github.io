@@ -4,30 +4,33 @@
   <meta charset="utf-8">
   
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <title>html input | Yucong&#39;s Blog</title>
+  <title>defineProperty and observable/watch | Yucong&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="在html5中 对于
-1&amp;lt;input type=&quot;file&quot;&amp;gt;
-可以用accept属性指定接收的文件类型。
-Snytax1&amp;lt;input accept=&quot;file_extension|audio/*|video/*|image/*|media_type&quot;&amp;gt;
-To specify more than one value, separate the values with a c">
+  <meta name="description" content="Object.defineProperty在js中我们用可以用这样几种方法定义属性：
+1foo.bar = &apos;abc&apos;;
+1foo[&apos;bar&apos;] = &apos;abc&apos;;
+123Object.defineProperty(foo, &apos;bar&apos;, &amp;#123;  value: &apos;abc&apos;,&amp;#125;);
+defineProperty(MDN链接)这种方法，最麻烦，最强大.
+语法1Object.define">
 <meta property="og:type" content="article">
-<meta property="og:title" content="html input">
-<meta property="og:url" content="http://yoursite.com/2017/01/19/html-input/index.html">
+<meta property="og:title" content="defineProperty and observable/watch">
+<meta property="og:url" content="http://yoursite.com/2017/09/27/defineObject-and-observable-watch/index.html">
 <meta property="og:site_name" content="Yucong's Blog">
-<meta property="og:description" content="在html5中 对于
-1&amp;lt;input type=&quot;file&quot;&amp;gt;
-可以用accept属性指定接收的文件类型。
-Snytax1&amp;lt;input accept=&quot;file_extension|audio/*|video/*|image/*|media_type&quot;&amp;gt;
-To specify more than one value, separate the values with a c">
-<meta property="og:updated_time" content="2017-01-19T08:29:30.297Z">
+<meta property="og:description" content="Object.defineProperty在js中我们用可以用这样几种方法定义属性：
+1foo.bar = &apos;abc&apos;;
+1foo[&apos;bar&apos;] = &apos;abc&apos;;
+123Object.defineProperty(foo, &apos;bar&apos;, &amp;#123;  value: &apos;abc&apos;,&amp;#125;);
+defineProperty(MDN链接)这种方法，最麻烦，最强大.
+语法1Object.define">
+<meta property="og:updated_time" content="2017-09-27T12:41:34.643Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="html input">
-<meta name="twitter:description" content="在html5中 对于
-1&amp;lt;input type=&quot;file&quot;&amp;gt;
-可以用accept属性指定接收的文件类型。
-Snytax1&amp;lt;input accept=&quot;file_extension|audio/*|video/*|image/*|media_type&quot;&amp;gt;
-To specify more than one value, separate the values with a c">
+<meta name="twitter:title" content="defineProperty and observable/watch">
+<meta name="twitter:description" content="Object.defineProperty在js中我们用可以用这样几种方法定义属性：
+1foo.bar = &apos;abc&apos;;
+1foo[&apos;bar&apos;] = &apos;abc&apos;;
+123Object.defineProperty(foo, &apos;bar&apos;, &amp;#123;  value: &apos;abc&apos;,&amp;#125;);
+defineProperty(MDN链接)这种方法，最麻烦，最强大.
+语法1Object.define">
   
     <link rel="alternative" href="/atom.xml" title="Yucong&#39;s Blog" type="application/atom+xml">
   
@@ -208,11 +211,11 @@ To specify more than one value, separate the values with a c">
 	</div>
 </nav>
 
-      <div class="body-wrap"><article id="post-html-input" class="article article-type-post" itemscope itemprop="blogPost">
+      <div class="body-wrap"><article id="post-defineObject-and-observable-watch" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2017/01/19/html-input/" class="article-date">
-  	<time datetime="2017-01-19T08:12:32.000Z" itemprop="datePublished">2017-01-19</time>
+      <a href="/2017/09/27/defineObject-and-observable-watch/" class="article-date">
+  	<time datetime="2017-09-27T12:26:26.000Z" itemprop="datePublished">2017-09-27</time>
 </a>
     </div>
   
@@ -225,7 +228,7 @@ To specify more than one value, separate the values with a c">
         
   
     <h1 class="article-title" itemprop="name">
-      html input
+      defineProperty and observable/watch
     </h1>
   
 
@@ -233,10 +236,6 @@ To specify more than one value, separate the values with a c">
       
       <div class="article-info article-info-post">
         
-	<div class="article-tag tagcloud">
-		<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/html/">html</a></li></ul>
-	</div>
-
         
 
         <div class="clearfix"></div>
@@ -245,12 +244,26 @@ To specify more than one value, separate the values with a c">
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>在html5中 对于</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span>&gt;</span></div></pre></td></tr></table></figure>
-<p>可以用accept属性指定接收的文件类型。</p>
-<h3 id="Snytax"><a href="#Snytax" class="headerlink" title="Snytax"></a>Snytax</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">accept</span>=<span class="string">"file_extension|audio/*|video/*|image/*|media_type"</span>&gt;</span></div></pre></td></tr></table></figure>
-<p>To specify more than one value, separate the values with a comma (e.g.</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">accept</span>=<span class="string">"audio/*,video/*,image/*"</span> /&gt;</span></div></pre></td></tr></table></figure>
+        <h1 id="Object-defineProperty"><a href="#Object-defineProperty" class="headerlink" title="Object.defineProperty"></a>Object.defineProperty</h1><p>在js中我们用可以用这样几种方法定义属性：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">foo.bar = <span class="string">'abc'</span>;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">foo[<span class="string">'bar'</span>] = <span class="string">'abc'</span>;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Object</span>.defineProperty(foo, <span class="string">'bar'</span>, &#123;</div><div class="line">  value: <span class="string">'abc'</span>,</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>defineProperty(<a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty" target="_blank" rel="external">MDN链接</a>)这种方法，最麻烦，最强大.</p>
+<h2 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Object</span>.defineProperty(obj, prop, descriptor)</div></pre></td></tr></table></figure>
+<h2 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h2><ul>
+<li>obj: 需要被操作的目标对象</li>
+<li>prop: 目标对象需要定义或修改的属性的名称</li>
+<li>descriptor: 将被定义或修改的属性的描述符。</li>
+</ul>
+<h2 id="返回值"><a href="#返回值" class="headerlink" title="返回值"></a>返回值</h2><p>被传递给函数的对象</p>
+<h2 id="descriptor"><a href="#descriptor" class="headerlink" title="descriptor"></a>descriptor</h2><p>之前列出来的比较简单的两种写法，是通过赋值来创建并显示在属性枚举中（<code>for...in</code>或<code>Object.keys</code>），可以被修改，也可以被删除。使用definePropery,可以控制这些：</p>
+<ul>
+<li>configurable: 这个值为true时，descriptor才可以被修改，同时这个property也能从obj上被删除。默认为false。</li>
+<li>enumerable: 这个值为true时，才可以出现在<code>for...in</code>或者<code>Object.keys</code>中</li>
+<li>value: property的值。默认undefined。</li>
+<li>writable: 这个值为true时，propery才能被赋值运算符改变。默认false。</li>
+<li>get/set: 就跟其他的getter/setter差不多，包括es6的getter/setter</li>
+</ul>
 
       
     </div>
@@ -260,18 +273,9 @@ To specify more than one value, separate the values with a c">
     
 <nav id="article-nav">
   
-    <a href="/2017/01/19/github-ssh-config/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption"><</strong>
-      <div class="article-nav-title">
-        
-          如何配置github ssh连接
-        
-      </div>
-    </a>
   
-  
-    <a href="/2016/12/13/vuejs-1/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Vue.js学习 - 创建第一个应用</div>
+    <a href="/2017/07/10/on-vs-listenTo/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Backbone model- on vs listenTo</div>
       <strong class="article-nav-caption">></strong>
     </a>
   
