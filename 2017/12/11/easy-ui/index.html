@@ -74,7 +74,7 @@ It">
 						<li>Tags</li>
 						
 						
-						<li>Über</li>
+						<li>About</li>
 						
 					</ul>
 				</div>
@@ -239,8 +239,8 @@ It">
 <p>model</p>
 <figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> &lt; ApplicationRecord</span></div><div class="line">  validates <span class="symbol">:name</span>, <span class="symbol">presence:</span> <span class="literal">true</span></div><div class="line"></div><div class="line">  before_create <span class="keyword">do</span></div><div class="line">    <span class="keyword">self</span>.name = login.capitalize <span class="keyword">if</span> name.blank?</div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
 <p>view</p>
-<figure class="highlight erb"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;%=<span class="ruby"> form_tag(<span class="string">"/login"</span>, <span class="symbol">method:</span> <span class="string">"post"</span>) <span class="keyword">do</span> </span>%&gt;</div><div class="line">  &lt;%=<span class="ruby"> text_field_tag(<span class="symbol">:name</span>) </span>%&gt;</div><div class="line">  &lt;%=<span class="ruby"> password_field_tag(<span class="symbol">:password</span>) </span>%&gt;</div><div class="line">  &lt;%=<span class="ruby"> submit_tag(<span class="string">"Search"</span>) </span>%&gt;</div><div class="line">&lt;%<span class="ruby"> <span class="keyword">end</span> </span>%&gt;</div></pre></td></tr></table></figure>
-<figure class="highlight erb"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;h1&gt;Welcome&lt;/h1&gt;</div><div class="line">&lt;h3&gt;Hello: &lt;%=<span class="ruby"> user.name </span>%&gt;&lt;/h3&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight erb"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="xml"><span class="tag">&lt;<span class="name">%=</span></span></span><span class="ruby"> form_tag(<span class="string">"/login"</span>, <span class="symbol">method:</span> <span class="string">"post"</span>) <span class="keyword">do</span> </span><span class="xml"><span class="tag">%&gt;</span></span></div><div class="line">  <span class="tag">&lt;<span class="name">%=</span></span><span class="ruby"> text_field_tag(<span class="symbol">:name</span>) </span><span class="xml"><span class="tag">%&gt;</span></span></div><div class="line">  <span class="tag">&lt;<span class="name">%=</span></span><span class="ruby"> password_field_tag(<span class="symbol">:password</span>) </span><span class="xml"><span class="tag">%&gt;</span></span></div><div class="line">  <span class="tag">&lt;<span class="name">%=</span></span><span class="ruby"> submit_tag(<span class="string">"Search"</span>) </span><span class="xml"><span class="tag">%&gt;</span></span></div><div class="line"><span class="tag">&lt;<span class="name">%</span></span><span class="ruby"> <span class="keyword">end</span> </span><span class="xml"><span class="tag">%&gt;</span></span></div></pre></td></tr></table></figure>
+<figure class="highlight erb"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="xml"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>Welcome<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></div><div class="line"><span class="tag">&lt;<span class="name">h3</span>&gt;</span>Hello: <span class="tag">&lt;<span class="name">%=</span></span><span class="ruby"> user.name </span><span class="xml"><span class="tag">%&gt;</span><span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span></div></pre></td></tr></table></figure>
 <p>controller</p>
 <figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">LoginsController</span> &lt; ApplicationController</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">create</span></span></div><div class="line">    <span class="keyword">if</span> user = User.authenticate(params[<span class="symbol">:username</span>], params[<span class="symbol">:password</span>])</div><div class="line">      session[<span class="symbol">:current_user_id</span>] = user.id</div><div class="line">      redirect_to landing_url</div><div class="line">    <span class="keyword">end</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
 <p>这一切很简单，在经典的MVC+serverside rendering的架构中，controller和model都是在server side运行,controller来管理business logic：调用哪个model（User），进行什么操作（authenticate），结果是什么（成功则跳转），model用来管理数据：User的字段,query（本例中映射到数据库）等操作。而view，很诚实的根据model里的数据来渲染页面，提交表单。我们没有JavaScript，发不出change，onClick事件，没有办法在view里面进行正则验证，这些逻辑都由controller完成。</p>
@@ -474,6 +474,15 @@ It">
   
     
 <nav id="article-nav">
+  
+    <a href="/2017/12/25/Functional-UI/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption"><</strong>
+      <div class="article-nav-title">
+        
+          Make frontend development easy again
+        
+      </div>
+    </a>
   
   
     <a href="/2017/10/18/deps-collection/" id="article-nav-older" class="article-nav-link-wrap">
