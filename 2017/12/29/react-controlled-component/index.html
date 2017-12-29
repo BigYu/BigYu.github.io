@@ -6,18 +6,21 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>有位孤独的裱糊匠 | Yucong&#39;s Blog</title>
+  <title>React.js Forms - Controlled Components | Yucong&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="说起爱国，每个人都曾经在昏黄的灯光下，啃那些令人热血沸腾的一行行，一段段。也想过能振臂一呼“为中华之崛起而读书”。然而一百年过去了，我泱泱中华也早已不再是那个任人鱼肉的东亚病夫之邦，莘莘学子也早无救亡图存之忧，偶有几个不知是不是无病呻吟之辈锤着打鼓摇着“爱国主义教育”的旌旗，不得回应而啐骂小生们欺师忘祖谓之“毁掉的一代”。或者更需要的是在静夜的微风中细细琢磨一下，究竟何谓爱国，何谓国士，何谓英雄，">
+  <meta name="description" content="(自行脑补评书起手式)话说上回咱们说到，UI = f(r(state, action))。这回咱们把这个r按下不表，单讲这个f…（评书听的少编不下去了=。=||）
+不卖关子了，一个很很受欢迎和好评的f自然是react.js，其中一个很能体现f(state) = UI的概念就是controlled components。汉化过后好像叫受控组件，挺绕口的就不管了。道理都讲过，但是具体怎么写呢？有哪些坑">
 <meta property="og:type" content="article">
-<meta property="og:title" content="有位孤独的裱糊匠">
-<meta property="og:url" content="http://yoursite.com/2016/09/18/essay0/index.html">
+<meta property="og:title" content="React.js Forms - Controlled Components">
+<meta property="og:url" content="http://yoursite.com/2017/12/29/react-controlled-component/index.html">
 <meta property="og:site_name" content="Yucong's Blog">
-<meta property="og:description" content="说起爱国，每个人都曾经在昏黄的灯光下，啃那些令人热血沸腾的一行行，一段段。也想过能振臂一呼“为中华之崛起而读书”。然而一百年过去了，我泱泱中华也早已不再是那个任人鱼肉的东亚病夫之邦，莘莘学子也早无救亡图存之忧，偶有几个不知是不是无病呻吟之辈锤着打鼓摇着“爱国主义教育”的旌旗，不得回应而啐骂小生们欺师忘祖谓之“毁掉的一代”。或者更需要的是在静夜的微风中细细琢磨一下，究竟何谓爱国，何谓国士，何谓英雄，">
-<meta property="og:updated_time" content="2016-09-26T01:22:17.741Z">
+<meta property="og:description" content="(自行脑补评书起手式)话说上回咱们说到，UI = f(r(state, action))。这回咱们把这个r按下不表，单讲这个f…（评书听的少编不下去了=。=||）
+不卖关子了，一个很很受欢迎和好评的f自然是react.js，其中一个很能体现f(state) = UI的概念就是controlled components。汉化过后好像叫受控组件，挺绕口的就不管了。道理都讲过，但是具体怎么写呢？有哪些坑">
+<meta property="og:updated_time" content="2017-12-29T09:30:46.436Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="有位孤独的裱糊匠">
-<meta name="twitter:description" content="说起爱国，每个人都曾经在昏黄的灯光下，啃那些令人热血沸腾的一行行，一段段。也想过能振臂一呼“为中华之崛起而读书”。然而一百年过去了，我泱泱中华也早已不再是那个任人鱼肉的东亚病夫之邦，莘莘学子也早无救亡图存之忧，偶有几个不知是不是无病呻吟之辈锤着打鼓摇着“爱国主义教育”的旌旗，不得回应而啐骂小生们欺师忘祖谓之“毁掉的一代”。或者更需要的是在静夜的微风中细细琢磨一下，究竟何谓爱国，何谓国士，何谓英雄，">
+<meta name="twitter:title" content="React.js Forms - Controlled Components">
+<meta name="twitter:description" content="(自行脑补评书起手式)话说上回咱们说到，UI = f(r(state, action))。这回咱们把这个r按下不表，单讲这个f…（评书听的少编不下去了=。=||）
+不卖关子了，一个很很受欢迎和好评的f自然是react.js，其中一个很能体现f(state) = UI的概念就是controlled components。汉化过后好像叫受控组件，挺绕口的就不管了。道理都讲过，但是具体怎么写呢？有哪些坑">
   
     <link rel="alternative" href="/atom.xml" title="Yucong&#39;s Blog" type="application/atom+xml">
   
@@ -141,32 +144,53 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-essay0" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-react-controlled-component" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      有位孤独的裱糊匠
+      React.js Forms - Controlled Components
     </h1>
   
 
         
-        <a href="/2016/09/18/essay0/" class="archive-article-date">
-  	<time datetime="2016-09-18T01:17:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-09-18</time>
+        <a href="/2017/12/29/react-controlled-component/" class="archive-article-date">
+  	<time datetime="2017-12-29T06:53:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-12-29</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>说起爱国，每个人都曾经在昏黄的灯光下，啃那些令人热血沸腾的一行行，一段段。也想过能振臂一呼“为中华之崛起而读书”。然而一百年过去了，我泱泱中华也早已不再是那个任人鱼肉的东亚病夫之邦，莘莘学子也早无救亡图存之忧，偶有几个不知是不是无病呻吟之辈锤着打鼓摇着“爱国主义教育”的旌旗，不得回应而啐骂小生们欺师忘祖谓之“毁掉的一代”。或者更需要的是在静夜的微风中细细琢磨一下，究竟何谓爱国，何谓国士，何谓英雄，那些年这块染血的土地上究竟是哪些人在扛着破败飘摇的民族前进。<br>翁同龢之辈？他对中华的祸害，怕是远甚于巨贪和珅和清末一干赃官污吏。甲午年鲜血染红的黄海上，多少将士恨不能食其肉寝其皮，此之谓爱国贼。然而他忠心耿耿，满腹经纶，书法文章无不精通，若不是拖甲午战争后腿这个地实在不好洗，有人还想着树之为书生榜样让天下学子效仿吧。<br>邓世昌邓公，此日漫挥天下泪，有公足壮海军威，岂不是大英雄。且不论多少凡夫俗子有邓公之志，邓公之才，邓公之威，只是不知道那些挥着热血红旗的人，可曾计算过要用多少大英雄的躯体，用多少致远舰的残骸，去填平专制农业国和宪政工业国之间的沟壑？<br>哦，对了，百年来，举国歌颂纪念邓公，唯有一大汉奸卖国贼不以为然，认为此举不值得提倡，命令众官兵不要效仿。还修定了《海军惩劝章程》，担心将士们都学邓世昌，以轻生为壮。<br>这个人把自己的姓名，签在了丧权辱国的马关条约和辛丑条约上。<br>这个人不顾我中华上下五千年之文明，整天洋人长洋人短的鼓吹西洋奇技淫巧。<br>这个人无视我中华地大物博，四万万众志成城的百姓，百万正义之师，却宣扬东洋的蕞尔小国多么强大，八国混杂的乌合之众装备精良，闭港闭关不敢一战。</p>
-<p>一百年前的一个傍晚，地平线上矮矮的挂着帝国昏黄夕阳，狼狈的老佛爷光绪帝在西边餐风饮露惶惶如丧家之犬，豺狗般的八国联军在京师烧杀掳掠把东方的瑰宝装上强盗的货轮。还有那位孤独的老人领了老佛爷的懿旨正前往那龙潭虎穴之地。他在想什么？那部已经“不再公开播出”的电视剧中给出了这样一个有趣的场景：老者重重的拿皮鞭抽着陀螺，脸上孩童般的笑容，对着身边的丫鬟笑道：“又要去卖国，当汉奸，去卖国，去当汉奸，去卖国，去当汉奸。。。”<br>或者谈判桌上，换上哪位爱国志士，直斥八国军匪虎狼之心，豺狼之态，让他们知道我们威武天朝正义之师不可战胜，就能让他们俯首称臣，省下那九万万两白银。<br>又或者哪位大儒圣贤，能开化与鸟兽为伍的洋鬼子，使之知礼孝廉耻，明仁义道德，读四书五经，然后知道自己所作所为大悖伦常之道，能在孔孟圣贤庙前向我们赔礼道歉，然后受我天子教化。</p>
-<p>签字的是不是李中堂，除了决定历史课本上黑锅的归属，怕是改变不了中华被列强蹂躏的命运；但从帝国主义嘴里抠回来辽东半岛，抠回来被彻底肢解的命运，恐怕那段岁月里在朝廷上粉墨登场过的，能做到的，也只有一个李鸿章吧。<br>其实他应该蠢一点，无能一点，愚昧一点，或者能让已经瓤子里腐败的清廷，支离破碎的更早一点吧。<br>哦，对了，少荃在日本，还吃了一颗价值一亿两白银的子弹呢。不知道现在的日本国民，是如何看待他们那位开枪的爱国青年的。<br>哦，对了，就算历史课本上给黄海海战的结论是“北洋水师全军覆没”，别忘了日本人可打不沉定远镇远二舰。直到二战，这铁甲巨舰的路线还在发挥着威力。甚至几十年后二战太平洋和大西洋血染的海面上，还在证明着李中堂思路的正确。</p>
-<p>“这是一个人对一个国家的战争”这是国外对甲午战争的一句评论。我们很难判断这句话是否成立——更可能的，这并非一个可以判断真伪的命题，儿仅仅是看到一个拥有“五千年文明”，“地大物博”，“不必与西洋互通有无”的大国支离破碎之后的一句感慨。历史的车轮在时光轴的这个横断面，刻下了一个大大的感叹号！四万万人中，难道只有这么一位可以大声疾呼“世界正经历三千年未有之巨变”，只有以变求变，才能有一线生机。至于那些跪倒在“祖宗之法”“圣贤教诲”前面泣血上奏的忠臣们，他们对中华的祸害，远甚于贪官污吏，远甚于流氓盗匪！时至今日，大家无不感叹鸿章大人生不逢时。但细细一想，也许所有真正能牵引时代前进的人，都要被打上一个“生不逢时”的标签吧：很难被他周围的人认可，不像李某落得个遗臭万年的下场，就算不错了。<br>——这种人是为了未来制造的，为了那个还没有被世人，没有被当时掌握话语权的“主流”接受的那个未来。</p>
-<p>所以，我们的历史书上，歌颂的是邓世昌。总不能歌颂翁老吧。他属于那个忠君报国的现在，属于那个清正廉明的现在。而李鸿章，属于那个机械轰鸣的未来。<br>还有，那个帝国落日余晖折射下，民族无奈的未来。<br>还有，他不停的要银子，花在破坏风水的洋务上，花在千里之外的海上。让京城里老佛爷的六十大寿，过得不那么开心啊。这岂是能鼓励和颂扬的？</p>
-<p>我们还是不要把历史当笑话读吧，也许今晚睡前可以话十分钟闭目想一下，我们每天茫茫碌碌，究竟是在修建那座美轮美奂的颐和园，还是打造一支也许回沉没的北洋水师。我们究竟在为老佛爷的六十大寿奋斗，还有没有隐隐为“未来”的波涛汹涌担忧。<br>李鸿章是悲剧。让李鸿章出现的时代也是悲剧。土地上的亭台阁楼建起来了，时代的大屋子，去只能靠这位苍老的裱糊匠孤独的修补。那个风雨飘摇中踽踽独行的背影，是不是不应该那么熟悉？</p>
+        <p>(自行脑补评书起手式)话说上回咱们说到，UI = f(r(state, action))。这回咱们把这个r按下不表，单讲这个f…（评书听的少编不下去了=。=||）</p>
+<p>不卖关子了，一个很很受欢迎和好评的f自然是react.js，其中一个很能体现f(state) = UI的概念就是controlled components。汉化过后好像叫受控组件，挺绕口的就不管了。道理都讲过，但是具体怎么写呢？有哪些坑？写一篇整理一下。</p>
+<p><a href="https://github.com/lorenseanstewart/react-controlled-form-components" target="_blank" rel="external">快速通往code和demo的传送门</a><br><a href="https://reactjs.org/docs/forms.html#controlled-components" target="_blank" rel="external">官方文档</a></p>
+<h1 id="从-UI-f-state-说起"><a href="#从-UI-f-state-说起" class="headerlink" title="从 UI = f(state) 说起"></a>从 UI = f(state) 说起</h1><p>之前的那篇长文，很详细的阐述了单项数据流和UI as function if states的原则。然而，理想很丰满，现实很骨感。HTML中的表单元素，input,textarea,select都不是stateless的。相反，他们很典型的维护了自己的inner state。比如说一个checkbox,它的checked就是一个内部状态。用户的点击会修改它，UI的状态，也就是有没有打上那个小勾，受内部状态的影响。怎么样体现UI = f(state)呢，就是这里要说的UI = f(state)</p>
+<p>做法其实很简单：</p>
+<p>UI不应该受内部状态影响。所以说，我们可以强行指定一个input的value，这样，不管你如何点击输入，都会被忽略。因为value被指定了。或者说，it is controlled. It is a controlled component.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;input type=<span class="string">"text"</span> value=&#123;<span class="keyword">this</span>.state.value&#125; /&gt;</div></pre></td></tr></table></figure>
+<p>那功能呢？总不能说用户输入啥都没反应吧。很简单啊，构造一个action发给相应的r。本次话题与r无关，这里不做展开，我们就用一个简单的handleChange表示</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;input type=<span class="string">"text"</span> value=&#123;<span class="keyword">this</span>.state.value&#125; onChange=&#123;<span class="keyword">this</span>.handleChange&#125; /&gt;</div></pre></td></tr></table></figure>
+<p>最最简单的情况（也是我们没有引入例如redux，mobx之类很fancy的r最常见的情况）</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">handleChange(event) &#123;</div><div class="line">  <span class="keyword">this</span>.setState(&#123;value: event.target.value.toUpperCase()&#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="具体的几种form-component"><a href="#具体的几种form-component" class="headerlink" title="具体的几种form component"></a>具体的几种form component</h1><h2 id="checkbox"><a href="#checkbox" class="headerlink" title="checkbox"></a>checkbox</h2><p>我们要控制的，不是value，用checked就行了。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;input type=<span class="string">"checkbox"</span> checked=&#123;<span class="keyword">this</span>.state.isChecked&#125; onChange=&#123;<span class="keyword">this</span>.handleChange&#125; /&gt;</div><div class="line"></div><div class="line">handleChange(event) &#123;</div><div class="line">  <span class="keyword">this</span>.setState(&#123; isChecked: !<span class="keyword">this</span>.state.isChecked&#125; );</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>也可以用value实现，但是不要问怎么做，不知道对你比较好。</p>
+<h2 id="textarea"><a href="#textarea" class="headerlink" title="textarea"></a>textarea</h2><p>在HTML中，textarea的text使用children来定义的。而React提供了一个小小的语法糖，统一成了value这个prop来保持接口一致</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;textarea value=&#123;<span class="keyword">this</span>.state.value&#125; onChange=&#123;<span class="keyword">this</span>.handleChange&#125; /&gt;</div></pre></td></tr></table></figure>
+<h2 id="select"><a href="#select" class="headerlink" title="select"></a>select</h2><p>其实直接贴例子就够了</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;select value=&#123;this.state.value&#125; onChange=&#123;this.handleChange&#125;&gt;</div><div class="line">  &lt;option value="grapefruit"&gt;Grapefruit&lt;/option&gt;</div><div class="line">  &lt;option value="lime"&gt;Lime&lt;/option&gt;</div><div class="line">  &lt;option value="coconut"&gt;Coconut&lt;/option&gt;</div><div class="line">  &lt;option value="mango"&gt;Mango&lt;/option&gt;</div><div class="line">&lt;/select&gt;</div></pre></td></tr></table></figure>
+<h1 id="Multiple-Inputs"><a href="#Multiple-Inputs" class="headerlink" title="Multiple Inputs"></a>Multiple Inputs</h1><p>通常在表单中都有一堆form components，当然你可以用上面的做法一个一个实现，通常也不麻烦。这里介绍一种避免大量重复代码的做法。</p>
+<p>我们用到了ES6中的computed property names这个语法(其实用es5也没有麻烦到哪里去)</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">this</span>.setState(&#123;</div><div class="line">  [name]: value</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>然后给form components一个那么属性就行了</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Reservation</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span>(props) &#123;</div><div class="line">    <span class="keyword">super</span>(props);</div><div class="line">    <span class="keyword">this</span>.state = &#123;</div><div class="line">      isGoing: <span class="literal">true</span>,</div><div class="line">      numberOfGuests: <span class="number">2</span></div><div class="line">    &#125;;</div><div class="line"></div><div class="line">    <span class="keyword">this</span>.handleInputChange = <span class="keyword">this</span>.handleInputChange.bind(<span class="keyword">this</span>);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  handleInputChange(event) &#123;</div><div class="line">    <span class="keyword">const</span> target = event.target;</div><div class="line">    <span class="keyword">const</span> value = target.type === <span class="string">'checkbox'</span> ? target.checked : target.value;</div><div class="line">    <span class="keyword">const</span> name = target.name;</div><div class="line"></div><div class="line">    <span class="keyword">this</span>.setState(&#123;</div><div class="line">      [name]: value</div><div class="line">    &#125;);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  render() &#123;</div><div class="line">    <span class="keyword">return</span> (</div><div class="line">      &lt;form&gt;</div><div class="line">        &lt;label&gt;</div><div class="line">          Is going:</div><div class="line">          &lt;input</div><div class="line">            name="isGoing"</div><div class="line">            type="checkbox"</div><div class="line">            checked=&#123;this.state.isGoing&#125;</div><div class="line">            onChange=&#123;this.handleInputChange&#125; /&gt;</div><div class="line">        &lt;/label&gt;</div><div class="line">        &lt;br /&gt;</div><div class="line">        &lt;label&gt;</div><div class="line">          Number of guests:</div><div class="line">          &lt;input</div><div class="line">            name="numberOfGuests"</div><div class="line">            type="number"</div><div class="line">            value=&#123;this.state.numberOfGuests&#125;</div><div class="line">            onChange=&#123;this.handleInputChange&#125; /&gt;</div><div class="line">        &lt;/label&gt;</div><div class="line">      &lt;/form&gt;</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="有个坑"><a href="#有个坑" class="headerlink" title="有个坑"></a>有个坑</h1><p>如果你忘了初始化value（checked）,那样react就会认为收到一个undefined。或者说，它会认为这是一个uncontrolled component</p>
+<p>比如说你收到了这样的error</p>
+<p>| Warning: Input is changing a controlled input of type text to be uncontrolled. Input elements should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled input element for the lifetime of the component</p>
+<p>那大概率就是这个问题。</p>
 
       
 
@@ -211,7 +235,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">随笔</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">framework</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">React</a>
         		</li>
       		
 		</ul>
@@ -267,7 +295,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2016/09/18/essay0/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2017/12/29/react-controlled-component/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -281,18 +309,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2016/10/13/code-convention/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          Airbnb JavaScript Style Guide
-        
-      </div>
-    </a>
   
-  
-    <a href="/2016/09/07/underscore-4/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">underscore源码阅读笔记（4）： eq(cont.)</div>
+    <a href="/2017/12/25/Functional-UI/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Functional approach to frontend development</div>
       <i class="icon-circle-right"></i>
     </a>
   
