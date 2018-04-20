@@ -142,6 +142,172 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-nginx" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/09/nginx/">Introduction of Nginx</a>
+    </h1>
+  
+
+        
+        <a href="/2018/04/09/nginx/" class="archive-article-date">
+  	<time datetime="2018-04-09T07:26:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-09</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="发音"><a href="#发音" class="headerlink" title="发音"></a>发音</h1><ul>
+<li>这是官网Frequently Asked Questions的第一个问题 <a href="https://www.nginx.com/resources/wiki/community/faq/" target="_blank" rel="external">https://www.nginx.com/resources/wiki/community/faq/</a></li>
+<li>correct<ul>
+<li>en-juhn-eks*</li>
+<li>Engine-X</li>
+</ul>
+</li>
+<li>Incorrect<ul>
+<li>en-jingks</li>
+</ul>
+</li>
+</ul>
+<h1 id="反向代理-Reverse-Proxy"><a href="#反向代理-Reverse-Proxy" class="headerlink" title="反向代理(Reverse Proxy)"></a>反向代理(Reverse Proxy)</h1><ul>
+<li><p>在电脑网络中，反向代理是代理服务器的一种。服务器根据客户端的请求，从其关系的一组或多组后端服务器（如Web服务器）上获取资源，然后再将这些资源返回给客户端，客户端只会得知反向代理的IP地址，而不知道在代理服务器后面的服务器簇的存在。</p>
+</li>
+<li><p>CDN就是一个典型的反向代理。</p>
+</li>
+</ul>
+<h2 id="正向代理代理客户端，反向代理代理服务器"><a href="#正向代理代理客户端，反向代理代理服务器" class="headerlink" title="正向代理代理客户端，反向代理代理服务器"></a>正向代理代理客户端，反向代理代理服务器</h2><ul>
+<li><p>与正向代理不同: 前向代理作为客户端的代理，将从互联网上获取的资源返回给一个或多个的客户端，服务器端（如Web服务器）只知道代理的IP地址而不知道客户端的IP地址；而反向代理是作为服务器端（如Web服务器）的代理使用，而不是客户端。客户端借由前向代理可以间接访问很多不同互联网服务器（簇）的资源，而反向代理是供很多客户端都通过它间接访问不同后端服务器上的资源，而不需要知道这些后端服务器的存在，而以为所有资源都来自于这个反向代理服务器。</p>
+</li>
+<li><p>举一个可能不太准确的例子：我们平时说到的代理就是代购，我拜托某个去某个国家的朋友帮我代购东西，外国的商家并不知道最终是谁在买这个商品，甚至可能有很多朋友都帮忙请他代购，或者说我请了不同的朋友帮我买不同的东西——商家不关心这些的，他只和向他掏钱的外卖小哥打交道。最终是谁在消费都被代理掉了。当然，代理也分透明和不透明。反向代理呢？超市更类似反向代理，我们都会亲自去逛超市，但是我们不必太去关心我们买到的商品从原料到加工到批发的复杂过程，和之前“我们”被代理掉相反，超市把提供这些商品的过程全都“代理”掉了。</p>
+</li>
+</ul>
+<h2 id="nginx反向代理"><a href="#nginx反向代理" class="headerlink" title="nginx反向代理"></a>nginx反向代理</h2><ul>
+<li>load balance</li>
+<li>multiple services</li>
+</ul>
+<h1 id="How-To-Install-Nginx"><a href="#How-To-Install-Nginx" class="headerlink" title="How To Install Nginx"></a>How To Install Nginx</h1><p>以下操作在Centos7.4的机器上完成 对CentOS 7都适用。</p>
+<h2 id="Step-One—Add-Nginx-Repository"><a href="#Step-One—Add-Nginx-Repository" class="headerlink" title="Step One—Add Nginx Repository"></a>Step One—Add Nginx Repository</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo yum install epel-release</div></pre></td></tr></table></figure>
+<h2 id="Step-Two-Install-Nginx"><a href="#Step-Two-Install-Nginx" class="headerlink" title="Step Two-Install Nginx"></a>Step Two-Install Nginx</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo yum install nginx</div></pre></td></tr></table></figure>
+<h2 id="Step-Three—Start-Nginx"><a href="#Step-Three—Start-Nginx" class="headerlink" title="Step Three—Start Nginx"></a>Step Three—Start Nginx</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo systemctl start nginx</div></pre></td></tr></table></figure>
+<p>ruanyf大神的这篇<a href="http://www.ruanyifeng.com/blog/2016/03/systemd-tutorial-commands.html" target="_blank" rel="external">blog</a>很好的解释了为什么要推荐这种启动方式（systemd）而不是直接init进程。</p>
+<p>如果你的机器上有firewall正在跑，需要额外步骤来允许http和https访问</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">sudo firewall-cmd --permanent --zone=public --add-service=http</div><div class="line">sudo firewall-cmd --permanent --zone=public --add-service=https</div><div class="line">sudo firewall-cmd --reload</div></pre></td></tr></table></figure>
+<h1 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">nginx <span class="_">-s</span> signal</div></pre></td></tr></table></figure>
+<p>signal可以是以下几种之一：</p>
+<ul>
+<li>stop: 暴力的关闭</li>
+<li>quit: 温柔的关闭</li>
+<li>reload: 修改了配置文件之后很容易忘的东西</li>
+<li>reopen: 平时玩耍时基本没怎么用到（重新打开日志，其实是重置了log的写指针）</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">nginx -t</div></pre></td></tr></table></figure>
+<p>测试配置是否有问题。强烈建议修改配置文件后执行。</p>
+<h1 id="基本配置"><a href="#基本配置" class="headerlink" title="基本配置"></a>基本配置</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div></pre></td><td class="code"><pre><div class="line"># user字段表明了Nginx服务是由哪个用户哪个群组来负责维护进程的</div><div class="line"># 我这里用了cainengtian用户，staff组来启动并维护进程</div><div class="line"># 查看当前用户命令： whoami</div><div class="line"># 查看当前用户所属组命令： groups ，当前用户可能有多个所属组，选第一个即可</div><div class="line">user nginx;</div><div class="line"># worker_processes字段表示Nginx服务占用的内核数量</div><div class="line"># 为了充分利用服务器性能你可以直接写你本机最高内核</div><div class="line"># 查看本机最高内核数量命令： sysctl -n hw.ncpu</div><div class="line">worker_processes auto;</div><div class="line"># error_log字段表示Nginx错误日志记录的位置</div><div class="line"># 模式选择：debug/info/notice/warn/error/crit</div><div class="line"># 上面模式从左到右记录的信息从最详细到最少</div><div class="line">error_log /var/log/nginx/error.log;</div><div class="line"># Nginx执行的进程id,默认配置文件是注释了</div><div class="line"># 如果上面worker_processes的数量大于1那Nginx就会启动多个进程</div><div class="line"># 而发信号的时候需要知道要向哪个进程发信息，不同进程有不同的pid，所以写进文件发信号比较简单</div><div class="line"># 你只需要手动创建，比如我下面的位置： touch /usr/local/var/run/nginx.pid</div><div class="line">pid /run/nginx.pid;</div><div class="line"></div><div class="line"># Load dynamic modules. See /usr/share/nginx/README.dynamic.</div><div class="line">include /usr/share/nginx/modules/*.conf;</div><div class="line"></div><div class="line">events &#123;</div><div class="line">    # 每一个worker进程能并发处理的最大连接数</div><div class="line">    # 当作为反向代理服务器，计算公式为： `worker_processes * worker_connections / 4`</div><div class="line">    # 当作为HTTP服务器时，公式是除以2</div><div class="line">    worker_connections 1024;</div><div class="line">&#125;</div><div class="line"></div><div class="line">http &#123;</div><div class="line">    log_format  main  &apos;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &apos;</div><div class="line">                      &apos;$status $body_bytes_sent &quot;$http_referer&quot; &apos;</div><div class="line">                      &apos;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&apos;;</div><div class="line">    access_log  /var/log/nginx/access.log  main;</div><div class="line"></div><div class="line">    sendfile            on;</div><div class="line">    # 在一个数据包里发送所有头文件，而不是一个接一个的发送</div><div class="line">    tcp_nopush          on;</div><div class="line">    # 不要缓存</div><div class="line">    tcp_nodelay         on;</div><div class="line">    keepalive_timeout   65;</div><div class="line">    types_hash_max_size 2048;</div><div class="line"></div><div class="line">    include             /etc/nginx/mime.types;</div><div class="line">    default_type        application/octet-stream;</div><div class="line"></div><div class="line">    # Load modular configuration files from the /etc/nginx/conf.d directory.</div><div class="line">    # See http://nginx.org/en/docs/ngx_core_module.html#include</div><div class="line">    # for more information.</div><div class="line">    include /etc/nginx/conf.d/*.conf;</div><div class="line"></div><div class="line">    server &#123;</div><div class="line">        listen       80 default_server;</div><div class="line">        listen       [::]:80 default_server;</div><div class="line">        server_name  _;</div><div class="line">        root         /usr/share/nginx/html;</div><div class="line"></div><div class="line">        # Load configuration files for the default server block.</div><div class="line">    # for more information.</div><div class="line">    include /etc/nginx/conf.d/*.conf;</div><div class="line"></div><div class="line">    server &#123;</div><div class="line">        listen       80 default_server;</div><div class="line">        listen       [::]:80 default_server;</div><div class="line">        server_name  _;</div><div class="line">        root         /usr/share/nginx/html;</div><div class="line"></div><div class="line">        # Load configuration files for the default server block.</div><div class="line">        include /etc/nginx/default.d/*.conf;</div><div class="line"></div><div class="line">        location / &#123;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        error_page 404 /404.html;</div><div class="line">            location = /40x.html &#123;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        error_page 500 502 503 504 /50x.html;</div><div class="line">            location = /50x.html &#123;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"># Settings for a TLS enabled server.</div><div class="line">#</div><div class="line">#    server &#123;</div><div class="line">#        listen       443 ssl http2 default_server;</div><div class="line">#        listen       [::]:443 ssl http2 default_server;</div><div class="line">#        server_name  _;</div><div class="line">#        root         /usr/share/nginx/html;</div><div class="line">#</div><div class="line">    keepalive_timeout   65;</div><div class="line">    types_hash_max_size 2048;</div><div class="line"></div><div class="line">    include             /etc/nginx/mime.types;</div><div class="line">    default_type        application/octet-stream;</div><div class="line"></div><div class="line">    # Load modular configuration files from the /etc/nginx/conf.d directory.</div><div class="line">    # See http://nginx.org/en/docs/ngx_core_module.html#include</div><div class="line">    # for more information.</div><div class="line">    include /etc/nginx/conf.d/*.conf;</div><div class="line"></div><div class="line">    server &#123;</div><div class="line">        listen       80 default_server;</div><div class="line">        listen       [::]:80 default_server;</div><div class="line">        server_name  _;</div><div class="line">        root         /usr/share/nginx/html;</div><div class="line"></div><div class="line">        # Load configuration files for the default server block.</div><div class="line">        include /etc/nginx/default.d/*.conf;</div><div class="line"></div><div class="line">        location / &#123;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        error_page 404 /404.html;</div><div class="line">            location = /40x.html &#123;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        error_page 500 502 503 504 /50x.html;</div><div class="line">            location = /50x.html &#123;</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h1 id="配置反向代理"><a href="#配置反向代理" class="headerlink" title="配置反向代理"></a>配置反向代理</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">upstream atlas &#123;</div><div class="line">    server 127.0.0.1:9000;</div><div class="line">    keepalive 64;</div><div class="line">&#125;</div><div class="line"></div><div class="line">server &#123;</div><div class="line">    listen 80;</div><div class="line">    server_name yucong.xyz;</div><div class="line"></div><div class="line">    location / &#123;</div><div class="line">        proxy_set_header X-Real-IP $remote_addr;</div><div class="line">        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</div><div class="line">        proxy_set_header Host $http_host;</div><div class="line">        proxy_set_header X-Nginx-Proxy true;</div><div class="line">        proxy_set_header Connection &quot;&quot;;</div><div class="line">        proxy_pass http://atlas;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="Nginx-proxy-set-heade"><a href="#Nginx-proxy-set-heade" class="headerlink" title="Nginx proxy_set_heade"></a>Nginx proxy_set_heade</h2><p>允许重新定义或添加字段传递给代理服务器的请求头。</p>
+<h2 id="upstream模块"><a href="#upstream模块" class="headerlink" title="upstream模块"></a>upstream模块</h2><p>作用：是用来定义服务器组的模块<br>将使nginx跨越单机的限制，完成网络数据的接收、处理和转发。</p>
+<p>结构：</p>
+<p>upstream groupName {</p>
+<p>  server serverName1 [param1=value1] [param2=value2] [param3];</p>
+<p>  server serverName2;</p>
+<p>}</p>
+<p>server的类型可以是：</p>
+<ol>
+<li><p>域名：如:webserver.website.com;</p>
+</li>
+<li><p>IP：如:192.168.0.239:80;</p>
+</li>
+<li><p>Unix套接字文件：如unix:/tmp/webserver;</p>
+</li>
+</ol>
+<h1 id="配置临时跳转"><a href="#配置临时跳转" class="headerlink" title="配置临时跳转"></a>配置临时跳转</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">location /from-path/ &#123;</div><div class="line">    # 当匹配到&#123;your-domain&#125;/from-path的时候会跳转&#123;your-domain&#125;/to-path</div><div class="line">    return 302 &#123;your-domain&#125;/to-path</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="配置访问限制"><a href="#配置访问限制" class="headerlink" title="配置访问限制"></a>配置访问限制</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"># 当匹配到/info的时候只允许x.x.x.x访问，其它的全部限制</div><div class="line"># 同时改写为/info.php</div><div class="line">location = /info &#123;</div><div class="line">    allow x.x.x.x;</div><div class="line">    deny all;</div><div class="line">    rewrite (.*) /info.php</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>rewrite功能就是，使用nginx提供的全局变量或自己设置的变量，结合正则表达式和标志位实现url重写以及重定向。rewrite只能放在server{},location{},if{}中，并且只能对域名后边的除去传递的参数外的字符串起作用。语法rewrite regex replacement [flag];</p>
+<h1 id="default-ssl-配置"><a href="#default-ssl-配置" class="headerlink" title="default-ssl 配置"></a>default-ssl 配置</h1><p>我们都知道HTTP在传输的过程中都是明文的，这直接导致了在传输的任何一个过程中都容易被窃取信息，所以才有了SSL（安全套接层）以及升级版TLS（传输层安全协议）的出现，其实就是在HTTP应用层给TCP/IP传输层的中间增加了TLS/SSL层，统称为HTTPS。</p>
+<p>那如何通过Nginx配置HTTPS站点呢，下面就是default-ssl配置文件的内容（详细解析）：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">server &#123;</div><div class="line">    # 默认情况下HTTPS监听443端口</div><div class="line">    listen  443 ssl;</div><div class="line">    server_name  localhost;</div><div class="line">    root  /var/www/;</div><div class="line">    # 下面这些都是配置SSL需要的</div><div class="line">    ssl on;</div><div class="line">    # 下面两个字段需要的crt利用openssl生成，具体可以看[这里](http://nginx.org/en/docs/http/configuring_https_servers.html)</div><div class="line">    ssl_certificate ssl/localhost.crt;</div><div class="line">    ssl_certificate_key ssl/localhost.key;</div><div class="line">    ssl_session_timeout 10m;</div><div class="line">    ssl_protocols SSLv2 SSLv3 TLSv1;</div><div class="line">    ssl_ciphers HIGH:!aNULL:!MD5;</div><div class="line">    ssl_prefer_server_ciphers on;</div><div class="line">    location = /info &#123;</div><div class="line">        allow 127.0.0.1;</div><div class="line">        deny all;</div><div class="line">        rewrite (.*) /info.php;</div><div class="line">    &#125;</div><div class="line">    location /phpmyadmin/ &#123;</div><div class="line">        root /usr/local/share/phpmyadmin;</div><div class="line">        index index.php index.html index.htm;</div><div class="line">    &#125;</div><div class="line">    location / &#123;</div><div class="line">        include /usr/local/etc/nginx/conf.d/php-fpm;</div><div class="line">    &#125;</div><div class="line">    error_page 403 /403.html;</div><div class="line">    error_page 404 /404.html;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="配置load-balance"><a href="#配置load-balance" class="headerlink" title="配置load balance"></a>配置load balance</h1><h2 id="内置"><a href="#内置" class="headerlink" title="内置"></a>内置</h2><p>Nginx负载均衡是通过upstream模块来实现的，内置实现了三种负载策略，配置还是比较简单的。官网负载均衡配置说明：<a href="http://nginx.org/en/docs/http/load_balancing.html" target="_blank" rel="external">http://nginx.org/en/docs/http/load_balancing.html</a></p>
+<ul>
+<li>轮循(default)</li>
+</ul>
+<p>Nginx根据请求次数，将每个请求均匀分配到每台服务器</p>
+<ul>
+<li>最少连接 least_con</li>
+</ul>
+<p>将请求分配给连接数最少的服务器。Nginx会统计哪些服务器的连接数最少。</p>
+<ul>
+<li>IP Hash ip_hash</li>
+</ul>
+<p>绑定处理请求的服务器。第一次请求时，根据该客户端的IP算出一个HASH值，将请求分配到集群中的某一台服务器上。后面该客户端的所有请求，都将通过HASH算法，找到之前处理这台客户端请求的服务器，然后将请求交给它来处理</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">http &#123;</div><div class="line"></div><div class="line">    # ... other config</div><div class="line"></div><div class="line">    upstream myapp &#123;</div><div class="line">        # least_con</div><div class="line">        # ip_hash</div><div class="line">        server 192.168.0.100:8080;</div><div class="line">        server 192.168.0.101:8080;</div><div class="line">        server example.com:8080;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    server &#123;</div><div class="line">        listen 80;</div><div class="line"></div><div class="line">        location / &#123;</div><div class="line">            proxy_pass http://myapp;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    # ... 省略其它配置</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="server-参数："><a href="#server-参数：" class="headerlink" title="server 参数："></a>server 参数：</h3><ul>
+<li>weight： 默认为1，将请求平均分配给每台server</li>
+<li>max_fails： 默认为1。某台Server允许请求失败的次数，超过最大次数后，在fail_timeout时间内，新的请求将不会分配给这台机器。如果设置为0，Nginx会将这台Server置为永久无效状态，然后将请求发给定义了proxy_next_upstream, fastcgi_next_upstream, uwsgi_next_upstream, scgi_next_upstream, and memcached_next_upstream指令来处理这次错误的请求。</li>
+<li>fail_timeout: 默认为10秒。某台Server达到max_fails次失败请求后，在fail_timeout期间内，nginx会认为这台Server暂时不可用，不会将请求分配给它</li>
+<li>backup: 备份机，所有服务器挂了之后才会生效</li>
+<li>down: 标识不可用（我不知道有啥用，可能有一些技术动态的激活？没用过。。。）</li>
+<li>max_conns: 限制分配给某台Server处理的最大连接数量，超过这个数量，将不会分配新的连接给它。默认为0，表示不限制</li>
+<li>resolve: 将server指令配置的域名，指定域名解析服务器。需要在http模块下配置resolver指令，指定域名解析服务</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">upstream tomcats &#123;</div><div class="line">    server 192.168.0.100:8080 weight=2 max_fails=3 fail_timeout=15;</div><div class="line">    server 192.168.0.101:8080 weight=3;</div><div class="line">    server 192.168.0.102:8080 backup;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">http &#123;</div><div class="line">    resolver 10.0.0.1;</div><div class="line"></div><div class="line">    upstream u &#123;</div><div class="line">        zone ...;</div><div class="line">        ...</div><div class="line">        server example.com resolve;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="第三方"><a href="#第三方" class="headerlink" title="第三方"></a>第三方</h2><ul>
+<li>fair: 根据服务器的响应时间来分配请求，响应时间短的优先分配，即负载压力小的优先会分配。</li>
+<li>url_hash: 按请求url的hash结果来分配请求，使每个url定向到同一个后端服务器，服务器做缓存时比较有效。</li>
+</ul>
+<p>基本用法：</p>
+<ol>
+<li>Google and download source code.(wget xxx -&gt; unzip xxx)</li>
+<li>Compile nginx.(make)</li>
+<li>Copy and replace old nginx. (ps aux | grep nginx -&gt; kill -g {nginx pid} -&gt; cp xxx yyy -&gt; start nginx)</li>
+</ol>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/04/09/nginx/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-react-backbone-dev-experience" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1402,97 +1568,6 @@
 
 
   
-    <article id="post-dense-arrays" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/21/dense-arrays/">Javascript中的稀疏数组 sparse arrays vs. 密集数组 dense arrays</a>
-    </h1>
-  
-
-        
-        <a href="/2017/03/21/dense-arrays/" class="archive-article-date">
-  	<time datetime="2017-03-21T06:49:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-21</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>大多数情况下，javascript中的数组是稀疏数组（其实就是k-v pairs），也就是说a[0], a[100]存在，但是a[1]到a[99]可能都不存在。</p>
-<p>不存在，不是说存在但是是undefined,就是真正的不存在:如果用foreach访问并console.log，会发现根本没有这么一项，而不是输出一个undefined</p>
-<p>实际上,JavaScript并没有常规的数组,所有的数组其实就是个对象,只不过会自动管理一些”数字”属性和length属性罢了.说的更直接一点,JavaScript中的数组根本没有索引,因为索引应该是数字,而JavaScript中数组的索引其实是字符串.arr[1]其实就是arr[“1”],给arr[“1000”] = 1,arr.length也会自动变为1001.这些表现的根本原因就是,JavaScript中的对象就是字符串到任意值的键值对.注意键只能是字符串</p>
-<h3 id="sparse-arrays"><a href="#sparse-arrays" class="headerlink" title="sparse arrays"></a>sparse arrays</h3><ul>
-<li>得到一个稀疏数组</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> sparseArr1 = <span class="keyword">new</span> <span class="built_in">Array</span>(<span class="number">3</span>);</div></pre></td></tr></table></figure>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> sparseArr2 = [];</div><div class="line"></div><div class="line">sparseArr2[<span class="number">0</span>] = <span class="number">1</span>;</div><div class="line">sparseArr2[<span class="number">100</span>] = <span class="number">100</span>;</div></pre></td></tr></table></figure>
-<ul>
-<li>遍历稀疏数组，所有的“空隙”会被跳过<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> sparseArr2 = [];</div><div class="line"></div><div class="line">sparseArr2[<span class="number">0</span>] = <span class="number">1</span>;</div><div class="line">sparseArr2[<span class="number">100</span>] = <span class="number">100</span>;</div><div class="line"></div><div class="line">sparseArr2.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">index, val</span>) </span>&#123; <span class="built_in">console</span>.log(index); <span class="built_in">console</span>.log(val) &#125;) <span class="comment">// output: 1 0 100 100</span></div></pre></td></tr></table></figure>
-</li>
-</ul>
-<h3 id="dense-arrays"><a href="#dense-arrays" class="headerlink" title="dense arrays"></a>dense arrays</h3><ul>
-<li>得到一个密集数组</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">Array</span>(<span class="literal">undefined</span>, <span class="literal">undefined</span>, <span class="literal">undefined</span>)</div></pre></td></tr></table></figure>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> denseArr1 = <span class="built_in">Array</span>.apply(<span class="literal">null</span>, <span class="built_in">Array</span>(<span class="number">3</span>))；</div></pre></td></tr></table></figure>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> denseArr2 = <span class="built_in">Array</span>.apply(<span class="literal">null</span>, <span class="built_in">Array</span>(<span class="number">3</span>)).map(<span class="built_in">Function</span>.prototype.call.bind(<span class="built_in">Number</span>))</div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">javascript</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/03/21/dense-arrays/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1590,6 +1665,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Frameworks</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Javascript</a>
               </li>
              
@@ -1610,6 +1689,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">ES6(ES2015)</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">framework</a>
               </li>
              
@@ -1618,27 +1701,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">ES6(ES2015)</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Frameworks</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">graphql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">query</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">html</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Dom</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">ES6</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1651,14 +1726,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Events</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Dom</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ES6</a>
               </li>
              
               <li class="article-tag-list-item">

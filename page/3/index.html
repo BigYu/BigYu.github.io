@@ -142,6 +142,96 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-underscore-4" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/09/07/underscore-4/">underscore源码阅读笔记（4）： eq(cont.)</a>
+    </h1>
+  
+
+        
+        <a href="/2016/09/07/underscore-4/" class="archive-article-date">
+  	<time datetime="2016-09-07T03:01:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-09-07</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="javascript判断变量类型的方法"><a href="#javascript判断变量类型的方法" class="headerlink" title="javascript判断变量类型的方法"></a>javascript判断变量类型的方法</h2><blockquote>
+<p>javascript中 一切皆对象</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(toString.call([<span class="number">123</span>]));<span class="comment">//[object Array]</span></div><div class="line"><span class="built_in">console</span>.log(toString.call(<span class="string">'123'</span>));<span class="comment">//[object String]</span></div><div class="line"><span class="built_in">console</span>.log(toString.call(&#123;a: <span class="string">'123'</span>&#125;));<span class="comment">//[object Object]</span></div><div class="line"><span class="built_in">console</span>.log(toString.call(<span class="regexp">/123/</span>));<span class="comment">//[object RegExp]</span></div><div class="line"><span class="built_in">console</span>.log(toString.call(<span class="number">123</span>));<span class="comment">//[object Number]</span></div><div class="line"><span class="built_in">console</span>.log(toString.call(<span class="literal">undefined</span>));<span class="comment">//[object Undefined]</span></div><div class="line"><span class="built_in">console</span>.log(toString.call(<span class="literal">null</span>));<span class="comment">//[object Null]</span></div></pre></td></tr></table></figure>
+<h2 id="eq函数中不同类型的“相等”判断"><a href="#eq函数中不同类型的“相等”判断" class="headerlink" title="eq函数中不同类型的“相等”判断"></a>eq函数中不同类型的“相等”判断</h2><h3 id="RegExp和string"><a href="#RegExp和string" class="headerlink" title="RegExp和string"></a>RegExp和string</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Strings, numbers, regular expressions, dates, and booleans are compared by value.</span></div><div class="line"><span class="keyword">case</span> <span class="string">'[object RegExp]'</span>:</div><div class="line"><span class="comment">// RegExps are coerced to strings for comparison (Note: '' + /a/i === '/a/i')</span></div><div class="line"><span class="keyword">case</span> <span class="string">'[object String]'</span>:</div><div class="line">  <span class="comment">// Primitives and their corresponding object wrappers are equivalent; thus, `"5"` is</span></div><div class="line">  <span class="comment">// equivalent to `new String("5")`.</span></div><div class="line">  <span class="keyword">return</span> <span class="string">''</span> + a === <span class="string">''</span> + b;</div><div class="line">·</div></pre></td></tr></table></figure>
+<p><strong> 以下“相等”均表示eq返回true </strong></p>
+<ul>
+<li>一个正则表达式 加上’’ 仍让与原来相等</li>
+<li>“abc”和new String(‘abc’)是相等的</li>
+</ul>
+<h3 id="Number"><a href="#Number" class="headerlink" title="Number"></a>Number</h3><p>·<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">case</span> <span class="string">'[object Number]'</span>:</div><div class="line">        <span class="comment">// `NaN`s are equivalent, but non-reflexive.</span></div><div class="line">        <span class="comment">// Object(NaN) is equivalent to NaN</span></div><div class="line">        <span class="keyword">if</span> (+a !== +a) <span class="keyword">return</span> +b !== +b;</div><div class="line">        <span class="comment">// An `egal` comparison is performed for other numeric values.</span></div><div class="line">        <span class="keyword">return</span> +a === <span class="number">0</span> ? <span class="number">1</span> / +a === <span class="number">1</span> / b : +a === +b;</div></pre></td></tr></table></figure></p>
+<ul>
+<li>js中 +NaN === +NaN 为false</li>
+<li>Object(NaN)和NaN相等</li>
+</ul>
+<h3 id="Date-Boolean"><a href="#Date-Boolean" class="headerlink" title="Date/Boolean"></a>Date/Boolean</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">case &apos;[object Date]&apos;:</div><div class="line">case &apos;[object Boolean]&apos;:</div><div class="line">  // Coerce dates and booleans to numeric primitive values. Dates are compared by their</div><div class="line">  // millisecond representations. Note that invalid dates with millisecond representations</div><div class="line">  // of `NaN` are not equivalent.</div><div class="line">  return +a === +b;</div></pre></td></tr></table></figure>
+<p>To be continued</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">javascript</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2016/09/07/underscore-4/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-css-position" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -919,6 +1009,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Frameworks</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Javascript</a>
               </li>
              
@@ -939,6 +1033,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">ES6(ES2015)</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">framework</a>
               </li>
              
@@ -947,27 +1045,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">ES6(ES2015)</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Frameworks</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">graphql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">query</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">html</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Dom</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">ES6</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -980,14 +1070,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Events</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Dom</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ES6</a>
               </li>
              
               <li class="article-tag-list-item">
