@@ -142,6 +142,109 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-lerna" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/05/23/lerna/">lerna——多项目多模块的管理</a>
+    </h1>
+  
+
+        
+        <a href="/2018/05/23/lerna/" class="archive-article-date">
+  	<time datetime="2018-05-23T02:45:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>.Net项目中有solution和projects的概念（本人.Net大菜鸟。。）通常的WebUI项目是没有的。甚至连project这个概念都不太清晰，一些比较随意的项目，或者有些年头的项目，package.json到处都是是很常见的现象。甚至还有很多项目没有使用npm那一套进行管理。同时，前端组件经常出现跨平台跨项目复用的情况——比如说，整个公司所有产品网站的警告框，需要采用相同的设计和行为，我们不希望每一个前端团队都拿着设计稿重复一遍实现，那样有整体的rebranding的时候会是噩梦。<br>现在很常见的一种实践就是，把每一个组件都打成npm包发布出去，每个项目都根据npm规范来使用他们。这种实践下，我们一个“项目”里，就会出现多个npm package。一个常见的情况，我们会同时开发多个模块，这些模块之间互相有依赖，本地debug的时候可能有dependency并没有发布出去。如果我们大量使用npm link会让本地开发变得十分麻烦和混乱，自动化测试也变得很困难。这时，使用lerna管理我们的项目会是一个不错的主意。</p>
+<p><a href="https://github.com/lerna/lerna" target="_blank" rel="external">https://github.com/lerna/lerna</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install lerna -g</div></pre></td></tr></table></figure>
+<h3 id="典型的lerna项目结构"><a href="#典型的lerna项目结构" class="headerlink" title="典型的lerna项目结构"></a>典型的lerna项目结构</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">my-lerna-repo/</div><div class="line">  package.json</div><div class="line">  packages/</div><div class="line">    package-1/</div><div class="line">      package.json</div><div class="line">    package-2/</div><div class="line">      package.json</div></pre></td></tr></table></figure>
+<p>这个项目的readme写得非常舒服，就不贴命令来凑篇幅了。</p>
+<h3 id="Add"><a href="#Add" class="headerlink" title="Add"></a>Add</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">lerna add xxx</div><div class="line">lerna add xxx --scope=yyy</div></pre></td></tr></table></figure>
+<p>和npm install/yarn add不同的是，使用lerna add，可以一个lerna repo下的所有项目依赖相同的版本，避免不同的owner之间问“喂，你们用的啥版本jQuery？这个API我能用不？”。当然，会有情况下某些第三方的包/版本只适用于其中的某个/某些pacakge，可以用–scope来做到。另外，有些同时正在开发的package可能没有被发布，或者线上版本已经过时，lerna会把你本地的代码link在一起，让调试和自动化测试变得容易的多。lerna add package1 –scope=package2： 这样，你本地的package1会依赖于本地的package2，而不用担心package2没发布或者已发布的版本是过时的。</p>
+<h3 id="Bootstrap"><a href="#Bootstrap" class="headerlink" title="Bootstrap"></a>Bootstrap</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">lerna bootstrap</div></pre></td></tr></table></figure>
+<p>读取每个package的package.json，安装依赖，并且把跨项目的依赖链接在一起。比如说package1的packag.json中有：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"dependencies"</span>: &#123;</div><div class="line">    <span class="attr">"react"</span>: <span class="string">"a.b.c"</span>,</div><div class="line">    <span class="attr">"package2"</span>: <span class="string">"d.e.f"</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>执行bootstrap之后，相当于用npm/yarn安装了react并link了package2：这在依赖关系复杂的时候，解决了很大的问题。</p>
+<h3 id="publish"><a href="#publish" class="headerlink" title="publish"></a>publish</h3><p>publish干了以下的事情：</p>
+<ol>
+<li>检查哪些项目应该被publish</li>
+<li>调整lerna.json中的版本号</li>
+<li>修改所有的package.json让它们只想正确的版本</li>
+<li>更新所有的依赖</li>
+<li>创建新的git commit和tag</li>
+<li>publish</li>
+</ol>
+<p>其他的publish参数可以参开人家的<a href="https://github.com/lerna/lerna/blob/master/README.md" target="_blank" rel="external">Readme</a></p>
+<h3 id="run"><a href="#run" class="headerlink" title="run"></a>run</h3><p>lerna run 就可以执行所有对应名字的npm scripts</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">JavaScript</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">project management</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">package management</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/05/23/lerna/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-nginx" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1507,86 +1610,6 @@
 
 
   
-    <article id="post-es6-generator" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/24/es6-generator/">es6-generator</a>
-    </h1>
-  
-
-        
-        <a href="/2017/03/24/es6-generator/" class="archive-article-date">
-  	<time datetime="2017-03-24T08:54:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-24</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>看babel官网上提供的例子</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> fibonacci = &#123;</div><div class="line">  [<span class="built_in">Symbol</span>.iterator]: <span class="function"><span class="keyword">function</span>*(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> pre = <span class="number">0</span>, cur = <span class="number">1</span>;</div><div class="line">    <span class="keyword">for</span> (;;) &#123;</div><div class="line">      <span class="keyword">var</span> temp = pre;</div><div class="line">      pre = cur;</div><div class="line">      cur += temp;</div><div class="line">      <span class="keyword">yield</span> cur;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> n <span class="keyword">of</span> fibonacci) &#123;</div><div class="line">  <span class="comment">// truncate the sequence at 1000</span></div><div class="line">  <span class="keyword">if</span> (n &gt; <span class="number">1000</span>)</div><div class="line">    <span class="keyword">break</span>;</div><div class="line">  <span class="built_in">console</span>.log(n);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>在for…of…循环中，会调用迭代器对象的迭代器方法。之前那篇迭代器有提到过，但是这里的function*和普通的函数function不一样。如果是普通的函数，不管什么时候执行，得到的结果总是一样的（不考虑全局变量之类的干扰），或者说，和上一次无关。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Javascript</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">ES6(ES2015)</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/03/24/es6-generator/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1753,6 +1776,18 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Vue.js</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">JavaScript</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">project management</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">package management</a>
               </li>
             
             <div class="clearfix"></div>

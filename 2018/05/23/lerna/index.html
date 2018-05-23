@@ -6,17 +6,18 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Tag: design pattern | Yucong&#39;s Blog</title>
+  <title>lerna——多项目多模块的管理 | Yucong&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="No matter where we are going, it starts from where we are">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Yucong's Blog">
-<meta property="og:url" content="http://yoursite.com/tags/design-pattern/index.html">
+  <meta name="description" content=".Net项目中有solution和projects的概念（本人.Net大菜鸟。。）通常的WebUI项目是没有的。甚至连project这个概念都不太清晰，一些比较随意的项目，或者有些年头的项目，package.json到处都是是很常见的现象。甚至还有很多项目没有使用npm那一套进行管理。同时，前端组件经常出现跨平台跨项目复用的情况——比如说，整个公司所有产品网站的警告框，需要采用相同的设计和行为，我">
+<meta property="og:type" content="article">
+<meta property="og:title" content="lerna——多项目多模块的管理">
+<meta property="og:url" content="http://yoursite.com/2018/05/23/lerna/index.html">
 <meta property="og:site_name" content="Yucong's Blog">
-<meta property="og:description" content="No matter where we are going, it starts from where we are">
+<meta property="og:description" content=".Net项目中有solution和projects的概念（本人.Net大菜鸟。。）通常的WebUI项目是没有的。甚至连project这个概念都不太清晰，一些比较随意的项目，或者有些年头的项目，package.json到处都是是很常见的现象。甚至还有很多项目没有使用npm那一套进行管理。同时，前端组件经常出现跨平台跨项目复用的情况——比如说，整个公司所有产品网站的警告框，需要采用相同的设计和行为，我">
+<meta property="og:updated_time" content="2018-05-23T04:30:14.807Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Yucong's Blog">
-<meta name="twitter:description" content="No matter where we are going, it starts from where we are">
+<meta name="twitter:title" content="lerna——多项目多模块的管理">
+<meta name="twitter:description" content=".Net项目中有solution和projects的概念（本人.Net大菜鸟。。）通常的WebUI项目是没有的。甚至连project这个概念都不太清晰，一些比较随意的项目，或者有些年头的项目，package.json到处都是是很常见的现象。甚至还有很多项目没有使用npm那一套进行管理。同时，前端组件经常出现跨平台跨项目复用的情况——比如说，整个公司所有产品网站的警告框，需要采用相同的设计和行为，我">
   
     <link rel="alternative" href="/atom.xml" title="Yucong&#39;s Blog" type="application/atom+xml">
   
@@ -140,64 +141,206 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-lerna" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/12/25/Functional-UI/" class="archive-article-date">
-  	<time datetime="2017-12-25T01:29:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-12-25</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/12/25/Functional-UI/">Functional approach to frontend development</a>
+    <h1 class="article-title" itemprop="name">
+      lerna——多项目多模块的管理
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2018/05/23/lerna/" class="archive-article-date">
+  	<time datetime="2018-05-23T02:45:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>.Net项目中有solution和projects的概念（本人.Net大菜鸟。。）通常的WebUI项目是没有的。甚至连project这个概念都不太清晰，一些比较随意的项目，或者有些年头的项目，package.json到处都是是很常见的现象。甚至还有很多项目没有使用npm那一套进行管理。同时，前端组件经常出现跨平台跨项目复用的情况——比如说，整个公司所有产品网站的警告框，需要采用相同的设计和行为，我们不希望每一个前端团队都拿着设计稿重复一遍实现，那样有整体的rebranding的时候会是噩梦。<br>现在很常见的一种实践就是，把每一个组件都打成npm包发布出去，每个项目都根据npm规范来使用他们。这种实践下，我们一个“项目”里，就会出现多个npm package。一个常见的情况，我们会同时开发多个模块，这些模块之间互相有依赖，本地debug的时候可能有dependency并没有发布出去。如果我们大量使用npm link会让本地开发变得十分麻烦和混乱，自动化测试也变得很困难。这时，使用lerna管理我们的项目会是一个不错的主意。</p>
+<p><a href="https://github.com/lerna/lerna" target="_blank" rel="external">https://github.com/lerna/lerna</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install lerna -g</div></pre></td></tr></table></figure>
+<h3 id="典型的lerna项目结构"><a href="#典型的lerna项目结构" class="headerlink" title="典型的lerna项目结构"></a>典型的lerna项目结构</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">my-lerna-repo/</div><div class="line">  package.json</div><div class="line">  packages/</div><div class="line">    package-1/</div><div class="line">      package.json</div><div class="line">    package-2/</div><div class="line">      package.json</div></pre></td></tr></table></figure>
+<p>这个项目的readme写得非常舒服，就不贴命令来凑篇幅了。</p>
+<h3 id="Add"><a href="#Add" class="headerlink" title="Add"></a>Add</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">lerna add xxx</div><div class="line">lerna add xxx --scope=yyy</div></pre></td></tr></table></figure>
+<p>和npm install/yarn add不同的是，使用lerna add，可以一个lerna repo下的所有项目依赖相同的版本，避免不同的owner之间问“喂，你们用的啥版本jQuery？这个API我能用不？”。当然，会有情况下某些第三方的包/版本只适用于其中的某个/某些pacakge，可以用–scope来做到。另外，有些同时正在开发的package可能没有被发布，或者线上版本已经过时，lerna会把你本地的代码link在一起，让调试和自动化测试变得容易的多。lerna add package1 –scope=package2： 这样，你本地的package1会依赖于本地的package2，而不用担心package2没发布或者已发布的版本是过时的。</p>
+<h3 id="Bootstrap"><a href="#Bootstrap" class="headerlink" title="Bootstrap"></a>Bootstrap</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">lerna bootstrap</div></pre></td></tr></table></figure>
+<p>读取每个package的package.json，安装依赖，并且把跨项目的依赖链接在一起。比如说package1的packag.json中有：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"dependencies"</span>: &#123;</div><div class="line">    <span class="attr">"react"</span>: <span class="string">"a.b.c"</span>,</div><div class="line">    <span class="attr">"package2"</span>: <span class="string">"d.e.f"</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>执行bootstrap之后，相当于用npm/yarn安装了react并link了package2：这在依赖关系复杂的时候，解决了很大的问题。</p>
+<h3 id="publish"><a href="#publish" class="headerlink" title="publish"></a>publish</h3><p>publish干了以下的事情：</p>
+<ol>
+<li>检查哪些项目应该被publish</li>
+<li>调整lerna.json中的版本号</li>
+<li>修改所有的package.json让它们只想正确的版本</li>
+<li>更新所有的依赖</li>
+<li>创建新的git commit和tag</li>
+<li>publish</li>
+</ol>
+<p>其他的publish参数可以参开人家的<a href="https://github.com/lerna/lerna/blob/master/README.md" target="_blank" rel="external">Readme</a></p>
+<h3 id="run"><a href="#run" class="headerlink" title="run"></a>run</h3><p>lerna run 就可以执行所有对应名字的npm scripts</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃鱼&lt;。)#)))≦<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/assets/img/alipay.png">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/assets/img/weixinpay.png">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">functional programming</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">JavaScript</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">design pattern</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">project management</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">package management</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/05/23/lerna/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/2018/04/09/nginx/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Introduction of Nginx</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -220,9 +363,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
