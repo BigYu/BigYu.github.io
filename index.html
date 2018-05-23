@@ -543,8 +543,8 @@
 <p>model</p>
 <figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> &lt; ApplicationRecord</span></div><div class="line">  validates <span class="symbol">:name</span>, <span class="symbol">presence:</span> <span class="literal">true</span></div><div class="line"></div><div class="line">  before_create <span class="keyword">do</span></div><div class="line">    <span class="keyword">self</span>.name = login.capitalize <span class="keyword">if</span> name.blank?</div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
 <p>view</p>
-<figure class="highlight erb"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;%=<span class="ruby"> form_tag(<span class="string">"/login"</span>, <span class="symbol">method:</span> <span class="string">"post"</span>) <span class="keyword">do</span> </span>%&gt;</div><div class="line">  &lt;%=<span class="ruby"> text_field_tag(<span class="symbol">:name</span>) </span>%&gt;</div><div class="line">  &lt;%=<span class="ruby"> password_field_tag(<span class="symbol">:password</span>) </span>%&gt;</div><div class="line">  &lt;%=<span class="ruby"> submit_tag(<span class="string">"Search"</span>) </span>%&gt;</div><div class="line">&lt;%<span class="ruby"> <span class="keyword">end</span> </span>%&gt;</div></pre></td></tr></table></figure>
-<figure class="highlight erb"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;h1&gt;Welcome&lt;/h1&gt;</div><div class="line">&lt;h3&gt;Hello: &lt;%=<span class="ruby"> user.name </span>%&gt;&lt;/h3&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight erb"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="xml"><span class="tag">&lt;<span class="name">%=</span></span></span><span class="ruby"> form_tag(<span class="string">"/login"</span>, <span class="symbol">method:</span> <span class="string">"post"</span>) <span class="keyword">do</span> </span><span class="xml"><span class="tag">%&gt;</span></span></div><div class="line">  <span class="tag">&lt;<span class="name">%=</span></span><span class="ruby"> text_field_tag(<span class="symbol">:name</span>) </span><span class="xml"><span class="tag">%&gt;</span></span></div><div class="line">  <span class="tag">&lt;<span class="name">%=</span></span><span class="ruby"> password_field_tag(<span class="symbol">:password</span>) </span><span class="xml"><span class="tag">%&gt;</span></span></div><div class="line">  <span class="tag">&lt;<span class="name">%=</span></span><span class="ruby"> submit_tag(<span class="string">"Search"</span>) </span><span class="xml"><span class="tag">%&gt;</span></span></div><div class="line"><span class="tag">&lt;<span class="name">%</span></span><span class="ruby"> <span class="keyword">end</span> </span><span class="xml"><span class="tag">%&gt;</span></span></div></pre></td></tr></table></figure>
+<figure class="highlight erb"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="xml"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>Welcome<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></div><div class="line"><span class="tag">&lt;<span class="name">h3</span>&gt;</span>Hello: <span class="tag">&lt;<span class="name">%=</span></span><span class="ruby"> user.name </span><span class="xml"><span class="tag">%&gt;</span><span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span></div></pre></td></tr></table></figure>
 <p>controller</p>
 <figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">LoginsController</span> &lt; ApplicationController</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">create</span></span></div><div class="line">    <span class="keyword">if</span> user = User.authenticate(params[<span class="symbol">:username</span>], params[<span class="symbol">:password</span>])</div><div class="line">      session[<span class="symbol">:current_user_id</span>] = user.id</div><div class="line">      redirect_to landing_url</div><div class="line">    <span class="keyword">end</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
 <h2 id="UI和业务逻辑没有太多耦合"><a href="#UI和业务逻辑没有太多耦合" class="headerlink" title="UI和业务逻辑没有太多耦合"></a>UI和业务逻辑没有太多耦合</h2><p>这就是我们所描述的田园时代，简单清晰。展示层，或者我们所说的View和业务逻辑，就是那段controller代码，只是通过model的字段定义有数据接口上的约定，没有其余的耦合。Controller处理业务逻辑，操作我们的model。View用来展示model。想象我们现在不用ejs作为模板引擎了，比如说用pug，controller基本不用啥改动。同样的，现在我们把db用mongodb替代mysql（事实上，我推荐个人小项目这么干），view基本不用改。即使业务变复杂，这个原则不会改变。</p>
@@ -1688,7 +1688,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Javascript</a>
+                <a href="javascript:void(0)" class="js-tag color4">css</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1700,15 +1700,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">css</a>
+                <a href="javascript:void(0)" class="js-tag color1">Javascript</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">javascript</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">ES6(ES2015)</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1720,11 +1716,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+                <a href="javascript:void(0)" class="js-tag color2">ES6(ES2015)</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">html</a>
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1732,7 +1728,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ES6</a>
+                <a href="javascript:void(0)" class="js-tag color5">html</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1745,6 +1741,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Events</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">ES6</a>
               </li>
              
               <li class="article-tag-list-item">
