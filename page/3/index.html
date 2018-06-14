@@ -142,6 +142,124 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-code-convention" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/10/13/code-convention/">Airbnb JavaScript Style Guide</a>
+    </h1>
+  
+
+        
+        <a href="/2016/10/13/code-convention/" class="archive-article-date">
+  	<time datetime="2016-10-13T01:25:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-10-13</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>Note that both let and const are block-scoped.</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// const and let only exist in the blocks they are defined in.</span></div><div class="line">&#123;</div><div class="line">  <span class="keyword">let</span> a = <span class="number">1</span>;</div><div class="line">  <span class="keyword">const</span> b = <span class="number">1</span>;</div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.log(a); <span class="comment">// ReferenceError</span></div><div class="line"><span class="built_in">console</span>.log(b); <span class="comment">// ReferenceError</span></div></pre></td></tr></table></figure>
+<ul>
+<li>Use computed property names when creating objects with dynamic property names.</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getKey</span>(<span class="params">k</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="string">`a key named <span class="subst">$&#123;k&#125;</span>`</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// bad</span></div><div class="line"><span class="keyword">const</span> obj = &#123;</div><div class="line">  id: <span class="number">5</span>,</div><div class="line">  name: <span class="string">'San Francisco'</span>,</div><div class="line">&#125;;</div><div class="line">obj[getKey(<span class="string">'enabled'</span>)] = <span class="literal">true</span>;</div><div class="line"></div><div class="line"><span class="comment">// good</span></div><div class="line"><span class="keyword">const</span> obj = &#123;</div><div class="line">  id: <span class="number">5</span>,</div><div class="line">  name: <span class="string">'San Francisco'</span>,</div><div class="line">  [getKey(<span class="string">'enabled'</span>)]: <span class="literal">true</span>,</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<ul>
+<li>Do not call Object.prototype methods directly, such as hasOwnProperty, propertyIsEnumerable, and isPrototypeOf.</li>
+</ul>
+<blockquote>
+<p>Why? These methods may be shadowed by properties on the object in question - consider { hasOwnProperty: false } - or, the object may be a null object (Object.create(null)).</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// bad</span></div><div class="line"><span class="built_in">console</span>.log(object.hasOwnProperty(key));</div><div class="line"></div><div class="line"><span class="comment">// good</span></div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.prototype.hasOwnProperty.call(object, key));</div><div class="line"></div><div class="line"><span class="comment">// best</span></div><div class="line"><span class="keyword">const</span> has = <span class="built_in">Object</span>.prototype.hasOwnProperty; <span class="comment">// cache the lookup once, in module scope.</span></div><div class="line"><span class="comment">/* or */</span></div><div class="line"><span class="keyword">const</span> has = <span class="built_in">require</span>(<span class="string">'has'</span>);</div><div class="line">…</div><div class="line"><span class="built_in">console</span>.log(has.call(object, key));</div></pre></td></tr></table></figure>
+<ul>
+<li>Use array spreads … to copy arrays.</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// bad</span></div><div class="line"><span class="keyword">const</span> len = items.length;</div><div class="line"><span class="keyword">const</span> itemsCopy = [];</div><div class="line"><span class="keyword">let</span> i;</div><div class="line"></div><div class="line"><span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; len; i++) &#123;</div><div class="line">  itemsCopy[i] = items[i];</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// good</span></div><div class="line"><span class="keyword">const</span> itemsCopy = [...items];</div></pre></td></tr></table></figure>
+<ul>
+<li>Use object destructuring when accessing and using multiple properties of an object. jscs:</li>
+</ul>
+<blockquote>
+<p>Why? Destructuring saves you from creating temporary references for those properties.</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// bad</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getFullName</span>(<span class="params">user</span>) </span>&#123;</div><div class="line">  <span class="keyword">const</span> firstName = user.firstName;</div><div class="line">  <span class="keyword">const</span> lastName = user.lastName;</div><div class="line"></div><div class="line">  <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;firstName&#125;</span> <span class="subst">$&#123;lastName&#125;</span>`</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// good</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getFullName</span>(<span class="params">user</span>) </span>&#123;</div><div class="line">  <span class="keyword">const</span> &#123; firstName, lastName &#125; = user;</div><div class="line">  <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;firstName&#125;</span> <span class="subst">$&#123;lastName&#125;</span>`</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// best</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getFullName</span>(<span class="params">&#123; firstName, lastName &#125;</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;firstName&#125;</span> <span class="subst">$&#123;lastName&#125;</span>`</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>Use array destructuring. jscs: requireArrayDestructuring</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>];</div><div class="line"></div><div class="line"><span class="comment">// bad</span></div><div class="line"><span class="keyword">const</span> first = arr[<span class="number">0</span>];</div><div class="line"><span class="keyword">const</span> second = arr[<span class="number">1</span>];</div><div class="line"></div><div class="line"><span class="comment">// good</span></div><div class="line"><span class="keyword">const</span> [first, second] = arr;</div></pre></td></tr></table></figure>
+<ul>
+<li>Strings that cause the line to go over 100 characters should not be written across multiple lines using string concatenation.</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// bad</span></div><div class="line"><span class="keyword">const</span> errorMessage = <span class="string">'This is a super long error that was thrown because \</span></div><div class="line">of Batman. When you stop to think about how Batman had anything to do \</div><div class="line">with this, you would get nowhere \</div><div class="line">fast.';</div><div class="line"></div><div class="line"><span class="comment">// bad</span></div><div class="line"><span class="keyword">const</span> errorMessage = <span class="string">'This is a super long error that was thrown because '</span> +</div><div class="line">  <span class="string">'of Batman. When you stop to think about how Batman had anything to do '</span> +</div><div class="line">  <span class="string">'with this, you would get nowhere fast.'</span>;</div><div class="line"></div><div class="line"><span class="comment">// good</span></div><div class="line"><span class="keyword">const</span> errorMessage = <span class="string">'This is a super long error that was thrown because of Batman. When you stop to think about how Batman had anything to do with this, you would get nowhere fast.'</span>;</div></pre></td></tr></table></figure>
+<ul>
+<li>Do not unnecessarily escape characters in strings. eslint: no-useless-escape</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// bad</span></div><div class="line"><span class="keyword">const</span> foo = <span class="string">'\'this\' \i\s \"quoted\"'</span>;</div><div class="line"></div><div class="line"><span class="comment">// good</span></div><div class="line"><span class="keyword">const</span> foo = <span class="string">'\'this\' is "quoted"'</span>;</div><div class="line"><span class="keyword">const</span> foo = <span class="string">`'this' is "quoted"`</span>;</div></pre></td></tr></table></figure>
+<ul>
+<li>Use named function expressions instead of function declarations. eslint: func-style jscs:</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// bad</span></div><div class="line"><span class="keyword">const</span> foo = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="comment">// bad</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// good</span></div><div class="line"><span class="keyword">const</span> foo = <span class="function"><span class="keyword">function</span> <span class="title">bar</span>(<span class="params"></span>) </span>&#123;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<ul>
+<li>Prefer the use of the spread operator … to call variadic functions. eslint: prefer-spread</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// bad</span></div><div class="line"><span class="keyword">const</span> x = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];</div><div class="line"><span class="built_in">console</span>.log.apply(<span class="built_in">console</span>, x);</div><div class="line"></div><div class="line"><span class="comment">// good</span></div><div class="line"><span class="keyword">const</span> x = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];</div><div class="line"><span class="built_in">console</span>.log(...x);</div><div class="line"></div><div class="line"><span class="comment">// bad</span></div><div class="line"><span class="keyword">new</span> (<span class="built_in">Function</span>.prototype.bind.apply(<span class="built_in">Date</span>, [<span class="literal">null</span>, <span class="number">2016</span>, <span class="number">08</span>, <span class="number">05</span>]));</div><div class="line"></div><div class="line"><span class="comment">// good</span></div><div class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(...[<span class="number">2016</span>, <span class="number">08</span>, <span class="number">05</span>]);</div></pre></td></tr></table></figure>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Javascript</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2016/10/13/code-convention/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-essay0" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -920,80 +1038,9 @@
 
 
   
-    <article id="post-hello-world" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/07/31/hello-world/">Hello World</a>
-    </h1>
-  
-
-        
-        <a href="/2016/07/31/hello-world/" class="archive-article-date">
-  	<time datetime="2016-07-31T10:19:21.655Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-07-31</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2016/07/31/hello-world/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
+      <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
     </nav>
   
 
@@ -1088,14 +1135,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Frameworks</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">css</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">functional programming</a>
               </li>
              
@@ -1104,15 +1143,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Frameworks</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">css</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Javascript</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">javascript</a>
+                <a href="javascript:void(0)" class="js-tag color5">framework</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">framework</a>
+                <a href="javascript:void(0)" class="js-tag color1">javascript</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1125,6 +1172,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">Dom</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1144,7 +1195,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Dom</a>
+                <a href="javascript:void(0)" class="js-tag color4">ES6</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1157,10 +1208,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Events</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ES6</a>
               </li>
              
               <li class="article-tag-list-item">

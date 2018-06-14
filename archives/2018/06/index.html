@@ -6,21 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Make UI development easy again | Yucong&#39;s Blog</title>
+  <title>Archives: 2018/6 | Yucong&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="作为前端开发者经常有被其他领域的工程师质疑：“你整天都在忙啥。不就是写个UI有那么难么？”当然我们可以找出很多例子来证明UI真的可以很难很高科技，比如说amazon那个魔术一般的wunderbar，但是我们加班真的在忙这些东西吗？我猜测绝大多数人跟我一样，头疼的task和bug都来自于无穷无尽的entity CRUD，表单，表格当中。所以我个人是很想赞同他们的质疑：“前端真的有那么难吗？”
-It">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Make UI development easy again">
-<meta property="og:url" content="http://yoursite.com/2017/12/11/easy-ui/index.html">
+  <meta name="description" content="No matter where we are going, it starts from where we are">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Yucong's Blog">
+<meta property="og:url" content="http://yoursite.com/archives/2018/06/index.html">
 <meta property="og:site_name" content="Yucong's Blog">
-<meta property="og:description" content="作为前端开发者经常有被其他领域的工程师质疑：“你整天都在忙啥。不就是写个UI有那么难么？”当然我们可以找出很多例子来证明UI真的可以很难很高科技，比如说amazon那个魔术一般的wunderbar，但是我们加班真的在忙这些东西吗？我猜测绝大多数人跟我一样，头疼的task和bug都来自于无穷无尽的entity CRUD，表单，表格当中。所以我个人是很想赞同他们的质疑：“前端真的有那么难吗？”
-It">
-<meta property="og:updated_time" content="2017-12-22T05:28:27.609Z">
+<meta property="og:description" content="No matter where we are going, it starts from where we are">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Make UI development easy again">
-<meta name="twitter:description" content="作为前端开发者经常有被其他领域的工程师质疑：“你整天都在忙啥。不就是写个UI有那么难么？”当然我们可以找出很多例子来证明UI真的可以很难很高科技，比如说amazon那个魔术一般的wunderbar，但是我们加班真的在忙这些东西吗？我猜测绝大多数人跟我一样，头疼的task和bug都来自于无穷无尽的entity CRUD，表单，表格当中。所以我个人是很想赞同他们的质疑：“前端真的有那么难吗？”
-It">
+<meta name="twitter:title" content="Yucong's Blog">
+<meta name="twitter:description" content="No matter where we are going, it starts from where we are">
   
     <link rel="alternative" href="/atom.xml" title="Yucong&#39;s Blog" type="application/atom+xml">
   
@@ -144,408 +140,49 @@ It">
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-easy-ui" class="article article-type-post " itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
+            
   
-    <h1 class="article-title" itemprop="name">
-      Make UI development easy again
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2018" class="archive-year">2018</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2018/06/14/webpack-hmr/" class="archive-article-date">
+  	<time datetime="2018-06-14T10:36:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-06-14</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2018/06/14/webpack-hmr/">转载:Webpack Hot Module Replacement 的原理解析</a>
     </h1>
   
 
-        
-        <a href="/2017/12/11/easy-ui/" class="archive-article-date">
-  	<time datetime="2017-12-11T02:26:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-12-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>作为前端开发者经常有被其他领域的工程师质疑：“你整天都在忙啥。不就是写个UI有那么难么？”当然我们可以找出很多例子来证明UI真的可以很难很高科技，比如说amazon那个魔术一般的wunderbar，但是我们加班真的在忙这些东西吗？我猜测绝大多数人跟我一样，头疼的task和bug都来自于无穷无尽的entity CRUD，表单，表格当中。所以我个人是很想赞同他们的质疑：“前端真的有那么难吗？”</p>
-<h1 id="It-was-easy"><a href="#It-was-easy" class="headerlink" title="It was easy"></a>It was easy</h1><p>若干年之前，我们并没有javascript，也没有SPA，那时的web应用开发是非常简单清晰的。我们以经典的ROR（ruby on rails, 很多被广泛的使用的框架，如structs，spring, Yii, asp.net都深受其影响）为例：</p>
-<p>建表(当然production中这么建表被fire了后果自负)</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="keyword">user</span> (</div><div class="line">  <span class="keyword">id</span> <span class="built_in">int</span>(<span class="number">11</span>) NNOT <span class="literal">NULL</span> auto_increment,</div><div class="line">  <span class="keyword">name</span> <span class="built_in">varchar</span>(<span class="number">255</span>),</div><div class="line">  <span class="keyword">password</span> <span class="built_in">varchar</span>(<span class="number">255</span>),</div><div class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="keyword">id</span>)</div><div class="line">);</div></pre></td></tr></table></figure>
-<p>model</p>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> &lt; ApplicationRecord</span></div><div class="line">  validates <span class="symbol">:name</span>, <span class="symbol">presence:</span> <span class="literal">true</span></div><div class="line"></div><div class="line">  before_create <span class="keyword">do</span></div><div class="line">    <span class="keyword">self</span>.name = login.capitalize <span class="keyword">if</span> name.blank?</div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
-<p>view</p>
-<figure class="highlight erb"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="xml"><span class="tag">&lt;<span class="name">%=</span></span></span><span class="ruby"> form_tag(<span class="string">"/login"</span>, <span class="symbol">method:</span> <span class="string">"post"</span>) <span class="keyword">do</span> </span><span class="xml"><span class="tag">%&gt;</span></span></div><div class="line">  <span class="tag">&lt;<span class="name">%=</span></span><span class="ruby"> text_field_tag(<span class="symbol">:name</span>) </span><span class="xml"><span class="tag">%&gt;</span></span></div><div class="line">  <span class="tag">&lt;<span class="name">%=</span></span><span class="ruby"> password_field_tag(<span class="symbol">:password</span>) </span><span class="xml"><span class="tag">%&gt;</span></span></div><div class="line">  <span class="tag">&lt;<span class="name">%=</span></span><span class="ruby"> submit_tag(<span class="string">"Search"</span>) </span><span class="xml"><span class="tag">%&gt;</span></span></div><div class="line"><span class="tag">&lt;<span class="name">%</span></span><span class="ruby"> <span class="keyword">end</span> </span><span class="xml"><span class="tag">%&gt;</span></span></div></pre></td></tr></table></figure>
-<figure class="highlight erb"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="xml"><span class="tag">&lt;<span class="name">h1</span>&gt;</span>Welcome<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span></div><div class="line"><span class="tag">&lt;<span class="name">h3</span>&gt;</span>Hello: <span class="tag">&lt;<span class="name">%=</span></span><span class="ruby"> user.name </span><span class="xml"><span class="tag">%&gt;</span><span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span></div></pre></td></tr></table></figure>
-<p>controller</p>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">LoginsController</span> &lt; ApplicationController</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">create</span></span></div><div class="line">    <span class="keyword">if</span> user = User.authenticate(params[<span class="symbol">:username</span>], params[<span class="symbol">:password</span>])</div><div class="line">      session[<span class="symbol">:current_user_id</span>] = user.id</div><div class="line">      redirect_to landing_url</div><div class="line">    <span class="keyword">end</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
-<p>这一切很简单，在经典的MVC+serverside rendering的架构中，controller和model都是在server side运行,controller来管理business logic：调用哪个model（User），进行什么操作（authenticate），结果是什么（成功则跳转），model用来管理数据：User的字段,query（本例中映射到数据库）等操作。而view，很诚实的根据model里的数据来渲染页面，提交表单。我们没有JavaScript，发不出change，onClick事件，没有办法在view里面进行正则验证，这些逻辑都由controller完成。</p>
-<p><em>Recap</em>：</p>
-<ol>
-<li>UI = f(model),不会受其他data binding或者events的影响</li>
-<li>view和controller之间划分了一条明显的界限</li>
-</ol>
-<p>好处：</p>
-<ol>
-<li>简单清晰，开发效率高，学习成本低</li>
-<li>想象我们现在不用ejs作为模板引擎了，比如说用pug，controller基本不用啥改动。同样的，现在我们把db用mongodb替代mysql（事实上，我推荐个人小项目这么干），view基本不用改。</li>
-</ol>
-<p>你换angular试试？把validate写进filter里:P</p>
-<p>举一个现实的例子，在campaign ui从ui server migrate到SPA的过程中，我们在UI server端最费心的是什么？删掉这个controller会不会有request 404。实际上，如果不是这么大规模的替换，根本用不了这么担心，比如上面提到的换模板引擎或者换db已经够大了吧。不用说简单（呵呵）的修改逻辑或者修改用户体验。</p>
-<p>换knockout呢？看不懂的console error等着你</p>
-<h2 id="why-we-move-away"><a href="#why-we-move-away" class="headerlink" title="why we move away"></a>why we move away</h2><p>To reduce UI friction!!</p>
-<ol>
-<li>每次重新渲染页面的perf无法接受</li>
-<li>复杂交互的需求：animation等</li>
-</ol>
-<p>拿这写个gmail？微软的卧底才这么干。还是用angular吧=.=</p>
-<h2 id="why-we-want-it-again"><a href="#why-we-want-it-again" class="headerlink" title="why we want it again?"></a>why we want it again?</h2><p>现在前端有大量MVC，MVVM框架，他们很优秀解决了无数的问题，但同时也引起开篇提出的质疑：现在前端是加班重灾区（jquery要接大锅，但与本文主题无关，略，并且相对于功劳，它不优雅之处并非主要）立下汗马功劳的events机制和data binding反过来在bite我们：</p>
-<ol>
-<li><p>hard bugs</p>
-<p>在campaign creation的第一步和第四步，我们有两次让用户set buget的机会。如果我们让这两个budget control是一个instance:因为每一步的next和back button都会validate当前step所有的form,那么实际上，第一步和第四步的都执行了自己步骤以外的validation，这导致了很多bug；如果让他们是不同的instance，需要构造两次不说，其他受budget影响的component都需要监听或者分辨来自不同budget control的事件，或者判断传入的instance是不是当前想要的。数据和validation同步也是可能导致问题的。</p>
-</li>
-<li><p>DCR and rebranding</p>
-<p>我们做了决定，deprecate monthly budget。然而 有很多已经存在的campaign apply了monthly budget， 所以settings页面需要保留monthly选项，creation页面需要删掉。</p>
-<p>当我们已经在pilot 紧张的准备GA的时候，另外一个feature也要开始准备release了：shared budget。原来的budget control成为了一个child 和shared budget的control一起组成新的budget panel：所有的事件和接口，都需要转发。</p>
-</li>
-<li><p>painful debugging experience</p>
-<p>我们有很多别的限制：不同的location，不同的language，budget的currency和limitation不一样，同时，bid是受到budget的限制的，traffic estimation是收到budget影响的。<br>别忘了，我们有两个budget control，而且未来有可能，面包屑上方的header里，会出现第三个。<br>别忘了，shared budget是和别的campaign关联的。budget除了value，还有type。是的，type还会变。你可以想象到我们在调试其中关于validation,关于filter，关于format，等等，bug的时候，不知道root cause在哪一脸懵逼的表情吗。</p>
-</li>
-<li><p>async</p>
-<p>我们的render和destroy方法都是同步的。因为lazy loading的需求，我们需要在render的时候再加载一个第三方库，加载成功之后会创建一系列新的实体在其子节点上。destroy的时候，需要讲他们一一销毁：这时，一个很容易出bug的问题诞生了：你怎么知道destroy的时候render及其异步操作已经全部完成。稍不小心就会让程序进入无法预测的异常状态。</p>
-<p>（1）改框架，render和destroy都支持promise。</p>
-<ul>
-<li>好主意，加油（微笑）争取明年release（doge）<br>（2）加全局flag</li>
-<li>我们确实很多时候是怎么干的。</li>
-<li>异步之后又fork出新的异步task怎么办</li>
-<li>你怎么能保证线程安全？怎么能保证flag不被修改？如果之后的业务告诉你确实要修改flag怎么办？比如说，有两个同时进行的lazy loading。掀桌。</li>
-</ul>
-</li>
-</ol>
-<p>哦，对了，我们GA了之后，另外一个crew开始在我们的基础上做multiple language。原来language由enum，成为了数组或者enum。嗯。。。<br>我们加班就是在干这样的事情的。</p>
-<h1 id="Make-it-easy-again"><a href="#Make-it-easy-again" class="headerlink" title="Make it easy again"></a>Make it easy again</h1><h2 id="We-want-both"><a href="#We-want-both" class="headerlink" title="We want both"></a>We want both</h2><p>回想一下我们为什么放弃了那些田园时代美好的东西：1. perf 2. ux requirements</p>
-<p>不就是把server sider rendering换成client side rendering嘛，其他的逻辑组织一切都不变，完全平移到client side。或者说用javascript强行写一个ror或者asp.net搁浏览器里跑，可行吗？</p>
-<p>当然可行，不过频繁的dom操作，依然让perf和体验不理想，可以归结为ui friction。好吧，我们写angular吧，我们写knockout吧，我们写backbone吧。</p>
-<p>喷了一大圈，那些大神们果然还是比我们厉害啊。</p>
-<h3 id="Not-a-blocker-now"><a href="#Not-a-blocker-now" class="headerlink" title="Not a blocker now"></a>Not a blocker now</h3><p>没想到现在我们迎来了一个大救星：virtual dom。放心的render，rerender吧，virtual dom刚我们干了reduce ui friction的活儿。咱们放心前进。</p>
-<p>另一方面，对于很多局部的小控件，其实啊，重画是完全可以接受的，并不是ui friction，比方说，你就是一个小小的date picker之类的。</p>
-<p>好了，现在我们可以回头找一下那一些被迫放弃的田园时代的美好吧。、</p>
-<p><em>Recap</em>：</p>
-<ol>
-<li>UI = f(model),不会受其他data binding或者events的影响</li>
-<li>view和controller之间划分了一条明显的界限</li>
-</ol>
-<h2 id="How？"><a href="#How？" class="headerlink" title="How？"></a>How？</h2><h3 id="状态递归"><a href="#状态递归" class="headerlink" title="状态递归"></a>状态递归</h3><p>controller是啥？描述状态转移的。compose出新的model 把这个新的model，交给新的view</p>
-<p><strong>controller: old_model -&gt; new_model</strong></p>
-<p>根据什么计算？废话，传进来的参数啊。别的东西我看不见看不见。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">new_model = r(old_model, params)</div></pre></td></tr></table></figure>
-<p>在这里，我们并不像局限于某一种特定的pattern来讨论这些问题：viewmodel还是model，who cares？我们可以都叫他state</p>
-<p>params也太局限了，我们也不想局限于某一种代码组织方式，controller function？controller class？这不重要，我们是来推销哲学的。我们就叫它action吧。</p>
-<p>敲黑板，划重点：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">state_next = r(state, action)</div></pre></td></tr></table></figure>
-<p>r is a pure function!r is a pure function!r is a pure function!</p>
-<h3 id="UI-f-state"><a href="#UI-f-state" class="headerlink" title="UI = f(state)"></a>UI = f(state)</h3><p>和以上同样的想法，把model扩展成state状态得到。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">UI = f(state)</div></pre></td></tr></table></figure>
-<p>f is a pure function!f is a pure function!f is a pure function!</p>
-<h3 id="pure-function"><a href="#pure-function" class="headerlink" title="pure function"></a>pure function</h3><ol>
-<li>what</li>
-</ol>
-<ul>
-<li>Given the same input, will always return the same output. 给定输入，则输出给定。</li>
-<li>Produces no side effects. 没有副作用。</li>
-</ul>
-<p>The simplest reusable building blocks of code in a program</p>
-<ul>
-<li>Immune to entire classes of bugs that have to do with shared mutable state</li>
-<li>Great candidates for parallel processing</li>
-<li>Easy to move around</li>
-</ul>
-<p><em>FP(functional programing)的数学背景(如果时间允许且听众感兴趣的话)</em></p>
-<p>(1) Category theory</p>
-<p>(解释了为什么pure function对干扰免疫，没有副作用)<br>(思考问题的时候，一定注意把pure function理解成pipe，而不是execute，重点！pipe！)</p>
-<ul>
-<li>category: an algebraic structure that comprises “objects” that are linked by “arrows“</li>
-<li>Consider the “category” as “container” which contains:<ul>
-<li>values</li>
-<li>transforming of values</li>
-</ul>
-</li>
-</ul>
-<p>(2) λ calc(lambda演算 然而JavaScript里的lambda 表达式不是真lambda表达式)</p>
-<ul>
-<li>λ-terms（解释了为什么“函数是一等公民”）<ul>
-<li>variables: x</li>
-<li>function creation/abstraction: λx.E</li>
-<li>function application: E1 E2</li>
-</ul>
-</li>
-<li>evaluation（解释了柯里化的数学原理，解释了FP对于异步和并行的优势，启发我们不要用传统的考虑“值”的思路（call by value）去理解而是call by name）<ul>
-<li>Alpha equivalence( or conversion )</li>
-<li>Beta reduction<ul>
-<li>call by value</li>
-<li>call by name</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<ol>
-<li>why</li>
-</ol>
-<ul>
-<li>we want UI to be predicable</li>
-<li>we want UI transforming be predicable</li>
-</ul>
-<p>(不要拿随机数生成来抬杠，因为随机数的生成，是需要seed的)</p>
-<ol>
-<li>benefits</li>
-</ol>
-<ul>
-<li>Easy to control the order</li>
-<li>Easy to pass in additional data</li>
-<li>Easy to make reusable reduce functions</li>
-</ul>
-<ol>
-<li>How</li>
-</ol>
-<ul>
-<li>currying</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">log</span>(<span class="params">status</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">context</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">message</span>) </span>&#123;</div><div class="line">      <span class="comment">// fancy logging code here</span></div><div class="line">    &#125;;</div><div class="line">  &#125;;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> info = log(<span class="string">'info'</span>); <span class="comment">// create a new function "info" by fixing first argument</span></div><div class="line">info(<span class="string">'db-context'</span>)(<span class="string">'message'</span>);</div><div class="line"></div><div class="line">log(<span class="string">'other level'</span>)(<span class="string">'some context'</span>)(<span class="string">'a message'</span>); <span class="comment">// use the original function directly with all arguments</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> dbInfo = info(<span class="string">'db'</span>); <span class="comment">// create a new function again</span></div><div class="line">dbInfo(<span class="string">'something happened'</span>);</div></pre></td></tr></table></figure>
-<ul>
-<li>partial</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">log</span>(<span class="params">status, context, message</span>) </span>&#123;</div><div class="line">  <span class="comment">// fancy logging code here</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">info</span>(<span class="params">context, message</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> log(<span class="string">'info'</span>, context, message);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">dbInfo</span>(<span class="params">message</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> info(<span class="string">'db'</span>, message);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li><p>immutable</p>
-<ul>
-<li>Some side effects avoided.</li>
-<li>Pure functions easier to write.</li>
-<li>Fast change detection.</li>
-<li>Immutable data can be safely cached.</li>
-<li>Easier to implement undo.</li>
-<li>Concurrency.</li>
-</ul>
-</li>
-</ul>
-<h3 id="Deep-in-r-centralized-state-management"><a href="#Deep-in-r-centralized-state-management" class="headerlink" title="Deep in r - centralized state management"></a>Deep in r - centralized state management</h3><ol>
-<li><p>state is read-only</p>
-<ul>
-<li>It is immutability</li>
-<li>all changes are centralized and happen one by one in a strict order</li>
-<li>Easy to be logged, serialized, stored, and later replayed for debugging or testing purposes.</li>
-</ul>
-</li>
-<li><p>Changes are made with pure functions</p>
-</li>
-</ol>
-<h3 id="Deep-in-f-UI-as-function-of-state"><a href="#Deep-in-f-UI-as-function-of-state" class="headerlink" title="Deep in f - UI as function of state"></a>Deep in f - UI as function of state</h3><ol>
-<li>One-way data binding</li>
-<li><p>single source of truth</p>
-<p> 我们之前遇到的各种前端框架显然不满足f(Status) = UI，通常来说，应该是<br>   f(Status, 用户交互，推送信息，其他UI联动变化，……) = UI<br> 那么React必然要做的事情就是实现一个:g(上面其他因素) = status，这就是需要单向数据流的原因。<br> 我个人的体会，因为可能已经习惯了诸如knockout、angularjs等成熟的框架提供的各种完善的two-way data-binding的机制，第一眼很难接受React的one-way data flow，而且写一些很小的component的时候（比如hello world之类的），会发现很简单的事情反而需要我们花一些额外的精力。<br> 比如一个最简单的input框，如果用ko，只需要把他和vm上一个observable绑定就好了，在ng中也是很简单的ng-model=xxx，但是突然React告诉你，不行，你要绕一圈，你的输入只能作用于status的update，绕一圈才能回到UI的变化，当然不习惯。<br> Facebook的工程师们肯定不是吃饱了撑的才这样设计。我们可以想象一些稍微复杂的逻辑——比如，如果这个input框需要把用户的输入全部转成大写字母，或者拒绝掉一些非法字符。当然，现在的框架已经足够优秀，我们可以pass in各种custom filter。问题就在于当这些需求一个一个堆砌起来，逻辑就会逐渐变得混乱，filter，suscription，events等等聚集在一起，代码的可读性会严重降低且难以维护。当UI中的元素越来越多，业务越来越复杂，这些不便利之处会指数级爆炸。<br>而单向的数据流就不存在这些问题了，flux中有一个很好的Dispature和Store的概念，就像现代物流的集散分拣中心一样的（此处谢绝抬杠），一件快递的时候看起来不必要，但是成千上万的数据涌来，他依然能把所有的东西处理得井井有条，所有的东西就像阅兵式上的方阵，清晰有条理。我们会被从filter，suscription，events中被拯救出来，只有两样简单的事情：status，UI。</p>
-</li>
-</ol>
-<h1 id="Tail"><a href="#Tail" class="headerlink" title="Tail"></a>Tail</h1><p>我们不是来sell某一种框架或者技术的。更多的是想抛砖引玉，启发大家如何借助一些最新的力量，在保留我们已有的财富的同时，找到一次前端的“文艺复新”。当然和文艺复新一样，这里也是旧瓶装新酒。这里的flux pattern和传统的MVC相比，也有了不少变化，下面会说明。</p>
-<p>可能喜欢在技术上赶时髦的同学已经想把那几个框架或者技术的名字呼之欲出了。但是这不是这里想要deliver的东西。这里只是讲一种pattern，我们更希望它随时随地，哪怕我们在处理没有用那些新的框架的时候，也能启发我们，让我们的工作更加简单。用到的时候，更能体会作者的良苦用心，为什么这样做，而不是API的搬运工。事实上，这种思考问题的方法，这种设计的思路，真的不需要通过哪个框架或者技术才能实现。Jquery？Why not？</p>
-<h2 id="case-study-projection-grid"><a href="#case-study-projection-grid" class="headerlink" title="case study: projection-grid"></a>case study: projection-grid</h2><ol>
-<li>predicable: 只要projection确定了，内容就确定。</li>
-<li>renderer并不关注projection如何被pipe，如何被compose，只需要关心render model长什么样子就能画出grid</li>
-<li>React，vue，backbone版本只是renderer不一样，如何计算render model完全不用重复。所以：不同情形下可以重用同一份plugin！</li>
-<li>Debug：只需要关注render model，就能查找是compose model发生的错误还是在render时发生。</li>
-<li>Test：对于core，只需要关注IO，对于renderer，只需要关注给定render model之后的snapshot。</li>
-<li>Extensibility: 通过pipe更多的plugin。plugin是pure function或plain object(这是语法糖，实际上我们都处理成reducer，即，根据现有配置和参数（state and action）返回新的配置（new state）)</li>
-</ol>
-<h2 id="Flux-pattern"><a href="#Flux-pattern" class="headerlink" title="Flux pattern"></a>Flux pattern</h2><ul>
-<li>View: representation layer. Controller views.</li>
-<li>Action: raise actions from representational layer.</li>
-<li>Dispatcher: receive actions and invoke callbacks.</li>
-<li>Store: respond to dispatched actions.</li>
-</ul>
-<h3 id="Controller-Views-Pattern"><a href="#Controller-Views-Pattern" class="headerlink" title="Controller Views Pattern"></a>Controller Views Pattern</h3><ul>
-<li>Separate controllers(container components) and views(representational components)</li>
-<li>Benefits<ul>
-<li>More portable.</li>
-<li>Less cognitive overhead.</li>
-<li>Easier testing.</li>
-</ul>
-</li>
-</ul>
-<h2 id="Frequende-asked-questions"><a href="#Frequende-asked-questions" class="headerlink" title="Frequende asked questions:"></a>Frequende asked questions:</h2><p>Q: how to share components to public?<br>A:</p>
-<ul>
-<li>We share widgets and controls. we should not share business.</li>
-<li>We can share universal helper functions in typical pure function way.</li>
-<li>Pure functions are even easier to share: No side effects. Predicable</li>
-<li>Higher ordered components.</li>
-</ul>
-<p>Q: how to compose async actions?<br>A:<br>这不就是λx condition的问题吗？柯里化。看似复杂的问题背后一定有简单的数学原理。</p>
-<p>Q: In big team co-work, how to break projects down?<br>A</p>
-<ul>
-<li>Trandional: application -&gt; modules -&gt; controllers + views + models(viewmodels) | MVVM or other patterns</li>
-<li>Applying middleware:(如果我们用函数式思考，一切非常自然)<ul>
-<li>application = middleware1(middleware2(middleware3(…midlewareN(config))))</li>
-<li>or application = middleware1(config1)(middleware2(config2))(…)(middlewareN(configN))</li>
-</ul>
-</li>
-</ul>
-<p>(如果我们用函数式思考，一切非常自然)</p>
-<p>回答这个问题，我建议大家先来这样思考我们的项目，想象成一个表格，或者数据库表，也就是一个二维的矩阵，一个维度是不同的业务实体，在这里就是不同种类的campaign；另一个维度与它垂直，就像是auth, i18n, theming，routing等等，你每一行代码的作用，就都可以用一个向量来表示：我这一行，是处理DSA的i18n。那么两种思考问题的方式其实就是一个地方不一样：把哪个维度看成行，把哪个维度看成列。</p>
-<p>传统的方法是根据业务来思考的。而这里推荐的另一个看问题的角度，是通过可扩展性，可维护性，（说人话：呼应标题，让前端开发变简单）的方面来思考。这和数据库很类似：列扩展很简单，一条SQL语句即可，行扩展相对麻烦。所以我们用middleware来描述我们的列:<br>一方面，借助柯里化，当我们需要扩展列（增加新的middleware）时，代价不那么大<br>另一方面，当我们增加业务实体时（这是我们的主要工作，除了架构师）进行简单的行扩展</p>
-<p>比方说 auth, i18n, theming，routing等等作为middleware避免了大量重复代码。我们平时在处理这些逻辑的时候，就算不是copy paste，互相之间的差别也不大，基本上是配置上的差别。</p>
-<p>那么我们会问这样一个问题，如果我要在我们的项目中加入一个新的entity，举个例子，我们已经有了几种campaign，search campaign，shopping campaign等等，现在我们又要加入DSA campaign.</p>
-<p>传统的做法是加入一个DSACampaignController,里面包含CRUD的actions，然后创建相应的View，templates，和campaignMT，adInsight MT integrate之后release，当然这些和之前其他campaign的code会有很多重复但是我们似乎也能接受（其实是习惯了）</p>
-<p>按照上面的做法，是不是说我要在auth里添加一点DSA的配置，i18n里添加几个DSA的规则，说起来不用写完整的重复的controller啊之类的，但是这种散弹式的修改真的不是团队协作的毒药吗？怎么不像上面说的“行扩展”那样简单啊？<br>回答：</p>
-<ol>
-<li>设计出声明式编程的接口很难吗？设计出集中配置项的语法糖很难吗？最最简单的，有一个middleware来派送config给不同的middleware总能做到吧。</li>
-<li>flux pattern中一个重要的角色是dispatcher，具体的应用中不同框架有不同的设计，但是功能都是：把不同的action分发到不同的store或者store里的不同字段。比方说一个简单的设计，不就是hash map吗？添加新的DSA campaign type，可以设计成为为这个新的entity action添加新的reducer（就是前面讲到的r的组件，或新的一组reducer）</li>
-</ol>
-<p>当然由此还会有一个问题：如果维度不够用怎么办？拿业务上说就是：我们的business entity不一定是扁平的结构，就比如说，我们有不同type的campaign，这是一层，不同type的adgroup，ads， keywords等等，然后campaign,ads,keywords这些又是拿到一层考虑：</p>
-<p>flatten：可能很多时候我们并不需要关系这些业务上的树形关系，共性和特性就是柯里化中的小技巧了。<br>数学上的分形，或者结合micro service的理念，通过子APP的方式来完成。</p>
-<p>可能还是有点抽象，还是举projection grid中的例子吧：</p>
-<p>不同场景下，datasource的不同，toolbar构造的不同，只体现在配置不同上。<br>功能上的扩展，对于开发者来说，考虑两件事情（1）在哪里插入projection（2）插入什么样的projection 比如说，我们在product groups 中要用table的rows来体现业务上的树状层级，我们就加入一个tree-plugin（与product groups业务本身无关），我们考虑的是：<br>在哪里pipe：修改structure projection pipe啥：加入parent node row<br>在哪里pipe：修改content projection pipe啥：添加icon和缩进描述层级关系</p>
+        <div class="article-info info-on-right">
+          
+          
 
-      
-
-      
-        <div class="page-reward">
-          <a href="javascript:;" class="page-reward-btn tooltip-top">
-            <div class="tooltip tooltip-east">
-            <span class="tooltip-item">
-              赏
-            </span>
-            <span class="tooltip-content">
-              <span class="tooltip-text">
-                <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃鱼&lt;。)#)))≦<i class="icon icon-quo-right"></i></p>
-                  <div class="reward-box">
-                    
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="/assets/img/alipay.png">
-                      <span class="reward-type">支付宝</span>
-                    </div>
-                    
-                    
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="/assets/img/weixinpay.png">
-                      <span class="reward-type">微信</span>
-                    </div>
-                    
-                  </div>
-                </span>
-              </span>
-            </span>
-          </div>
-          </a>
         </div>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-
-      
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
-      </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
-        </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2017/12/11/easy-ui/" alt="微信分享二维码">
-    </div>
-</div>
-
-<div class="mask js-mask"></div>
-      
-      <div class="clearfix"></div>
-    </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-  
-<nav id="article-nav">
-  
-    <a href="/2017/12/25/Functional-UI/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          Functional approach to frontend development
-        
-      </div>
-    </a>
   
   
-    <a href="/2017/10/18/deps-collection/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Data binding: hijack and dependencies collection</div>
-      <i class="icon-circle-right"></i>
-    </a>
-  
-</nav>
-
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-  
-  
+    </div></section>
   
 
-  
-
-  
-
-  
+    
 
 
           </div>
@@ -568,8 +205,8 @@ It">
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: true,
-		isArchive: false,
+		isPost: false,
+		isArchive: true,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
