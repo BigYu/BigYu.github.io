@@ -142,6 +142,225 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-vuejs-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/12/13/vuejs-1/">Vue.js学习 - 创建第一个应用</a>
+    </h1>
+  
+
+        
+        <a href="/2016/12/13/vuejs-1/" class="archive-article-date">
+  	<time datetime="2016-12-13T07:34:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-13</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="在github上创建一个项目"><a href="#在github上创建一个项目" class="headerlink" title="在github上创建一个项目"></a>在github上创建一个项目</h2><h2 id="在本地创建对应的repro"><a href="#在本地创建对应的repro" class="headerlink" title="在本地创建对应的repro"></a>在本地创建对应的repro</h2><h3 id="init-git"><a href="#init-git" class="headerlink" title="init git"></a>init git</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">echo</span> <span class="string">"# test"</span> &gt;&gt; README.md</div><div class="line">git init</div><div class="line">git add README.md</div><div class="line">git commit -m <span class="string">"first commit"</span></div><div class="line">git remote add origin https://github.com/BigYu/test.git</div><div class="line">git push -u origin master</div></pre></td></tr></table></figure>
+<ul>
+<li>我创建了两个branch，master和develop。如果是一个人写的小项目，其实没有必要。管他呢，就当假装follow gitflow的一点执念吧，嘻嘻。</li>
+</ul>
+<h3 id="init-npm"><a href="#init-npm" class="headerlink" title="init npm"></a>init npm</h3><p>  加上-y选项，即全部填写默认值。如果将来需要修改，在文件里修改吧，什么都没写的时候干这些意义不大</p>
+<h2 id="准备好第三方依赖"><a href="#准备好第三方依赖" class="headerlink" title="准备好第三方依赖"></a>准备好第三方依赖</h2><h3 id="梳理一下我要用啥"><a href="#梳理一下我要用啥" class="headerlink" title="梳理一下我要用啥"></a>梳理一下我要用啥</h3><ul>
+<li>vue.js</li>
+<li>ES2015(6?) &amp; babel</li>
+<li>webpack/webpack devserver</li>
+<li>sass</li>
+</ul>
+<p>先暂时想到这些。以后想起来再加。</p>
+<h3 id="安装webpack"><a href="#安装webpack" class="headerlink" title="安装webpack"></a>安装webpack</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">npm install --save-dev webpack</div><div class="line">npm install webpack-dev-server -g</div></pre></td></tr></table></figure>
+<p>dev server用于本地调试，所以没有加入到packages.json里</p>
+<h3 id="使用webpack-dev-server"><a href="#使用webpack-dev-server" class="headerlink" title="使用webpack dev server"></a>使用webpack dev server</h3><ul>
+<li>webpack.config.js</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">  entry: <span class="string">'./src/index.js'</span>,</div><div class="line">  output: &#123;</div><div class="line">    path: <span class="string">'./assets'</span>,</div><div class="line">    filename: <span class="string">'bundle.js'</span></div><div class="line">  &#125;,</div><div class="line">  devServer: &#123;</div><div class="line">    port: <span class="number">99</span></div><div class="line">  &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<ul>
+<li>src/index.js</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">document</span>.write(<span class="string">'Hello vue!!! I am Yucong.'</span>);</div></pre></td></tr></table></figure>
+<ul>
+<li>bash commands</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">webpack dev server</div></pre></td></tr></table></figure>
+<p>浏览器打开 <a href="http://localhost:99/webpack-dev-server/bundle" target="_blank" rel="external">http://localhost:99/webpack-dev-server/bundle</a> 就能看到啦。自动刷新哦~</p>
+<h3 id="webpack"><a href="#webpack" class="headerlink" title="webpack"></a>webpack</h3><ul>
+<li>bash command</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">webpack</div></pre></td></tr></table></figure>
+<p>然后就看到bundle.js在assets目录下被创建了</p>
+<p>再加入一个index.html</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"assets/bundle.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="安装babel-loader并调试"><a href="#安装babel-loader并调试" class="headerlink" title="安装babel loader并调试"></a>安装babel loader并调试</h3><ul>
+<li>install</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install babel-loader babel-core babel-preset-es2015 --save-dev</div></pre></td></tr></table></figure>
+<ul>
+<li>config</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>: &#123;</div><div class="line">  loaders: [</div><div class="line">    &#123;</div><div class="line">      test: <span class="regexp">/\.js$/</span>,</div><div class="line">      exclude: <span class="regexp">/(node_modules|bower_components)/</span>,</div><div class="line">      loader: <span class="string">'babel-loader'</span>,</div><div class="line">      query: &#123;</div><div class="line">        presets: [<span class="string">'es2015'</span>]</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>src/index.js</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> <span class="string">'./test1'</span>;</div><div class="line"></div><div class="line"><span class="built_in">document</span>.write(<span class="string">'Hello vue!!! I am Yucong.'</span>);</div></pre></td></tr></table></figure>
+<ul>
+<li>src/test1.js</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> <span class="string">'./test_module/test2'</span>;</div><div class="line"></div><div class="line"><span class="built_in">window</span>.console.log(<span class="string">'Hello'</span>);</div></pre></td></tr></table></figure>
+<ul>
+<li>src/test_module/test2.js</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> test3 <span class="keyword">from</span> <span class="string">'./test3'</span>;</div><div class="line"></div><div class="line"><span class="keyword">const</span> a = <span class="number">2</span>;</div><div class="line"></div><div class="line">alert(a);</div><div class="line">alert(test3.foo);</div></pre></td></tr></table></figure>
+<ul>
+<li>src/test_module/test3.js</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</div><div class="line">  foo: <span class="string">'bar'</span>,</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p><strong> 这里还有一个问题，所有的import path都是相对路径，还不知道怎么做成绝对路径。。。 </strong></p>
+<h3 id="html-loader"><a href="#html-loader" class="headerlink" title="html loader"></a>html loader</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install html-loader --save-dev</div></pre></td></tr></table></figure>
+<p>config</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure>
+<h3 id="安装vue-js-写一个hello-word"><a href="#安装vue-js-写一个hello-word" class="headerlink" title="安装vue.js 写一个hello word"></a>安装vue.js 写一个hello word</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install vue --save</div></pre></td></tr></table></figure>
+<ul>
+<li>index.js</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'vue'</span>;</div><div class="line"></div><div class="line"><span class="keyword">new</span> Vue(&#123;</div><div class="line">  el: <span class="string">'#app'</span>,</div><div class="line">  data: &#123;</div><div class="line">    message: <span class="string">'Hello Vue!'</span>,</div><div class="line">  &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p><strong> The runtime-only build does not include the template compiler, and does not support the template option. You can only use the render option when using the runtime-only build, but it works with single-file components, because single-file components’ templates are pre-compiled into render functions during the build step. The runtime-only build is roughly 30% lighter-weight than the standalone build, weighing only 17.60kb min+gzip. </strong></p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">resolve: &#123;</div><div class="line">  alias: &#123;</div><div class="line">    <span class="string">'vue$'</span>: <span class="string">'vue/dist/vue.common.js'</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>index.html</li>
+</ul>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"app"</span>&gt;</span>&#123;&#123;message&#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"/bundle.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Frameworks</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Vue.js</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2016/12/13/vuejs-1/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-underscore-5" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/12/03/underscore-5/">underscore源码阅读笔记（5）： defer</a>
+    </h1>
+  
+
+        
+        <a href="/2016/12/03/underscore-5/" class="archive-article-date">
+  	<time datetime="2016-12-03T06:03:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-03</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这周被邪恶的knockout狠狠的坑了一次，解决方法是用defer函数让ko的binding让调用栈结束之后进行。于是看了一下源码，了解一下defer的实现。</p>
+<h2 id="defer"><a href="#defer" class="headerlink" title="defer"></a>defer</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">_.defer = _.partial(_.delay, _, <span class="number">1</span>);</div></pre></td></tr></table></figure>
+<h2 id="partial"><a href="#partial" class="headerlink" title="partial"></a>partial</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Partially apply a function by creating a version that has had some of its</span></div><div class="line"><span class="comment">// arguments pre-filled, without changing its dynamic `this` context. _ acts</span></div><div class="line"><span class="comment">// as a placeholder, allowing any combination of arguments to be pre-filled.</span></div><div class="line">_.partial = <span class="function"><span class="keyword">function</span>(<span class="params">func</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> boundArgs = slice.call(<span class="built_in">arguments</span>, <span class="number">1</span>);</div><div class="line">  <span class="keyword">var</span> bound = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> position = <span class="number">0</span>, length = boundArgs.length;</div><div class="line">    <span class="keyword">var</span> args = <span class="built_in">Array</span>(length);</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; length; i++) &#123;</div><div class="line">      args[i] = boundArgs[i] === _ ? <span class="built_in">arguments</span>[position++] : boundArgs[i];</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">while</span> (position &lt; <span class="built_in">arguments</span>.length) args.push(<span class="built_in">arguments</span>[position++]);</div><div class="line">    <span class="keyword">return</span> executeBound(func, bound, <span class="keyword">this</span>, <span class="keyword">this</span>, args);</div><div class="line">  &#125;;</div><div class="line">  <span class="keyword">return</span></div></pre></td></tr></table></figure>
+<p>Partially apply a function by filling in any number of its arguments, without changing its dynamic this value. A close cousin of bind. You may pass _ in your list of arguments to specify an argument that should not be pre-filled, but left open to supply at call-time.</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> subtract = <span class="function"><span class="keyword">function</span>(<span class="params">a, b</span>) </span>&#123; <span class="keyword">return</span> b - a; &#125;;</div><div class="line">sub5 = _.partial(subtract, <span class="number">5</span>);</div><div class="line">sub5(<span class="number">20</span>);</div><div class="line">=&gt; <span class="number">15</span></div><div class="line"></div><div class="line"><span class="comment">// Using a placeholder</span></div><div class="line">subFrom20 = _.partial(subtract, _, <span class="number">20</span>);</div><div class="line">subFrom20(<span class="number">5</span>);</div><div class="line">=&gt; <span class="number">15</span></div></pre></td></tr></table></figure>
+<h2 id="delay"><a href="#delay" class="headerlink" title="delay"></a>delay</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Delays a function for the given number of milliseconds, and then calls</span></div><div class="line"><span class="comment">// it with the arguments supplied.</span></div><div class="line">_.delay = <span class="function"><span class="keyword">function</span>(<span class="params">func, wait</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> args = slice.call(<span class="built_in">arguments</span>, <span class="number">2</span>);</div><div class="line">  <span class="keyword">return</span> setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="keyword">return</span> func.apply(<span class="literal">null</span>, args);</div><div class="line">  &#125;, wait);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p><strong> setTimeout() will run asynchronously after finishing current execution block.  </strong></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2016/12/03/underscore-5/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-code-convention" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -870,174 +1089,6 @@
 
 
   
-    <article id="post-jQuery-Delegate-events" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/08/01/jQuery-Delegate-events/">jquery 为动态添加的元素绑定事件</a>
-    </h1>
-  
-
-        
-        <a href="/2016/08/01/jQuery-Delegate-events/" class="archive-article-date">
-  	<time datetime="2016-08-01T07:45:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-08-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><strong>live函数已经被废弃了！！</strong></p>
-<p>如果直接写click函数的话，只能把事件绑定在已经存在的元素上，不能绑定在动态添加的元素上</p>
-<p>尝试过重新调用，结果是重复触发。。。</p>
-<p>###可以用delegate来实现</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">.delegate( selector, eventType, handler )</div></pre></td></tr></table></figure>
-<p>例如：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">'someUlSelector'</span>).delegate(<span class="string">'someLiSelector'</span>, <span class="string">'click'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="comment">//codes...</span></div><div class="line">    <span class="comment">//$(this) for the current jquery instance of the element</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Frameworks</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2016/08/01/jQuery-Delegate-events/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-React-notes" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/08/01/React-notes/">What I learn after first glance on ReactJs</a>
-    </h1>
-  
-
-        
-        <a href="/2016/08/01/React-notes/" class="archive-article-date">
-  	<time datetime="2016-08-01T04:47:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-08-01</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>就不再这里罗列各种关于React的新特性或者feature了，意义不大，而且我也是初学者。<br>之前我个人也一直很喜欢Facebook的东西——小巧，简单，清晰，还有他们漂亮的文档实在是吸引人去看。</p>
-<ul>
-<li><p>f(Status) = UI</p>
-<p>这个公式可以概括React作为view层面的framework最精髓的地方。你的code可以根据逻辑操作status。status的变化反映在UI上的变化大部分工作室React帮我们做的，开发者只需要很少的精力去编写，或者说是配置status和UI之间的映射关系。<br>UI是复杂的，我们现在处理五花八门的dom结构就已经十分头痛了，再加上种类越来越多的富文本元素，再加上，再加上越来越复杂的动态交互，使得现在UI的开发成本越来越高，代码越来越复杂，而且runtime的维护成本也越来越高。包括缓存在内的问题也越来越棘手。<br>Status是简单的，清晰的（我觉得清晰比简单更加能吸引我。当然，让事情变简单可以让事情变清晰）。Status就是数据结构，对于UI来说，并不会十分复杂和庞大，一般只需要一些简单的array和object。处理他们是程序员们最熟悉的事情，而且可以想象代码可以像数据结构课本上那么清晰明了。另外，做UI的Cache和Delta的代价显然十分高昂，但是换成这么一堆初学者都能看懂的array啊object啊就完全不是问题了，这也是React给出来的魔术般的解决缓存和Performance的策略：页面的render是基于status update的delta来的。</p>
-</li>
-<li><p>单向数据流</p>
-<p>我们之前遇到的各种前端框架显然不满足</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">f(Status) = UI</div></pre></td></tr></table></figure>
-<p>通常来说，应该是</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">f(Status, 用户交互，推送信息，其他UI联动变化，……) = UI</div></pre></td></tr></table></figure>
-<p>那么React必然要做的事情就是实现一个</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">g(上面其他因素) = status</div></pre></td></tr></table></figure>
-<p>这就是需要单向数据流的原因。<br>我个人的体会，因为可能已经习惯了诸如knockout、angularjs等成熟的框架提供的各种完善的two-way data-binding的机制，第一眼很难接受React的one-way data flow，而且写一些很小的component的时候（比如hello world之类的），会发现很简单的事情反而需要我们花一些额外的精力。<br>比如一个最简单的input框，如果用ko，只需要把他和vm上一个observable绑定就好了，在ng中也是很简单的ng-model=xxx，但是突然React告诉你，不行，你要绕一圈，你的输入只能作用于status的update，绕一圈才能回到UI的变化，当然不习惯。<br>Facebook的工程师们肯定不是吃饱了撑的才这样设计。我们可以想象一些稍微复杂的逻辑——比如，如果这个input框需要把用户的输入全部转成大写字母，或者拒绝掉一些非法字符。当然，现在的框架已经足够优秀，我们可以pass in各种custom filter。问题就在于当这些需求一个一个堆砌起来，逻辑就会逐渐变得混乱，filter，suscription，events等等聚集在一起，代码的可读性会严重降低且难以维护。当UI中的元素越来越多，业务越来越复杂，这些不便利之处会指数级爆炸。<br>而单向的数据流就不存在这些问题了，flux中有一个很好的Dispature和Store的概念，就像现代物流的集散分拣中心一样的（此处谢绝抬杠），一件快递的时候看起来不必要，但是成千上万的数据涌来，他依然能把所有的东西处理得井井有条，所有的东西就像阅兵式上的方阵，清晰有条理。我们会被从filter，suscription，events中被拯救出来，只有两样简单的事情：status，UI。</p>
-</li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Frameworks</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2016/08/01/React-notes/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
@@ -1143,6 +1194,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Javascript</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Frameworks</a>
               </li>
              
@@ -1151,15 +1206,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Javascript</a>
+                <a href="javascript:void(0)" class="js-tag color1">javascript</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">framework</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">javascript</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1199,6 +1250,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">React</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Framework</a>
               </li>
              
@@ -1208,10 +1263,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Events</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">React</a>
               </li>
              
               <li class="article-tag-list-item">
