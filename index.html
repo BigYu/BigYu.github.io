@@ -142,6 +142,181 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-recompose-2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/07/13/recompose-2/">recompose - 从一个小例子说起</a>
+    </h1>
+  
+
+        
+        <a href="/2018/07/13/recompose-2/" class="archive-article-date">
+  	<time datetime="2018-07-13T06:12:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-07-13</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a href="https://github.com/acdlite/recompose" target="_blank" rel="external">https://github.com/acdlite/recompose</a></p>
+<h1 id="Recompose是用来干嘛的？"><a href="#Recompose是用来干嘛的？" class="headerlink" title="Recompose是用来干嘛的？"></a>Recompose是用来干嘛的？</h1><p>Recompose是用来refactor react code的神器。我个人还是比较功利的，代码让人feel painful才需要refactor，而不是盲目的追求fashion之类的。</p>
+<h1 id="我们的代码如何变坏？"><a href="#我们的代码如何变坏？" class="headerlink" title="我们的代码如何变坏？"></a>我们的代码如何变坏？</h1><p>从一个小例子说起。我们画一个Card，里面有一个grid用来展示data。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyCard</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line">  <span class="comment">// ...lifecycle hooks</span></div><div class="line">  render() &#123;</div><div class="line">    <span class="keyword">const</span> &#123; data &#125; = <span class="keyword">this</span>.props;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> (</div><div class="line">      <span class="xml"><span class="tag">&lt;<span class="name">Grid</span> <span class="attr">data</span>=<span class="string">&#123;data&#125;/</span>&gt;</span></span></div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>现在我们有一个很正常的需求：当我们没有数据的时候，就啥的不显示，以免grid<br>component报错。</p>
+<p>我们每个人都sign off过这样的代码：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyCard</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line">  <span class="comment">// ...lifecycle hooks</span></div><div class="line">  render() &#123;</div><div class="line">    <span class="keyword">const</span> &#123; data &#125; = <span class="keyword">this</span>.props;</div><div class="line">      <span class="keyword">if</span> (_.isEmpty(data)) &#123;</div><div class="line">      <span class="keyword">return</span> <span class="literal">null</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> (</div><div class="line">      <span class="xml"><span class="tag">&lt;<span class="name">Grid</span> <span class="attr">data</span>=<span class="string">&#123;data&#125;/</span>&gt;</span></span></div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这其实也无伤大雅。但是，很多时候，我们又得到了更多的需求，比如说，如果有error，我们就画一张哭脸。</p>
+<p>sign off过这样代码的都需要反省一下，比如说我自己。。。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyCard</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line">  <span class="comment">// ...lifecycle hooks</span></div><div class="line"></div><div class="line">  render() &#123;</div><div class="line">    <span class="keyword">const</span> &#123; data &#125; = <span class="keyword">this</span>.props;</div><div class="line">    <span class="keyword">if</span> (_.isEmpty(data)) &#123;</div><div class="line">      <span class="keyword">return</span> <span class="literal">null</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (data.status === ‘error’) &#123;</div><div class="line">      <span class="keyword">return</span> &lt;CryingFace /&gt;;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    return (</div><div class="line">      &lt;Grid data=&#123;data&#125;/&gt;</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这种行为本身，就违背了对修改关闭，对扩展开放的open close原则。之后顺着这条道路走下去，我们讲得到爆炸式的一大串if或者switch。比如说我们的判断条件会变的越来越复杂，我们处理异常的方式也会不停的改变。</p>
+<p>当然，我们可以这样解决：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyCard</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span>(props) &#123;</div><div class="line">    <span class="keyword">super</span>(props);</div><div class="line">    <span class="keyword">const</span> &#123;</div><div class="line">      dataValidator = _.constant(<span class="literal">true</span>),</div><div class="line">      conditionalRenderer = () =&gt; <span class="literal">null</span>,</div><div class="line">    &#125; = props;</div><div class="line">    <span class="keyword">this</span>.dataValidator = dataValidator;</div><div class="line">    <span class="keyword">this</span>.conditionalRenderer = conditionalRenderer;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  render() &#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>（当然我们也可以用一些design pattern，比如说这里可以考虑抽象工厂或者模板方法模式，让这段code更加优雅可扩展。这里不讨论。）</p>
+<p>这样做解决了上面提到的一些问题，带来的新问题是：</p>
+<ol>
+<li>文档不够清楚的话，这个shared component share出去，基本上是没人会用的。。。</li>
+<li>很多个页面里，我们确实只需要一个简单的，没有data的时候显示一个default message的component，我们可能要把这个重复的dataValidator和conditionalRender传很多遍。</li>
+</ol>
+<p>在React里，这样写是犯法的：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">CardWithEmptyDataHandler</span> <span class="keyword">extends</span> <span class="title">Mycard</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span>(props) &#123;</div><div class="line">    <span class="keyword">super</span>(_.defaults(&#123;&#125;, &#123;</div><div class="line">      dataValidator: (&#123; data &#125;) =&gt; &#123;</div><div class="line">        <span class="keyword">if</span> (_.isEmpty(data)) &#123;</div><div class="line">          <span class="keyword">return</span> <span class="string">'empty'</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">      &#125;,</div><div class="line">      conditionalRenderer: (result, defaultRenderer) =&gt; &#123;</div><div class="line">        <span class="keyword">switch</span>(result) &#123;</div><div class="line">          <span class="keyword">case</span> <span class="string">'empty'</span>:</div><div class="line">            <span class="keyword">return</span> <span class="literal">null</span>;</div><div class="line">          <span class="keyword">default</span>:</div><div class="line">            <span class="keyword">return</span> defaultRenderer();</div><div class="line">        &#125;</div><div class="line">      &#125;,</div><div class="line">    &#125;, props));</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="React-Composition-vs-Inheritance"><a href="#React-Composition-vs-Inheritance" class="headerlink" title="React: Composition vs Inheritance"></a>React: Composition vs Inheritance</h2><ul>
+<li>Use composition instead of inheritance to reuse code between components.</li>
+<li>E.g. Containment and Specialization</li>
+<li>At Facebook, we use React in thousands of components, and we haven’t found any use cases where we would recommend creating component inheritance hierarchies.</li>
+</ul>
+<h2 id="React-Use-HOCs-For-Cross-Cutting-Concerns"><a href="#React-Use-HOCs-For-Cross-Cutting-Concerns" class="headerlink" title="React: Use HOCs For Cross-Cutting Concerns"></a>React: Use HOCs For Cross-Cutting Concerns</h2><blockquote>
+<p><i>Higher-Order Components (HOCs) are JavaScript functions which add functionality to existing component classes.</i></p>
+</blockquote>
+<p>比如说我们有一个基础的grid，可以单纯的画格子。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">MyGrid</span>(<span class="params">props</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> (</div><div class="line">    <span class="xml"><span class="tag">&lt;<span class="name">table</span>&gt;</span></span></div><div class="line">      &#123;/* ...code */&#125;</div><div class="line">    <span class="tag">&lt;/<span class="name">table</span>&gt;</span></div><div class="line">  );</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>可以有一个HOC，给这个grid加上pagination</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> PaginableGrid = withPaging(MyGrid);</div></pre></td></tr></table></figure>
+<p>还可以再套一层，让grid从不同的地方获取数据</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> PaginableGridWithOdataSource = withOdataSource(withPaging(MyGrid));</div><div class="line"><span class="keyword">const</span> PaginableGridWithMemorySource = withMemorySource(withPaging(MyGrid));</div></pre></td></tr></table></figure>
+<p>withPaging也可以用来wrap别的东西</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> PaginableList = withPaging(MyList);</div></pre></td></tr></table></figure>
+<p>错误的写法,也是习惯了OO思想的人最容易写的写法:</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">PaginableGrid</span> <span class="keyword">extends</span> <span class="title">MyGrid</span> </span>&#123;</div><div class="line">  getGridData(params) &#123;</div><div class="line">    <span class="keyword">const</span> rawData = <span class="keyword">super</span>.getGridData(params);</div><div class="line"></div><div class="line">    <span class="keyword">return</span> handlePagination(rawData, <span class="comment">/* ...params */</span>)</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="Recompose-Make-HOCs-easy-to-comprehend-and-act-as-the-basic-“bricks”-to-build-apps"><a href="#Recompose-Make-HOCs-easy-to-comprehend-and-act-as-the-basic-“bricks”-to-build-apps" class="headerlink" title="Recompose - Make HOCs easy to comprehend and act as the basic “bricks” to build apps."></a>Recompose - Make HOCs easy to comprehend and act as the basic “bricks” to build apps.</h1><p>用Recompose，我们可以这样写：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> renderNothingIfNoData = hasNoData =&gt; branch(hasNoData, renderNothing);</div><div class="line"><span class="keyword">const</span> renderCryingFaceIfBadData = isBadData =&gt; branch(isBadData, renderCryingFace);</div><div class="line"></div><div class="line"><span class="keyword">const</span> enhance = compose(</div><div class="line">  <span class="comment">/* ...more wrappers */</span></div><div class="line">  renderNothingIfNoData((&#123; data &#125;) =&gt; _.isEmpty(data)),</div><div class="line">  renderCryingFaceIfBadData(customeValidationHandler)</div><div class="line">  <span class="comment">/* ...more wrappers */</span></div><div class="line">);</div><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> ComponentWithConditionalRendering = enhance(SomeComponent);</div></pre></td></tr></table></figure>
+<h1 id="Recompose-Pure-functional-programming-and-helper-functions-to…"><a href="#Recompose-Pure-functional-programming-and-helper-functions-to…" class="headerlink" title="Recompose - Pure functional programming and  helper functions to…"></a>Recompose - Pure functional programming and  helper functions to…</h1><h2 id="lift-state-into-functional-wrappers"><a href="#lift-state-into-functional-wrappers" class="headerlink" title="lift state into functional wrappers."></a>lift state into functional wrappers.</h2><p>下面是一个简单的计数器的例子，在react里非常常见：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Counter</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span>(props) &#123;</div><div class="line">    <span class="keyword">super</span>(props);</div><div class="line">    <span class="keyword">this</span>.state = &#123; counter: <span class="number">0</span> &#125;;</div><div class="line">    <span class="keyword">this</span>.handleDecrement = <span class="keyword">this</span>.handleDecrement.bind(<span class="keyword">this</span>);</div><div class="line">    <span class="keyword">this</span>.handleIncrement = <span class="keyword">this</span>.handleIncrement.bind(<span class="keyword">this</span>);</div><div class="line">  &#125;</div><div class="line">  handleIncrement() &#123;</div><div class="line">    <span class="keyword">this</span>.setState(&#123; counter: <span class="keyword">this</span>.state.counter + <span class="number">1</span> &#125;);</div><div class="line">  &#125;</div><div class="line">  handleDecrement() &#123;</div><div class="line">    <span class="keyword">this</span>.setState(&#123; counter: <span class="keyword">this</span>.state.counter – <span class="number">1</span> &#125;);</div><div class="line">  &#125;</div><div class="line">  render() &#123;</div><div class="line">    <span class="keyword">return</span> (</div><div class="line">     <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></div><div class="line">       Count: &#123;this.state.counter&#125;</div><div class="line">       <span class="tag">&lt;<span class="name">button</span> <span class="attr">onClick</span>=<span class="string">&#123;this.handleIncrement&#125;</span>&gt;</span>Increment<span class="tag">&lt;/<span class="name">button</span>&gt;</span></div><div class="line">       <span class="tag">&lt;<span class="name">button</span> <span class="attr">onClick</span>=<span class="string">&#123;this.handleDecrement&#125;</span>&gt;</span>Decrement<span class="tag">&lt;/<span class="name">button</span>&gt;</span></div><div class="line">     <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这是一段比较规范的react代码，肯定不能说有问题。但是有几个地方老会让人觉得不爽：</p>
+<ul>
+<li>太长了。。。</li>
+<li>像super(props); this.handleDecrement = this.handleDecrement.bind(this); 这样没有营养的代码，我们是不是写得有点多了。</li>
+<li>this.state = { counter: 0 }; 这是一个mutable的表达，从哲学上来说和react一直提倡的immutable是相违背的。<ul>
+<li>副作用就是：如果我们认真学习了thinkings in React,然后想规范自己的代码，引入了eslint-plugin-immutable，然后就发现，lint挂了。</li>
+</ul>
+</li>
+<li>this.setState({ counter: this.state.counter + 1 }); 这不是纯函数。</li>
+</ul>
+<p>用recompose:</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Counter</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span>(props) &#123;</div><div class="line">    <span class="keyword">super</span>(props);</div><div class="line">    <span class="keyword">this</span>.state = &#123; counter: <span class="number">0</span> &#125;;</div><div class="line">    <span class="keyword">this</span>.handleDecrement = <span class="keyword">this</span>.handleDecrement.bind(<span class="keyword">this</span>);</div><div class="line">    <span class="keyword">this</span>.handleIncrement = <span class="keyword">this</span>.handleIncrement.bind(<span class="keyword">this</span>);</div><div class="line">  &#125;</div><div class="line">  handleIncrement() &#123;</div><div class="line">    <span class="keyword">this</span>.setState(&#123; counter: <span class="keyword">this</span>.state.counter + <span class="number">1</span> &#125;);</div><div class="line">  &#125;</div><div class="line">  handleDecrement() &#123;</div><div class="line">    <span class="keyword">this</span>.setState(&#123; counter: <span class="keyword">this</span>.state.counter – <span class="number">1</span> &#125;);</div><div class="line">  &#125;</div><div class="line">  render() &#123;</div><div class="line">    <span class="keyword">return</span> (</div><div class="line">     <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></div><div class="line">       Count: &#123;this.state.counter&#125;</div><div class="line">       <span class="tag">&lt;<span class="name">button</span> <span class="attr">onClick</span>=<span class="string">&#123;this.handleIncrement&#125;</span>&gt;</span>Increment<span class="tag">&lt;/<span class="name">button</span>&gt;</span></div><div class="line">       <span class="tag">&lt;<span class="name">button</span> <span class="attr">onClick</span>=<span class="string">&#123;this.handleDecrement&#125;</span>&gt;</span>Decrement<span class="tag">&lt;/<span class="name">button</span>&gt;</span></div><div class="line">     <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Or with a Redux-style reducer:</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> counterReducer = (count, action) =&gt; &#123;</div><div class="line">  <span class="keyword">switch</span> (action.type) &#123;</div><div class="line">    <span class="keyword">case</span> INCREMENT:</div><div class="line">      <span class="keyword">return</span> count + <span class="number">1</span></div><div class="line">    <span class="keyword">case</span> DECREMENT:</div><div class="line">      <span class="keyword">return</span> count - <span class="number">1</span></div><div class="line">    <span class="keyword">default</span>:</div><div class="line">      <span class="keyword">return</span> count</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"><span class="keyword">const</span> enhance = withReducer(<span class="string">'counter'</span>, <span class="string">'dispatch'</span>, counterReducer, <span class="number">0</span>)</div><div class="line"><span class="keyword">const</span> Counter = enhance((&#123; counter, dispatch &#125;) =&gt;</div><div class="line">  <span class="xml"><span class="tag">&lt;<span class="name">div</span>&gt;</span></span></div><div class="line">    Count: &#123;counter&#125;</div><div class="line">    <span class="tag">&lt;<span class="name">button</span> <span class="attr">onClick</span>=<span class="string">&#123;()</span> =&gt;</span> dispatch(&#123; type: INCREMENT &#125;)&#125;&gt;Increment<span class="tag">&lt;/<span class="name">button</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">button</span> <span class="attr">onClick</span>=<span class="string">&#123;()</span> =&gt;</span> dispatch(&#123; type: DECREMENT &#125;)&#125;&gt;Decrement<span class="tag">&lt;/<span class="name">button</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">)</div></pre></td></tr></table></figure>
+<h1 id="Recompose-perform-the-most-common-React-patterns"><a href="#Recompose-perform-the-most-common-React-patterns" class="headerlink" title="Recompose - perform the most common React patterns"></a>Recompose - perform the most common React patterns</h1><p>每一个学习React的码农都会接触flux，其中的大多数会称赞它的优美，严谨，完备，然而很少人会真的在产品中使用，因为复杂，晦涩。</p>
+<p>用recompose来写这些common pattern,效果就不一样了。</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> provide = store =&gt; withContext(</div><div class="line">  &#123; store: PropTypes.object &#125;,</div><div class="line">  () =&gt; (&#123; store &#125;)</div><div class="line">)</div><div class="line"><span class="comment">// Apply to base component</span></div><div class="line"><span class="comment">// Descendants of App have access to context.store</span></div><div class="line"><span class="keyword">const</span> AppWithContext = provide(store)(App)</div></pre></td></tr></table></figure>
+<h1 id="Recompose-optimize-rendering-performance"><a href="#Recompose-optimize-rendering-performance" class="headerlink" title="Recompose - optimize rendering performance"></a>Recompose - optimize rendering performance</h1><figure class="highlight jsx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// A component that is expensive to render</span></div><div class="line"><span class="keyword">const</span> ExpensiveComponent = (&#123; propA, propB &#125;) =&gt; &#123;...&#125;</div><div class="line"><span class="comment">// Optimized version of same component, using shallow comparison of props</span></div><div class="line"><span class="comment">// Same effect as extending React.PureComponent</span></div><div class="line"><span class="keyword">const</span> OptimizedComponent = pure(ExpensiveComponent)</div><div class="line"><span class="comment">// Even more optimized: only updates if specific prop keys have changed</span></div><div class="line"><span class="keyword">const</span> HyperOptimizedComponent = onlyUpdateForKeys([<span class="string">'propA'</span>, <span class="string">'propB'</span>])(ExpensiveComponent)</div></pre></td></tr></table></figure>
+<p>我们在优化react component的performance的时候，经常使用pureComponent，也就是说props变了才会重新render。Recompose的pure可以做这件事。</p>
+<p>我们经常可以做更进一步的优化，比如说有一个东西，只有data变化的时候才重新render，其他的变化不应该触发render，就可以用onlyUpdateForKeys来做。</p>
+<h1 id="Recompose-build-your-own-libraries"><a href="#Recompose-build-your-own-libraries" class="headerlink" title="Recompose - build your own libraries"></a>Recompose - build your own libraries</h1><p>比如说我们刚才一不小心就写出来两个自己的util接口:</p>
+<ul>
+<li>renderNothingIfNoData</li>
+<li>renderCryingFaceIfBadData</li>
+</ul>
+<p>再来一个：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> withCustomerId = (customerId) =&gt; withProps(props =&gt; (&#123;</div><div class="line">  currentCustomer : &#123; Id: customerId, ...props.currentCustomer &#125;</div><div class="line">&#125;));</div></pre></td></tr></table></figure>
+<h1 id="Recompose-Flattening-HOCs-hierarchies-into-pipelines"><a href="#Recompose-Flattening-HOCs-hierarchies-into-pipelines" class="headerlink" title="Recompose - Flattening HOCs hierarchies into pipelines."></a>Recompose - Flattening HOCs hierarchies into pipelines.</h1><p>Less JSX. Even less code.</p>
+<p>优化前：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> &#123; Consumer: ThemeConsumer &#125; = React.createContext(&#123; theme: <span class="string">'dark'</span> &#125;);</div><div class="line"><span class="keyword">const</span> &#123; Consumer: I18NConsumer &#125; = React.createContext(&#123; i18n: <span class="string">'en'</span> &#125;);</div><div class="line"><span class="keyword">const</span> RenderPropsComponent = (&#123; render, value &#125;) =&gt; render(&#123; value: <span class="number">1</span> &#125;);</div><div class="line"><span class="keyword">const</span> EnhancedApp = () =&gt; (</div><div class="line">  &lt;ThemeConsumer&gt;</div><div class="line">    &#123;(&#123; theme &#125;) =&gt; (</div><div class="line">      &lt;I18NConsumer&gt;</div><div class="line">        &#123;(&#123; i18n &#125;) =&gt; (</div><div class="line">          &lt;RenderPropsComponent</div><div class="line">            render=&#123;(&#123; value &#125;) =&gt; (</div><div class="line">              &lt;App theme=&#123;theme&#125; locale=&#123;i18n&#125; value=&#123;value&#125; /&gt;</div><div class="line">            )&#125;</div><div class="line">          /&gt;</div><div class="line">        )&#125;</div><div class="line">      &lt;/I18NConsumer&gt;</div><div class="line">    )&#125;</div><div class="line">  &lt;/ThemeConsumer&gt;</div><div class="line">)</div></pre></td></tr></table></figure>
+<p>优化后：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> &#123; Consumer: ThemeConsumer &#125; = React.createContext(&#123; theme: <span class="string">'dark'</span> &#125;);</div><div class="line"><span class="keyword">const</span> &#123; Consumer: I18NConsumer &#125; = React.createContext(&#123; i18n: <span class="string">'en'</span> &#125;);</div><div class="line"><span class="keyword">const</span> RenderPropsComponent = (&#123; render, value &#125;) =&gt; render(&#123; value: <span class="number">1</span> &#125;);</div><div class="line"><span class="keyword">const</span> EnhancedApp = compose(</div><div class="line">  <span class="comment">// Context (Function as Child Components)</span></div><div class="line">  fromRenderProps(ThemeConsumer, (&#123; theme &#125;) =&gt; (&#123; theme &#125;)),</div><div class="line">  fromRenderProps(I18NConsumer, (&#123; i18n &#125;) =&gt; (&#123; locale: i18n &#125;)),</div><div class="line">  <span class="comment">// Render props</span></div><div class="line">  fromRenderProps(RenderPropsComponent, (&#123; value &#125;) =&gt; (&#123; value &#125;),</div><div class="line">    <span class="string">'render'</span>),</div><div class="line">)(App);</div></pre></td></tr></table></figure>
+<h1 id="Recompose-unit-testing"><a href="#Recompose-unit-testing" class="headerlink" title="Recompose - unit testing"></a>Recompose - unit testing</h1><ul>
+<li>Writing pure functions is helpful for unit testing: I/O tests and no side effects.<ul>
+<li><a href="https://github.com/jfmengels/eslint-plugin-fp" target="_blank" rel="external">https://github.com/jfmengels/eslint-plugin-fp</a></li>
+<li><a href="https://github.com/jhusain/eslint-plugin-immutable" target="_blank" rel="external">https://github.com/jhusain/eslint-plugin-immutable</a></li>
+<li>No let; No this; No mutable.</li>
+</ul>
+</li>
+<li>Easy snapshot test for the very basic component.</li>
+</ul>
+<h1 id="Recompose-debug"><a href="#Recompose-debug" class="headerlink" title="Recompose - debug"></a>Recompose - debug</h1><p>这是目前recompose比较让人头疼的地方。详见这个issue：<a href="https://github.com/acdlite/recompose/issues/97" target="_blank" rel="external">https://github.com/acdlite/recompose/issues/97</a></p>
+<p>但是有两个小tips可以帮助debug</p>
+<ul>
+<li>Use “withDisplayName”</li>
+<li>withProps(console.log)</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">React</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">recompose</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Design pattern</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Functional programming</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/07/13/recompose-2/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-recompose" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1511,126 +1686,6 @@
 
 
   
-    <article id="post-deps-collection" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/10/18/deps-collection/">Data binding: hijack and dependencies collection</a>
-    </h1>
-  
-
-        
-        <a href="/2017/10/18/deps-collection/" class="archive-article-date">
-  	<time datetime="2017-10-18T02:22:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-18</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>见过的前端js框架，data-binding的实现方案大致有三种：</p>
-<ul>
-<li>直接把数据的暴露成function,如knockout</li>
-<li>dirty check, 如angular</li>
-<li>劫持getter,setter + 依赖收集,如vue</li>
-</ul>
-<p>写下第三种：</p>
-<p><a href="https://github.com/vuejs/vue/blob/dev/src/core/observer/index.js" target="_blank" rel="external">Vue 源码</a></p>
-<p>我们的demo code是这样的：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">form</div><div class="line">  input(type=&quot;text&quot;, v-bind=&quot;count&quot;)</div><div class="line">  button(type=&quot;button&quot;, v-click=&quot;increment&quot;) increment</div><div class="line">div(v-bind=&quot;count&quot;)</div></pre></td></tr></table></figure>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; Observable, Watcher &#125; <span class="keyword">from</span> <span class="string">'@bingads-webui/simple-observable'</span>;</div><div class="line"></div><div class="line"><span class="keyword">const</span> person = <span class="keyword">new</span> Observable(&#123;</div><div class="line">  firstName: <span class="string">'Michael'</span>,</div><div class="line">  lastName: <span class="string">'Jordan'</span>,</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="keyword">new</span> Watcher(person, <span class="string">'fullName'</span>, () =&gt; &#123;</div><div class="line">  <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;person.firstName&#125;</span> <span class="subst">$&#123;person.lastName&#125;</span>`</span>;</div><div class="line">&#125;, (val) =&gt; &#123;</div><div class="line">  <span class="built_in">console</span>.log(<span class="string">`The full name is <span class="subst">$&#123;val&#125;</span>`</span>);</div><div class="line">&#125;);</div><div class="line"></div><div class="line"><span class="built_in">console</span>.log(person.fullName);</div><div class="line"></div><div class="line">person.lastName = <span class="string">'Jackson'</span>;</div><div class="line"></div><div class="line"><span class="built_in">window</span>.person = person;</div></pre></td></tr></table></figure>
-<p>带dom操作的:</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; App &#125; <span class="keyword">from</span> <span class="string">'@bingads-webui/simple-observable'</span>;</div><div class="line"><span class="keyword">import</span> template <span class="keyword">from</span> <span class="string">'./index.pug'</span>;</div><div class="line"></div><div class="line"><span class="keyword">new</span> App(&#123;</div><div class="line">  el: <span class="built_in">document</span>.body,</div><div class="line">  template,</div><div class="line">  data: &#123;</div><div class="line">    count: <span class="number">3</span>,</div><div class="line">  &#125;,</div><div class="line">  method: &#123;</div><div class="line">    increment: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">      <span class="keyword">this</span>.data.count++;</div><div class="line">    &#125;</div><div class="line">  &#125;,</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<h1 id="Observable"><a href="#Observable" class="headerlink" title="Observable"></a>Observable</h1><h2 id="在属性被读写的时候主动通知："><a href="#在属性被读写的时候主动通知：" class="headerlink" title="在属性被读写的时候主动通知："></a>在属性被读写的时候主动通知：</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> person = &#123;&#125;;</div><div class="line"></div><div class="line"><span class="keyword">let</span> firstName = <span class="string">'Michael'</span>;</div><div class="line"></div><div class="line"><span class="built_in">Object</span>.defineProperty(person, <span class="string">'firstName'</span>, &#123;</div><div class="line">  get() &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'Reading person.firstName'</span>);</div><div class="line"></div><div class="line">    <span class="keyword">return</span> <span class="string">'Michael'</span>;</div><div class="line">  &#125;,</div><div class="line"></div><div class="line">  set(val) &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">`Setting person.firstName <span class="subst">$&#123;val&#125;</span>`</span>);</div><div class="line"></div><div class="line">    firstName = val;</div><div class="line">  &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<p>我们可以定义最基本的observable类和defineReactive方法：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">defineReactive</span>(<span class="params">obj, key, val</span>) </span>&#123;</div><div class="line">  <span class="built_in">Object</span>.defineProperty(obj, key, &#123;</div><div class="line">    get() &#123;</div><div class="line">      <span class="comment">// todo</span></div><div class="line"></div><div class="line">      <span class="keyword">return</span> val;</div><div class="line">    &#125;,</div><div class="line"></div><div class="line">    set(newVal) &#123;</div><div class="line">      <span class="comment">// todo</span></div><div class="line"></div><div class="line">      val = newVal;</div><div class="line">    &#125;,</div><div class="line">  &#125;);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">obervable</span>(<span class="params">obj</span>) </span>&#123;</div><div class="line">  <span class="keyword">const</span> keys = <span class="built_in">Object</span>.keys(obj);</div><div class="line"></div><div class="line">  keys.forEach((key) =&gt; &#123;</div><div class="line">    defineReactive(obj, key, obj[key]);</div><div class="line">  &#125;);</div><div class="line"></div><div class="line">  <span class="keyword">return</span> obj;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>Refactor一下，写成class</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Observable</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span>(obj) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.walk(obj);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  walk(obj) &#123;</div><div class="line">    <span class="keyword">const</span> keys = <span class="built_in">Object</span>.keys(obj);</div><div class="line"></div><div class="line">    keys.forEach((key) =&gt; &#123;</div><div class="line">      <span class="keyword">this</span>.defineReactive(obj, key, obj[key]);</div><div class="line">    &#125;);</div><div class="line"></div><div class="line">    <span class="keyword">return</span> obj;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  defineReactive(obj, key, val) &#123;</div><div class="line">    <span class="built_in">Object</span>.defineProperty(obj, key, &#123;</div><div class="line">      get() &#123;</div><div class="line">        <span class="comment">// todo</span></div><div class="line"></div><div class="line">        <span class="keyword">return</span> val;</div><div class="line">      &#125;,</div><div class="line"></div><div class="line">      set(newVal) &#123;</div><div class="line">        <span class="comment">// todo</span></div><div class="line"></div><div class="line">        val = newVal;</div><div class="line">      &#125;,</div><div class="line">    &#125;);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h1 id="Watcher"><a href="#Watcher" class="headerlink" title="Watcher"></a>Watcher</h1><p>现在来实现demo中的这个部分：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">new</span> Watcher(person, <span class="string">'fullName'</span>, () =&gt; &#123;</div><div class="line">  <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;person.firstName&#125;</span> <span class="subst">$&#123;person.lastName&#125;</span>`</span>;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<p>(有没有觉得和dirty check里面的$$watchers很像。。。后面还有更像的)</p>
-<ul>
-<li>watcher属性无法被赋值</li>
-<li>watcher的值由第三个参数决定</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">watcher</span>(<span class="params">obj, key, getVal</span>) </span>&#123;</div><div class="line">  <span class="built_in">Object</span>.defineProperty(obj, key, &#123;</div><div class="line">    get() &#123;</div><div class="line">      <span class="keyword">const</span> val = getVal();</div><div class="line"></div><div class="line">      <span class="keyword">return</span> val;</div><div class="line">    &#125;,</div><div class="line">    set() &#123;</div><div class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'Cannot set values of wathers.'</span>);</div><div class="line">    &#125;</div><div class="line">  &#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>改写成watcher类并加入listener</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Watcher</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span>(obj, key, cb， onComputedUpdate) &#123;</div><div class="line">    <span class="keyword">this</span>.obj = obj;</div><div class="line">    <span class="keyword">this</span>.key = key;</div><div class="line">    <span class="keyword">this</span>.cb = cb;</div><div class="line">    <span class="keyword">this</span>.onComputedUpdate = onComputedUpdate;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.defineComputed();</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  defineComputed() &#123;</div><div class="line">    <span class="keyword">const</span> self = <span class="keyword">this</span>;</div><div class="line"></div><div class="line">    <span class="keyword">const</span> onDepUpdated = () =&gt; &#123;</div><div class="line">      <span class="keyword">const</span> val = self.cb();</div><div class="line"></div><div class="line">      <span class="keyword">this</span>.onComputedUpdate(val);</div><div class="line">    &#125;;</div><div class="line"></div><div class="line">    <span class="built_in">Object</span>.defineProperty(<span class="keyword">this</span>.obj, <span class="keyword">this</span>.key, &#123;</div><div class="line">      get() &#123;</div><div class="line">        <span class="keyword">const</span> val = self.cb();</div><div class="line">        <span class="keyword">this</span>.onComputedUpdate(val);</div><div class="line"></div><div class="line">        <span class="keyword">return</span> val;</div><div class="line">      &#125;,</div><div class="line"></div><div class="line">      set() &#123;</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'Cannot set values of wathers.'</span>);</div><div class="line">      &#125;,</div><div class="line">    &#125;);</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>这样observable和watcher就可以一起工作了：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> person = <span class="keyword">new</span> Observable(&#123; firstName: <span class="string">'Michael'</span>, lastName: <span class="string">'Jordan'</span> &#125;);</div><div class="line"></div><div class="line"><span class="keyword">new</span> Watcher(person, <span class="string">'fullName'</span>, () =&gt; <span class="string">`<span class="subst">$&#123;person.firstName&#125;</span> <span class="subst">$&#123;person.lastName&#125;</span>`</span>, (val) =&gt; &#123; <span class="built_in">console</span>.log(<span class="string">`new value <span class="subst">$&#123;val&#125;</span>`</span>) &#125;);</div></pre></td></tr></table></figure>
-<h1 id="Dependencies-collection"><a href="#Dependencies-collection" class="headerlink" title="Dependencies collection"></a>Dependencies collection</h1><p>这样有一个问题：我们是主动去取fullName的值的时候，它才会被计算。而我们期望的行为，是firstName或者lastName被修改的时候，主动通知fullName，并更新,触发onComputedUpdate。<br>可以设计这样一个dependency collector, 来收集所有的dependencies. 具体一点就是,让一个observable知道有哪些watcher依赖它,并且在自己被赋值的时候通知watcher.</p>
-<p>注意到watcher的getter被call到的时候,它依赖哪些observable,就会call到这些observable,可以用这个时机来告诉observable,这个watcher依赖你了.然后在call到setter时,就可以把dependencies拿出来通知:</p>
-<p>简单版本,拿一个全局变量存dependencies做依赖收集器</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> Dep = &#123;</div><div class="line">  target: <span class="literal">null</span>,</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<p>在watcher中:</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">defineComputed() &#123;</div><div class="line">  <span class="keyword">const</span> self = <span class="keyword">this</span>;</div><div class="line"></div><div class="line">  <span class="built_in">Object</span>.defineProperty(<span class="keyword">this</span>.obj, <span class="keyword">this</span>.key, &#123;</div><div class="line">    get() &#123;</div><div class="line">      Dep.target = () =&gt; &#123;</div><div class="line">        <span class="keyword">const</span> val = self.cb();</div><div class="line">        <span class="keyword">this</span>.onComputedUpdate(val);</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">const</span> val = self.cb();</div><div class="line"></div><div class="line">      <span class="keyword">return</span> val;</div><div class="line">    &#125;,</div><div class="line"></div><div class="line">    set() &#123;</div><div class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'Cannot set values of wathers.'</span>);</div><div class="line">    &#125;,</div><div class="line">  &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>在observable中</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">defineReactive(obj, key, val) &#123;</div><div class="line">  <span class="keyword">const</span> deps = [];</div><div class="line"></div><div class="line">  <span class="built_in">Object</span>.defineProperty(obj, key, &#123;</div><div class="line">    get() &#123;</div><div class="line">      deps.push(Dep.target);</div><div class="line"></div><div class="line">      <span class="keyword">return</span> val;</div><div class="line">    &#125;,</div><div class="line"></div><div class="line">    set(newVal) &#123;</div><div class="line">      val = newVal;</div><div class="line">      deps.forEach(dep =&gt; dep());</div><div class="line">    &#125;,</div><div class="line">  &#125;);</div></pre></td></tr></table></figure>
-<h1 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> _ <span class="keyword">from</span> <span class="string">'underscore'</span>;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Dep</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span>() &#123;</div><div class="line">    <span class="keyword">this</span>.deps = [];</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  depend() &#123;</div><div class="line">    <span class="keyword">if</span> (Dep.target &amp;&amp; <span class="keyword">this</span>.deps.indexOf(Dep.target) === <span class="number">-1</span>) &#123;</div><div class="line">      <span class="keyword">this</span>.deps.push(Dep.target);</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  notify() &#123;</div><div class="line">    <span class="keyword">this</span>.deps.forEach((dep) =&gt; &#123;</div><div class="line">      dep();</div><div class="line">    &#125;);</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">Dep.target = <span class="literal">null</span>;</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">Observable</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span>(obj) &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.walk(obj);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  walk(obj) &#123;</div><div class="line">    <span class="keyword">const</span> keys = <span class="built_in">Object</span>.keys(obj);</div><div class="line"></div><div class="line">    keys.forEach((key) =&gt; &#123;</div><div class="line">      <span class="keyword">this</span>.defineReactive(obj, key, obj[key]);</div><div class="line">    &#125;);</div><div class="line"></div><div class="line">    <span class="keyword">return</span> obj;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  defineReactive(obj, key, val) &#123;</div><div class="line">    <span class="keyword">const</span> dep = <span class="keyword">new</span> Dep();</div><div class="line"></div><div class="line">    <span class="built_in">Object</span>.defineProperty(obj, key, &#123;</div><div class="line">      get() &#123;</div><div class="line">        dep.depend();</div><div class="line"></div><div class="line">        <span class="keyword">return</span> val;</div><div class="line">      &#125;,</div><div class="line"></div><div class="line">      set(newVal) &#123;</div><div class="line">        val = newVal;</div><div class="line">        dep.notify();</div><div class="line">      &#125;,</div><div class="line">    &#125;);</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">Watcher</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span>(obj, key, cb, onComputedUpdate) &#123;</div><div class="line">    <span class="keyword">this</span>.obj = obj;</div><div class="line">    <span class="keyword">this</span>.key = key;</div><div class="line">    <span class="keyword">this</span>.cb = cb;</div><div class="line">    <span class="keyword">this</span>.onComputedUpdate = onComputedUpdate;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.defineComputed();</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  defineComputed() &#123;</div><div class="line">    <span class="keyword">const</span> self = <span class="keyword">this</span>;</div><div class="line"></div><div class="line">    <span class="keyword">const</span> onDepUpdated = () =&gt; &#123;</div><div class="line">      <span class="keyword">const</span> val = self.cb();</div><div class="line"></div><div class="line">      <span class="keyword">this</span>.onComputedUpdate(val);</div><div class="line">    &#125;;</div><div class="line"></div><div class="line">    <span class="built_in">Object</span>.defineProperty(<span class="keyword">this</span>.obj, <span class="keyword">this</span>.key, &#123;</div><div class="line">      get() &#123;</div><div class="line">        Dep.target = onDepUpdated;</div><div class="line"></div><div class="line">        <span class="keyword">const</span> val = self.cb();</div><div class="line"></div><div class="line">        Dep.target = <span class="literal">null</span>;</div><div class="line"></div><div class="line">        <span class="keyword">return</span> val;</div><div class="line">      &#125;,</div><div class="line"></div><div class="line">      set() &#123;</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'Cannot assign value computed!'</span>);</div><div class="line">      &#125;,</div><div class="line">    &#125;);</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">App</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span>(&#123; el, template, data, method &#125;) &#123;</div><div class="line">    <span class="keyword">this</span>.el = el;</div><div class="line">    <span class="keyword">this</span>.template = template;</div><div class="line">    <span class="keyword">this</span>.data = <span class="keyword">new</span> Observable(data);</div><div class="line">    <span class="keyword">this</span>.method = method;</div><div class="line">    <span class="keyword">this</span>.render();</div><div class="line">    <span class="keyword">this</span>.applyBindings();</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  applyBindings() &#123;</div><div class="line">    <span class="keyword">const</span> bindList = <span class="keyword">this</span>.el.querySelectorAll(<span class="string">'[v-bind]'</span>);</div><div class="line"></div><div class="line">    _.each(bindList, (bind) =&gt; &#123;</div><div class="line">      <span class="keyword">const</span> bindKey = bind.getAttribute(<span class="string">'v-bind'</span>);</div><div class="line"></div><div class="line">      <span class="keyword">if</span> (bind.tagName === <span class="string">'INPUT'</span>) &#123;</div><div class="line">        <span class="comment">// bind.value = this.data[bindKey];</span></div><div class="line"></div><div class="line">        <span class="keyword">new</span> Watcher(<span class="keyword">this</span>.data, <span class="string">`$<span class="subst">$&#123;bindKey&#125;</span>Value`</span>, () =&gt; &#123;</div><div class="line">          <span class="keyword">return</span> <span class="keyword">this</span>.data[bindKey];</div><div class="line">        &#125;, (newVal) =&gt; &#123;</div><div class="line">          bind.value = newVal;</div><div class="line">        &#125;);</div><div class="line"></div><div class="line">        bind.value = <span class="keyword">this</span>.data[<span class="string">`$<span class="subst">$&#123;bindKey&#125;</span>Value`</span>];</div><div class="line"></div><div class="line">        bind.addEventListener(<span class="string">'input'</span>, (e) =&gt; &#123;</div><div class="line">          <span class="keyword">this</span>.data[bindKey] = e.target.value;</div><div class="line">        &#125;);</div><div class="line">      &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">new</span> Watcher(<span class="keyword">this</span>.data, <span class="string">`$<span class="subst">$&#123;bindKey&#125;</span>InnerHtml`</span>, () =&gt; &#123;</div><div class="line">          <span class="keyword">return</span> <span class="keyword">this</span>.data[bindKey];</div><div class="line">        &#125;, (newVal) =&gt; &#123;</div><div class="line">          bind.innerHTML = newVal;</div><div class="line">        &#125;);</div><div class="line"></div><div class="line">        bind.innerHTML = <span class="keyword">this</span>.data[<span class="string">`$<span class="subst">$&#123;bindKey&#125;</span>InnerHtml`</span>];</div><div class="line">      &#125;</div><div class="line">    &#125;);</div><div class="line"></div><div class="line">    <span class="keyword">const</span> clickList = <span class="keyword">this</span>.el.querySelectorAll(<span class="string">'[v-click]'</span>);</div><div class="line"></div><div class="line">    _.each(clickList, (click) =&gt; &#123;</div><div class="line">      <span class="keyword">const</span> clickKey = click.getAttribute(<span class="string">'v-click'</span>);</div><div class="line">      <span class="keyword">const</span> clickFunc = <span class="keyword">this</span>.method[clickKey];</div><div class="line"></div><div class="line">      click.onclick = clickFunc.bind(<span class="keyword">this</span>);</div><div class="line">    &#125;);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  render() &#123;</div><div class="line">    <span class="keyword">this</span>.el.innerHTML = <span class="keyword">this</span>.template();</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">javascript</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">framework</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">data binding</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/10/18/deps-collection/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1728,6 +1783,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Frameworks</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">functional programming</a>
               </li>
              
@@ -1736,15 +1795,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Javascript</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Frameworks</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">css</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Javascript</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1768,11 +1823,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Dom</a>
+                <a href="javascript:void(0)" class="js-tag color5">html</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">html</a>
+                <a href="javascript:void(0)" class="js-tag color4">Dom</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1788,11 +1843,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ES6</a>
+                <a href="javascript:void(0)" class="js-tag color1">React</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">React</a>
+                <a href="javascript:void(0)" class="js-tag color5">recompose</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Design pattern</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Functional programming</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1805,6 +1868,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Events</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">ES6</a>
               </li>
              
               <li class="article-tag-list-item">
