@@ -142,6 +142,75 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-github-ssh-config" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/19/github-ssh-config/">如何配置github ssh连接</a>
+    </h1>
+  
+
+        
+        <a href="/2017/01/19/github-ssh-config/" class="archive-article-date">
+  	<time datetime="2017-01-19T08:24:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-01-19</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="测试ssh连接是否正常"><a href="#测试ssh连接是否正常" class="headerlink" title="测试ssh连接是否正常"></a>测试ssh连接是否正常</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh -T git@coding.net</div></pre></td></tr></table></figure>
+<h2 id="配置ssh连接"><a href="#配置ssh连接" class="headerlink" title="配置ssh连接"></a>配置ssh连接</h2><h3 id="1-打开gitbash"><a href="#1-打开gitbash" class="headerlink" title="1. 打开gitbash"></a>1. 打开gitbash</h3><h3 id="2-生成public-key"><a href="#2-生成public-key" class="headerlink" title="2. 生成public key"></a>2. 生成public key</h3><p>用以下命令 邮箱换成自己的</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh-keygen -t rsa -b 4096 -C <span class="string">"your_email@example.com"</span></div></pre></td></tr></table></figure>
+<p>一路回车就行了</p>
+<h3 id="3-找到生成的public-key添加到github"><a href="#3-找到生成的public-key添加到github" class="headerlink" title="3. 找到生成的public key添加到github"></a>3. 找到生成的public key添加到github</h3><p>首先找到公钥文件id_rsa.pub，默认目录为C:/Users/[username]/.ssh，用文本编辑器打开并复制</p>
+<p><a href="https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/" target="_blank" rel="external">然后参考这里</a></p>
+<h3 id="到这里就ok了"><a href="#到这里就ok了" class="headerlink" title="到这里就ok了"></a>到这里就ok了</h3><p>可以找repo pull/push一下试一试了</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/01/19/github-ssh-config/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-html-input" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1000,93 +1069,6 @@
 
 
   
-    <article id="post-underscore-2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/08/17/underscore-2/">underscore源码阅读笔记（2）： reduce</a>
-    </h1>
-  
-
-        
-        <a href="/2016/08/17/underscore-2/" class="archive-article-date">
-  	<time datetime="2016-08-17T02:01:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-08-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li>reduce和reduceRight的实现：</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// **Reduce** builds up a single result from a list of values, aka `inject`,</span></div><div class="line"><span class="comment">// or `foldl`.</span></div><div class="line">_.reduce = _.foldl = _.inject = createReduce(<span class="number">1</span>);</div><div class="line"></div><div class="line"><span class="comment">// The right-associative version of reduce, also known as `foldr`.</span></div><div class="line">_.reduceRight = _.foldr = createReduce(<span class="number">-1</span>);</div></pre></td></tr></table></figure>
-<ul>
-<li>核心：createReduce - 这是一个function decorator:</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Create a reducing function iterating left or right.</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">createReduce</span>(<span class="params">dir</span>) </span>&#123;</div><div class="line">  <span class="comment">// Optimized iterator function as using arguments.length</span></div><div class="line">  <span class="comment">// in the main function will deoptimize the, see #1991.</span></div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">iterator</span>(<span class="params">obj, iteratee, memo, keys, index, length</span>) </span>&#123;</div><div class="line">    <span class="keyword">for</span> (; index &gt;= <span class="number">0</span> &amp;&amp; index &lt; length; index += dir) &#123;</div><div class="line">      <span class="keyword">var</span> currentKey = keys ? keys[index] : index;</div><div class="line">      memo = iteratee(memo, obj[currentKey], currentKey, obj);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> memo;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">obj, iteratee, memo, context</span>) </span>&#123;</div><div class="line">    iteratee = optimizeCb(iteratee, context, <span class="number">4</span>);</div><div class="line">    <span class="keyword">var</span> keys = !isArrayLike(obj) &amp;&amp; _.keys(obj),</div><div class="line">        length = (keys || obj).length,</div><div class="line">        index = dir &gt; <span class="number">0</span> ? <span class="number">0</span> : length - <span class="number">1</span>;</div><div class="line">    <span class="comment">// Determine the initial value if none is provided.</span></div><div class="line">    <span class="keyword">if</span> (<span class="built_in">arguments</span>.length &lt; <span class="number">3</span>) &#123;</div><div class="line">      memo = obj[keys ? keys[index] : index];</div><div class="line">      index += dir;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> iterator(obj, iteratee, memo, keys, index, length);</div><div class="line">  &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<blockquote>
-<p>Optimized iterator function as using arguments.length in the main function will deoptimize the, see #1991.</p>
-</blockquote>
-<p>换我这种人来写，肯定就是用arguments.length来取一下，然后开开心心的开始for循环了，嘿嘿嘿</p>
-<h3 id="195行到198行在干嘛？"><a href="#195行到198行在干嘛？" class="headerlink" title="195行到198行在干嘛？"></a>195行到198行在干嘛？</h3><p>如果没有传初始值，则把第一个值作为初始值，同时移动一下初始迭代位置</p>
-<h3 id="191行"><a href="#191行" class="headerlink" title="191行"></a>191行</h3><p>同时支持数组和集合。可以借鉴：）</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Javascript</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2016/08/17/underscore-2/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
@@ -1196,15 +1178,19 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">css</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Javascript</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">css</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">javascript</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">ES6(ES2015)</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1216,19 +1202,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">ES6(ES2015)</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">html</a>
+                <a href="javascript:void(0)" class="js-tag color4">Dom</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">Dom</a>
+                <a href="javascript:void(0)" class="js-tag color5">html</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1241,22 +1223,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">package management</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">React</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">recompose</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Design pattern</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Functional programming</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1273,6 +1239,22 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">ES6</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">React</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">recompose</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Design pattern</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Functional programming</a>
               </li>
              
               <li class="article-tag-list-item">
