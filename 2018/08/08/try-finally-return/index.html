@@ -6,17 +6,21 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Yucong&#39;s Blog</title>
+  <title>Javascript - try/catch/finally return statement | Yucong&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="No matter where we are going, it starts from where we are">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Yucong's Blog">
-<meta property="og:url" content="http://yoursite.com/page/3/index.html">
+  <meta name="description" content="12345678910(function example() &amp;#123;    try &amp;#123;        return true;    &amp;#125;    finally &amp;#123;        return false;    &amp;#125;&amp;#125;)()// returns false
+在try catch 语句中 finally block里的东西 永远都会被执行！">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Javascript - try/catch/finally return statement">
+<meta property="og:url" content="http://yoursite.com/2018/08/08/try-finally-return/index.html">
 <meta property="og:site_name" content="Yucong's Blog">
-<meta property="og:description" content="No matter where we are going, it starts from where we are">
+<meta property="og:description" content="12345678910(function example() &amp;#123;    try &amp;#123;        return true;    &amp;#125;    finally &amp;#123;        return false;    &amp;#125;&amp;#125;)()// returns false
+在try catch 语句中 finally block里的东西 永远都会被执行！">
+<meta property="og:updated_time" content="2018-08-08T04:10:56.760Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Yucong's Blog">
-<meta name="twitter:description" content="No matter where we are going, it starts from where we are">
+<meta name="twitter:title" content="Javascript - try/catch/finally return statement">
+<meta name="twitter:description" content="12345678910(function example() &amp;#123;    try &amp;#123;        return true;    &amp;#125;    finally &amp;#123;        return false;    &amp;#125;&amp;#125;)()// returns false
+在try catch 语句中 finally block里的东西 永远都会被执行！">
   
     <link rel="alternative" href="/atom.xml" title="Yucong&#39;s Blog" type="application/atom+xml">
   
@@ -140,82 +144,139 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-    <article id="post-iterators" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+            <article id="blog-try-finally-return" class="article article-type-blog " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/16/iterators/">iterators &amp; for...of... es6迭代器</a>
+    <h1 class="article-title" itemprop="name">
+      Javascript - try/catch/finally return statement
     </h1>
   
 
         
-        <a href="/2017/03/16/iterators/" class="archive-article-date">
-  	<time datetime="2017-03-16T14:01:56.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-16</time>
+        <a href="/2018/08/08/try-finally-return/" class="archive-article-date">
+  	<time datetime="2018-08-08T04:01:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-08</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="用for…in…一定要小心！！"><a href="#用for…in…一定要小心！！" class="headerlink" title="用for…in…一定要小心！！"></a>用for…in…一定要小心！！</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> myArray = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];</div><div class="line"></div><div class="line"><span class="keyword">for</span> (<span class="keyword">var</span> index <span class="keyword">in</span> myArray) &#123; <span class="comment">// never do this!!</span></div><div class="line">  <span class="built_in">console</span>.log(myArray[index]);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li>index不是number而是string，说不定就让自己掉进 ‘2’ + 1 == ‘21’ 这样的bug里了</li>
-<li>for-in还会作用于自定义属性（myArray.name这种）</li>
-<li>有些时候顺序是随机的</li>
-</ul>
-<p><strong> 简而言之，for-in是为普通对象设计的，你可以遍历得到字符串类型的键，因此不适用于数组遍历 </strong></p>
-<h3 id="forEach的局限"><a href="#forEach的局限" class="headerlink" title=".forEach的局限"></a>.forEach的局限</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">myArray.forEach(funciton(val) &#123;</div><div class="line">  <span class="built_in">console</span>.log(val);</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<p>不能使用break语句中断循环，也不能使用return语句返回到外层函数</p>
-<h3 id="for…of-in-es6"><a href="#for…of-in-es6" class="headerlink" title="for…of in es6"></a>for…of in es6</h3><ul>
-<li>正确响应break, continue</li>
-<li>避免for…in的缺点</li>
-<li>除了Array, 还可以遍历String, map, set</li>
-</ul>
-<h3 id="迭代器对象"><a href="#迭代器对象" class="headerlink" title="迭代器对象"></a>迭代器对象</h3><p>for-of循环语句通过方法调用来遍历各种集合。数组、Maps对象、Sets对象以及其它在我们讨论的对象有一个共同点，它们都有一个迭代器方法。</p>
-<p>你可以给任意类型的对象添加迭代器方法。</p>
-<p>当你为对象添加myObject.toString()方法后，就可以将对象转化为字符串，同样地，当你向任意对象添加myObject<a href="">Symbol.iterator</a>方法，就可以遍历这个对象了</p>
-<p>for-of循环首先调用集合的<a href="">Symbol.iterator</a>方法，紧接着返回一个新的迭代器对象。迭代器对象可以是任意具有.next()方法的对象；for-of循环将重复调用这个方法，每次循环调用一次</p>
+        <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span> <span class="title">example</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">finally</span> &#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">    &#125;</div><div class="line">&#125;)()</div><div class="line"></div><div class="line"><span class="comment">// returns false</span></div></pre></td></tr></table></figure>
+<p>在try catch 语句中 finally block里的东西 永远都会被执行！</p>
 
       
 
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃鱼&lt;。)#)))≦<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/assets/img/alipay.png">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="/assets/img/weixinpay.png">
+                      <span class="reward-type">微信</span>
+                    </div>
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
       
     </div>
     <div class="article-info article-info-index">
       
       
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Javascript</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">ES6</a>
-        		</li>
-      		
-		</ul>
-	</div>
+      
 
       
 
       
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/03/16/iterators/">展开全文 >></a>
-        </p>
-      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
 
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/08/08/try-finally-return/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
       
       <div class="clearfix"></div>
     </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2018/08/08/mock-import/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Mocking ES6 module import</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
 
 <aside class="wrap-side-operation">
     <div class="mod-side-operation">
@@ -235,841 +296,14 @@
 
 
 
-
-  
-    <article id="post-event-flow" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/15/event-flow/">event flow</a>
-    </h1>
-  
-
-        
-        <a href="/2017/03/15/event-flow/" class="archive-article-date">
-  	<time datetime="2017-03-15T02:23:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="流-Flow-事件流-event-flow"><a href="#流-Flow-事件流-event-flow" class="headerlink" title="流 Flow - 事件流 event flow"></a>流 Flow - 事件流 event flow</h3><p>简单来说 流就是<strong>具有方向的数据</strong><br>事件流所描述的就是从页面中接受事件的顺序。</p>
-<h3 id="事件冒泡"><a href="#事件冒泡" class="headerlink" title="事件冒泡"></a>事件冒泡</h3><p>事件冒泡即事件开始时，由最具体的元素接收（也就是事件发生所在的节点），然后逐级传播到较为不具体的节点</p>
-<h3 id="事件捕获"><a href="#事件捕获" class="headerlink" title="事件捕获"></a>事件捕获</h3><p>当某个事件发生时，父元素应该更早接收到事件，具体元素则最后接收到事件</p>
-<h3 id="addEventListener"><a href="#addEventListener" class="headerlink" title="addEventListener"></a>addEventListener</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">element.addEventListener(event, <span class="function"><span class="keyword">function</span>, <span class="title">useCapture</span>)</span></div></pre></td></tr></table></figure>
-<p>第一个参数是需要绑定的事件，第二个参数是触发事件后要执行的函数。而第三个参数默认值是false，表示在事件冒泡的阶段调用事件处理函数，如果参数为true，则表示在事件捕获阶段调用处理函数</p>
-<h3 id="DOM-事件流"><a href="#DOM-事件流" class="headerlink" title="DOM 事件流"></a>DOM 事件流</h3><ul>
-<li><p>事件捕获阶段</p>
-</li>
-<li><p>处于目标阶段</p>
-</li>
-<li><p>事件冒泡阶段</p>
-</li>
-<li><p>阻止事件冒泡</p>
-</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">event.stopPropagation()</div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Javascript</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Dom</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/03/15/event-flow/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-github-ssh-config" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/19/github-ssh-config/">如何配置github ssh连接</a>
-    </h1>
-  
-
-        
-        <a href="/2017/01/19/github-ssh-config/" class="archive-article-date">
-  	<time datetime="2017-01-19T08:24:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-01-19</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="测试ssh连接是否正常"><a href="#测试ssh连接是否正常" class="headerlink" title="测试ssh连接是否正常"></a>测试ssh连接是否正常</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh -T git@coding.net</div></pre></td></tr></table></figure>
-<h2 id="配置ssh连接"><a href="#配置ssh连接" class="headerlink" title="配置ssh连接"></a>配置ssh连接</h2><h3 id="1-打开gitbash"><a href="#1-打开gitbash" class="headerlink" title="1. 打开gitbash"></a>1. 打开gitbash</h3><h3 id="2-生成public-key"><a href="#2-生成public-key" class="headerlink" title="2. 生成public key"></a>2. 生成public key</h3><p>用以下命令 邮箱换成自己的</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh-keygen -t rsa -b 4096 -C <span class="string">"your_email@example.com"</span></div></pre></td></tr></table></figure>
-<p>一路回车就行了</p>
-<h3 id="3-找到生成的public-key添加到github"><a href="#3-找到生成的public-key添加到github" class="headerlink" title="3. 找到生成的public key添加到github"></a>3. 找到生成的public key添加到github</h3><p>首先找到公钥文件id_rsa.pub，默认目录为C:/Users/[username]/.ssh，用文本编辑器打开并复制</p>
-<p><a href="https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/" target="_blank" rel="external">然后参考这里</a></p>
-<h3 id="到这里就ok了"><a href="#到这里就ok了" class="headerlink" title="到这里就ok了"></a>到这里就ok了</h3><p>可以找repo pull/push一下试一试了</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/01/19/github-ssh-config/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-html-input" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/19/html-input/">html input</a>
-    </h1>
-  
-
-        
-        <a href="/2017/01/19/html-input/" class="archive-article-date">
-  	<time datetime="2017-01-19T08:12:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-01-19</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在html5中 对于</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span>&gt;</span></div></pre></td></tr></table></figure>
-<p>可以用accept属性指定接收的文件类型。</p>
-<h3 id="Snytax"><a href="#Snytax" class="headerlink" title="Snytax"></a>Snytax</h3><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">accept</span>=<span class="string">"file_extension|audio/*|video/*|image/*|media_type"</span>&gt;</span></div></pre></td></tr></table></figure>
-<p>To specify more than one value, separate the values with a comma (e.g.</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">accept</span>=<span class="string">"audio/*,video/*,image/*"</span> /&gt;</span></div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">html</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/01/19/html-input/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-vuejs-1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/12/13/vuejs-1/">Vue.js学习 - 创建第一个应用</a>
-    </h1>
-  
-
-        
-        <a href="/2016/12/13/vuejs-1/" class="archive-article-date">
-  	<time datetime="2016-12-13T07:34:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-13</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="在github上创建一个项目"><a href="#在github上创建一个项目" class="headerlink" title="在github上创建一个项目"></a>在github上创建一个项目</h2><h2 id="在本地创建对应的repro"><a href="#在本地创建对应的repro" class="headerlink" title="在本地创建对应的repro"></a>在本地创建对应的repro</h2><h3 id="init-git"><a href="#init-git" class="headerlink" title="init git"></a>init git</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">echo</span> <span class="string">"# test"</span> &gt;&gt; README.md</div><div class="line">git init</div><div class="line">git add README.md</div><div class="line">git commit -m <span class="string">"first commit"</span></div><div class="line">git remote add origin https://github.com/BigYu/test.git</div><div class="line">git push -u origin master</div></pre></td></tr></table></figure>
-<ul>
-<li>我创建了两个branch，master和develop。如果是一个人写的小项目，其实没有必要。管他呢，就当假装follow gitflow的一点执念吧，嘻嘻。</li>
-</ul>
-<h3 id="init-npm"><a href="#init-npm" class="headerlink" title="init npm"></a>init npm</h3><p>  加上-y选项，即全部填写默认值。如果将来需要修改，在文件里修改吧，什么都没写的时候干这些意义不大</p>
-<h2 id="准备好第三方依赖"><a href="#准备好第三方依赖" class="headerlink" title="准备好第三方依赖"></a>准备好第三方依赖</h2><h3 id="梳理一下我要用啥"><a href="#梳理一下我要用啥" class="headerlink" title="梳理一下我要用啥"></a>梳理一下我要用啥</h3><ul>
-<li>vue.js</li>
-<li>ES2015(6?) &amp; babel</li>
-<li>webpack/webpack devserver</li>
-<li>sass</li>
-</ul>
-<p>先暂时想到这些。以后想起来再加。</p>
-<h3 id="安装webpack"><a href="#安装webpack" class="headerlink" title="安装webpack"></a>安装webpack</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">npm install --save-dev webpack</div><div class="line">npm install webpack-dev-server -g</div></pre></td></tr></table></figure>
-<p>dev server用于本地调试，所以没有加入到packages.json里</p>
-<h3 id="使用webpack-dev-server"><a href="#使用webpack-dev-server" class="headerlink" title="使用webpack dev server"></a>使用webpack dev server</h3><ul>
-<li>webpack.config.js</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">  entry: <span class="string">'./src/index.js'</span>,</div><div class="line">  output: &#123;</div><div class="line">    path: <span class="string">'./assets'</span>,</div><div class="line">    filename: <span class="string">'bundle.js'</span></div><div class="line">  &#125;,</div><div class="line">  devServer: &#123;</div><div class="line">    port: <span class="number">99</span></div><div class="line">  &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<ul>
-<li>src/index.js</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">document</span>.write(<span class="string">'Hello vue!!! I am Yucong.'</span>);</div></pre></td></tr></table></figure>
-<ul>
-<li>bash commands</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">webpack dev server</div></pre></td></tr></table></figure>
-<p>浏览器打开 <a href="http://localhost:99/webpack-dev-server/bundle" target="_blank" rel="external">http://localhost:99/webpack-dev-server/bundle</a> 就能看到啦。自动刷新哦~</p>
-<h3 id="webpack"><a href="#webpack" class="headerlink" title="webpack"></a>webpack</h3><ul>
-<li>bash command</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">webpack</div></pre></td></tr></table></figure>
-<p>然后就看到bundle.js在assets目录下被创建了</p>
-<p>再加入一个index.html</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"assets/bundle.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
-<h3 id="安装babel-loader并调试"><a href="#安装babel-loader并调试" class="headerlink" title="安装babel loader并调试"></a>安装babel loader并调试</h3><ul>
-<li>install</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install babel-loader babel-core babel-preset-es2015 --save-dev</div></pre></td></tr></table></figure>
-<ul>
-<li>config</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">module</span>: &#123;</div><div class="line">  loaders: [</div><div class="line">    &#123;</div><div class="line">      test: <span class="regexp">/\.js$/</span>,</div><div class="line">      exclude: <span class="regexp">/(node_modules|bower_components)/</span>,</div><div class="line">      loader: <span class="string">'babel-loader'</span>,</div><div class="line">      query: &#123;</div><div class="line">        presets: [<span class="string">'es2015'</span>]</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li>src/index.js</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> <span class="string">'./test1'</span>;</div><div class="line"></div><div class="line"><span class="built_in">document</span>.write(<span class="string">'Hello vue!!! I am Yucong.'</span>);</div></pre></td></tr></table></figure>
-<ul>
-<li>src/test1.js</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> <span class="string">'./test_module/test2'</span>;</div><div class="line"></div><div class="line"><span class="built_in">window</span>.console.log(<span class="string">'Hello'</span>);</div></pre></td></tr></table></figure>
-<ul>
-<li>src/test_module/test2.js</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> test3 <span class="keyword">from</span> <span class="string">'./test3'</span>;</div><div class="line"></div><div class="line"><span class="keyword">const</span> a = <span class="number">2</span>;</div><div class="line"></div><div class="line">alert(a);</div><div class="line">alert(test3.foo);</div></pre></td></tr></table></figure>
-<ul>
-<li>src/test_module/test3.js</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</div><div class="line">  foo: <span class="string">'bar'</span>,</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<p><strong> 这里还有一个问题，所有的import path都是相对路径，还不知道怎么做成绝对路径。。。 </strong></p>
-<h3 id="html-loader"><a href="#html-loader" class="headerlink" title="html loader"></a>html loader</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install html-loader --save-dev</div></pre></td></tr></table></figure>
-<p>config</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div></pre></td></tr></table></figure>
-<h3 id="安装vue-js-写一个hello-word"><a href="#安装vue-js-写一个hello-word" class="headerlink" title="安装vue.js 写一个hello word"></a>安装vue.js 写一个hello word</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install vue --save</div></pre></td></tr></table></figure>
-<ul>
-<li>index.js</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'vue'</span>;</div><div class="line"></div><div class="line"><span class="keyword">new</span> Vue(&#123;</div><div class="line">  el: <span class="string">'#app'</span>,</div><div class="line">  data: &#123;</div><div class="line">    message: <span class="string">'Hello Vue!'</span>,</div><div class="line">  &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<p><strong> The runtime-only build does not include the template compiler, and does not support the template option. You can only use the render option when using the runtime-only build, but it works with single-file components, because single-file components’ templates are pre-compiled into render functions during the build step. The runtime-only build is roughly 30% lighter-weight than the standalone build, weighing only 17.60kb min+gzip. </strong></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">resolve: &#123;</div><div class="line">  alias: &#123;</div><div class="line">    <span class="string">'vue$'</span>: <span class="string">'vue/dist/vue.common.js'</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li>index.html</li>
-</ul>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">title</span>&gt;</span>Document<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"app"</span>&gt;</span>&#123;&#123;message&#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"/bundle.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></div></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Frameworks</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Vue.js</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2016/12/13/vuejs-1/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-underscore-5" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/12/03/underscore-5/">underscore源码阅读笔记（5）： defer</a>
-    </h1>
-  
-
-        
-        <a href="/2016/12/03/underscore-5/" class="archive-article-date">
-  	<time datetime="2016-12-03T06:03:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-03</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这周被邪恶的knockout狠狠的坑了一次，解决方法是用defer函数让ko的binding让调用栈结束之后进行。于是看了一下源码，了解一下defer的实现。</p>
-<h2 id="defer"><a href="#defer" class="headerlink" title="defer"></a>defer</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">_.defer = _.partial(_.delay, _, <span class="number">1</span>);</div></pre></td></tr></table></figure>
-<h2 id="partial"><a href="#partial" class="headerlink" title="partial"></a>partial</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Partially apply a function by creating a version that has had some of its</span></div><div class="line"><span class="comment">// arguments pre-filled, without changing its dynamic `this` context. _ acts</span></div><div class="line"><span class="comment">// as a placeholder, allowing any combination of arguments to be pre-filled.</span></div><div class="line">_.partial = <span class="function"><span class="keyword">function</span>(<span class="params">func</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> boundArgs = slice.call(<span class="built_in">arguments</span>, <span class="number">1</span>);</div><div class="line">  <span class="keyword">var</span> bound = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> position = <span class="number">0</span>, length = boundArgs.length;</div><div class="line">    <span class="keyword">var</span> args = <span class="built_in">Array</span>(length);</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; length; i++) &#123;</div><div class="line">      args[i] = boundArgs[i] === _ ? <span class="built_in">arguments</span>[position++] : boundArgs[i];</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">while</span> (position &lt; <span class="built_in">arguments</span>.length) args.push(<span class="built_in">arguments</span>[position++]);</div><div class="line">    <span class="keyword">return</span> executeBound(func, bound, <span class="keyword">this</span>, <span class="keyword">this</span>, args);</div><div class="line">  &#125;;</div><div class="line">  <span class="keyword">return</span></div></pre></td></tr></table></figure>
-<p>Partially apply a function by filling in any number of its arguments, without changing its dynamic this value. A close cousin of bind. You may pass _ in your list of arguments to specify an argument that should not be pre-filled, but left open to supply at call-time.</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> subtract = <span class="function"><span class="keyword">function</span>(<span class="params">a, b</span>) </span>&#123; <span class="keyword">return</span> b - a; &#125;;</div><div class="line">sub5 = _.partial(subtract, <span class="number">5</span>);</div><div class="line">sub5(<span class="number">20</span>);</div><div class="line">=&gt; <span class="number">15</span></div><div class="line"></div><div class="line"><span class="comment">// Using a placeholder</span></div><div class="line">subFrom20 = _.partial(subtract, _, <span class="number">20</span>);</div><div class="line">subFrom20(<span class="number">5</span>);</div><div class="line">=&gt; <span class="number">15</span></div></pre></td></tr></table></figure>
-<h2 id="delay"><a href="#delay" class="headerlink" title="delay"></a>delay</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Delays a function for the given number of milliseconds, and then calls</span></div><div class="line"><span class="comment">// it with the arguments supplied.</span></div><div class="line">_.delay = <span class="function"><span class="keyword">function</span>(<span class="params">func, wait</span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> args = slice.call(<span class="built_in">arguments</span>, <span class="number">2</span>);</div><div class="line">  <span class="keyword">return</span> setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">    <span class="keyword">return</span> func.apply(<span class="literal">null</span>, args);</div><div class="line">  &#125;, wait);</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<p><strong> setTimeout() will run asynchronously after finishing current execution block.  </strong></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2016/12/03/underscore-5/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-code-convention" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/10/13/code-convention/">Airbnb JavaScript Style Guide</a>
-    </h1>
-  
-
-        
-        <a href="/2016/10/13/code-convention/" class="archive-article-date">
-  	<time datetime="2016-10-13T01:25:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-10-13</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li>Note that both let and const are block-scoped.</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// const and let only exist in the blocks they are defined in.</span></div><div class="line">&#123;</div><div class="line">  <span class="keyword">let</span> a = <span class="number">1</span>;</div><div class="line">  <span class="keyword">const</span> b = <span class="number">1</span>;</div><div class="line">&#125;</div><div class="line"><span class="built_in">console</span>.log(a); <span class="comment">// ReferenceError</span></div><div class="line"><span class="built_in">console</span>.log(b); <span class="comment">// ReferenceError</span></div></pre></td></tr></table></figure>
-<ul>
-<li>Use computed property names when creating objects with dynamic property names.</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getKey</span>(<span class="params">k</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="string">`a key named <span class="subst">$&#123;k&#125;</span>`</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// bad</span></div><div class="line"><span class="keyword">const</span> obj = &#123;</div><div class="line">  id: <span class="number">5</span>,</div><div class="line">  name: <span class="string">'San Francisco'</span>,</div><div class="line">&#125;;</div><div class="line">obj[getKey(<span class="string">'enabled'</span>)] = <span class="literal">true</span>;</div><div class="line"></div><div class="line"><span class="comment">// good</span></div><div class="line"><span class="keyword">const</span> obj = &#123;</div><div class="line">  id: <span class="number">5</span>,</div><div class="line">  name: <span class="string">'San Francisco'</span>,</div><div class="line">  [getKey(<span class="string">'enabled'</span>)]: <span class="literal">true</span>,</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<ul>
-<li>Do not call Object.prototype methods directly, such as hasOwnProperty, propertyIsEnumerable, and isPrototypeOf.</li>
-</ul>
-<blockquote>
-<p>Why? These methods may be shadowed by properties on the object in question - consider { hasOwnProperty: false } - or, the object may be a null object (Object.create(null)).</p>
-</blockquote>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// bad</span></div><div class="line"><span class="built_in">console</span>.log(object.hasOwnProperty(key));</div><div class="line"></div><div class="line"><span class="comment">// good</span></div><div class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.prototype.hasOwnProperty.call(object, key));</div><div class="line"></div><div class="line"><span class="comment">// best</span></div><div class="line"><span class="keyword">const</span> has = <span class="built_in">Object</span>.prototype.hasOwnProperty; <span class="comment">// cache the lookup once, in module scope.</span></div><div class="line"><span class="comment">/* or */</span></div><div class="line"><span class="keyword">const</span> has = <span class="built_in">require</span>(<span class="string">'has'</span>);</div><div class="line">…</div><div class="line"><span class="built_in">console</span>.log(has.call(object, key));</div></pre></td></tr></table></figure>
-<ul>
-<li>Use array spreads … to copy arrays.</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// bad</span></div><div class="line"><span class="keyword">const</span> len = items.length;</div><div class="line"><span class="keyword">const</span> itemsCopy = [];</div><div class="line"><span class="keyword">let</span> i;</div><div class="line"></div><div class="line"><span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; len; i++) &#123;</div><div class="line">  itemsCopy[i] = items[i];</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// good</span></div><div class="line"><span class="keyword">const</span> itemsCopy = [...items];</div></pre></td></tr></table></figure>
-<ul>
-<li>Use object destructuring when accessing and using multiple properties of an object. jscs:</li>
-</ul>
-<blockquote>
-<p>Why? Destructuring saves you from creating temporary references for those properties.</p>
-</blockquote>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// bad</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getFullName</span>(<span class="params">user</span>) </span>&#123;</div><div class="line">  <span class="keyword">const</span> firstName = user.firstName;</div><div class="line">  <span class="keyword">const</span> lastName = user.lastName;</div><div class="line"></div><div class="line">  <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;firstName&#125;</span> <span class="subst">$&#123;lastName&#125;</span>`</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// good</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getFullName</span>(<span class="params">user</span>) </span>&#123;</div><div class="line">  <span class="keyword">const</span> &#123; firstName, lastName &#125; = user;</div><div class="line">  <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;firstName&#125;</span> <span class="subst">$&#123;lastName&#125;</span>`</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// best</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getFullName</span>(<span class="params">&#123; firstName, lastName &#125;</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;firstName&#125;</span> <span class="subst">$&#123;lastName&#125;</span>`</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<ul>
-<li>Use array destructuring. jscs: requireArrayDestructuring</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>];</div><div class="line"></div><div class="line"><span class="comment">// bad</span></div><div class="line"><span class="keyword">const</span> first = arr[<span class="number">0</span>];</div><div class="line"><span class="keyword">const</span> second = arr[<span class="number">1</span>];</div><div class="line"></div><div class="line"><span class="comment">// good</span></div><div class="line"><span class="keyword">const</span> [first, second] = arr;</div></pre></td></tr></table></figure>
-<ul>
-<li>Strings that cause the line to go over 100 characters should not be written across multiple lines using string concatenation.</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// bad</span></div><div class="line"><span class="keyword">const</span> errorMessage = <span class="string">'This is a super long error that was thrown because \</span></div><div class="line">of Batman. When you stop to think about how Batman had anything to do \</div><div class="line">with this, you would get nowhere \</div><div class="line">fast.';</div><div class="line"></div><div class="line"><span class="comment">// bad</span></div><div class="line"><span class="keyword">const</span> errorMessage = <span class="string">'This is a super long error that was thrown because '</span> +</div><div class="line">  <span class="string">'of Batman. When you stop to think about how Batman had anything to do '</span> +</div><div class="line">  <span class="string">'with this, you would get nowhere fast.'</span>;</div><div class="line"></div><div class="line"><span class="comment">// good</span></div><div class="line"><span class="keyword">const</span> errorMessage = <span class="string">'This is a super long error that was thrown because of Batman. When you stop to think about how Batman had anything to do with this, you would get nowhere fast.'</span>;</div></pre></td></tr></table></figure>
-<ul>
-<li>Do not unnecessarily escape characters in strings. eslint: no-useless-escape</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// bad</span></div><div class="line"><span class="keyword">const</span> foo = <span class="string">'\'this\' \i\s \"quoted\"'</span>;</div><div class="line"></div><div class="line"><span class="comment">// good</span></div><div class="line"><span class="keyword">const</span> foo = <span class="string">'\'this\' is "quoted"'</span>;</div><div class="line"><span class="keyword">const</span> foo = <span class="string">`'this' is "quoted"`</span>;</div></pre></td></tr></table></figure>
-<ul>
-<li>Use named function expressions instead of function declarations. eslint: func-style jscs:</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// bad</span></div><div class="line"><span class="keyword">const</span> foo = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="comment">// bad</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// good</span></div><div class="line"><span class="keyword">const</span> foo = <span class="function"><span class="keyword">function</span> <span class="title">bar</span>(<span class="params"></span>) </span>&#123;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<ul>
-<li>Prefer the use of the spread operator … to call variadic functions. eslint: prefer-spread</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// bad</span></div><div class="line"><span class="keyword">const</span> x = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];</div><div class="line"><span class="built_in">console</span>.log.apply(<span class="built_in">console</span>, x);</div><div class="line"></div><div class="line"><span class="comment">// good</span></div><div class="line"><span class="keyword">const</span> x = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];</div><div class="line"><span class="built_in">console</span>.log(...x);</div><div class="line"></div><div class="line"><span class="comment">// bad</span></div><div class="line"><span class="keyword">new</span> (<span class="built_in">Function</span>.prototype.bind.apply(<span class="built_in">Date</span>, [<span class="literal">null</span>, <span class="number">2016</span>, <span class="number">08</span>, <span class="number">05</span>]));</div><div class="line"></div><div class="line"><span class="comment">// good</span></div><div class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(...[<span class="number">2016</span>, <span class="number">08</span>, <span class="number">05</span>]);</div></pre></td></tr></table></figure>
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Javascript</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2016/10/13/code-convention/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-essay0" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/09/18/essay0/">有位孤独的裱糊匠</a>
-    </h1>
-  
-
-        
-        <a href="/2016/09/18/essay0/" class="archive-article-date">
-  	<time datetime="2016-09-18T01:17:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-09-18</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>说起爱国，每个人都曾经在昏黄的灯光下，啃那些令人热血沸腾的一行行，一段段。也想过能振臂一呼“为中华之崛起而读书”。然而一百年过去了，我泱泱中华也早已不再是那个任人鱼肉的东亚病夫之邦，莘莘学子也早无救亡图存之忧，偶有几个不知是不是无病呻吟之辈锤着打鼓摇着“爱国主义教育”的旌旗，不得回应而啐骂小生们欺师忘祖谓之“毁掉的一代”。或者更需要的是在静夜的微风中细细琢磨一下，究竟何谓爱国，何谓国士，何谓英雄，那些年这块染血的土地上究竟是哪些人在扛着破败飘摇的民族前进。<br>翁同龢之辈？他对中华的祸害，怕是远甚于巨贪和珅和清末一干赃官污吏。甲午年鲜血染红的黄海上，多少将士恨不能食其肉寝其皮，此之谓爱国贼。然而他忠心耿耿，满腹经纶，书法文章无不精通，若不是拖甲午战争后腿这个地实在不好洗，有人还想着树之为书生榜样让天下学子效仿吧。<br>邓世昌邓公，此日漫挥天下泪，有公足壮海军威，岂不是大英雄。且不论多少凡夫俗子有邓公之志，邓公之才，邓公之威，只是不知道那些挥着热血红旗的人，可曾计算过要用多少大英雄的躯体，用多少致远舰的残骸，去填平专制农业国和宪政工业国之间的沟壑？<br>哦，对了，百年来，举国歌颂纪念邓公，唯有一大汉奸卖国贼不以为然，认为此举不值得提倡，命令众官兵不要效仿。还修定了《海军惩劝章程》，担心将士们都学邓世昌，以轻生为壮。<br>这个人把自己的姓名，签在了丧权辱国的马关条约和辛丑条约上。<br>这个人不顾我中华上下五千年之文明，整天洋人长洋人短的鼓吹西洋奇技淫巧。<br>这个人无视我中华地大物博，四万万众志成城的百姓，百万正义之师，却宣扬东洋的蕞尔小国多么强大，八国混杂的乌合之众装备精良，闭港闭关不敢一战。</p>
-<p>一百年前的一个傍晚，地平线上矮矮的挂着帝国昏黄夕阳，狼狈的老佛爷光绪帝在西边餐风饮露惶惶如丧家之犬，豺狗般的八国联军在京师烧杀掳掠把东方的瑰宝装上强盗的货轮。还有那位孤独的老人领了老佛爷的懿旨正前往那龙潭虎穴之地。他在想什么？那部已经“不再公开播出”的电视剧中给出了这样一个有趣的场景：老者重重的拿皮鞭抽着陀螺，脸上孩童般的笑容，对着身边的丫鬟笑道：“又要去卖国，当汉奸，去卖国，去当汉奸，去卖国，去当汉奸。。。”<br>或者谈判桌上，换上哪位爱国志士，直斥八国军匪虎狼之心，豺狼之态，让他们知道我们威武天朝正义之师不可战胜，就能让他们俯首称臣，省下那九万万两白银。<br>又或者哪位大儒圣贤，能开化与鸟兽为伍的洋鬼子，使之知礼孝廉耻，明仁义道德，读四书五经，然后知道自己所作所为大悖伦常之道，能在孔孟圣贤庙前向我们赔礼道歉，然后受我天子教化。</p>
-<p>签字的是不是李中堂，除了决定历史课本上黑锅的归属，怕是改变不了中华被列强蹂躏的命运；但从帝国主义嘴里抠回来辽东半岛，抠回来被彻底肢解的命运，恐怕那段岁月里在朝廷上粉墨登场过的，能做到的，也只有一个李鸿章吧。<br>其实他应该蠢一点，无能一点，愚昧一点，或者能让已经瓤子里腐败的清廷，支离破碎的更早一点吧。<br>哦，对了，少荃在日本，还吃了一颗价值一亿两白银的子弹呢。不知道现在的日本国民，是如何看待他们那位开枪的爱国青年的。<br>哦，对了，就算历史课本上给黄海海战的结论是“北洋水师全军覆没”，别忘了日本人可打不沉定远镇远二舰。直到二战，这铁甲巨舰的路线还在发挥着威力。甚至几十年后二战太平洋和大西洋血染的海面上，还在证明着李中堂思路的正确。</p>
-<p>“这是一个人对一个国家的战争”这是国外对甲午战争的一句评论。我们很难判断这句话是否成立——更可能的，这并非一个可以判断真伪的命题，儿仅仅是看到一个拥有“五千年文明”，“地大物博”，“不必与西洋互通有无”的大国支离破碎之后的一句感慨。历史的车轮在时光轴的这个横断面，刻下了一个大大的感叹号！四万万人中，难道只有这么一位可以大声疾呼“世界正经历三千年未有之巨变”，只有以变求变，才能有一线生机。至于那些跪倒在“祖宗之法”“圣贤教诲”前面泣血上奏的忠臣们，他们对中华的祸害，远甚于贪官污吏，远甚于流氓盗匪！时至今日，大家无不感叹鸿章大人生不逢时。但细细一想，也许所有真正能牵引时代前进的人，都要被打上一个“生不逢时”的标签吧：很难被他周围的人认可，不像李某落得个遗臭万年的下场，就算不错了。<br>——这种人是为了未来制造的，为了那个还没有被世人，没有被当时掌握话语权的“主流”接受的那个未来。</p>
-<p>所以，我们的历史书上，歌颂的是邓世昌。总不能歌颂翁老吧。他属于那个忠君报国的现在，属于那个清正廉明的现在。而李鸿章，属于那个机械轰鸣的未来。<br>还有，那个帝国落日余晖折射下，民族无奈的未来。<br>还有，他不停的要银子，花在破坏风水的洋务上，花在千里之外的海上。让京城里老佛爷的六十大寿，过得不那么开心啊。这岂是能鼓励和颂扬的？</p>
-<p>我们还是不要把历史当笑话读吧，也许今晚睡前可以话十分钟闭目想一下，我们每天茫茫碌碌，究竟是在修建那座美轮美奂的颐和园，还是打造一支也许回沉没的北洋水师。我们究竟在为老佛爷的六十大寿奋斗，还有没有隐隐为“未来”的波涛汹涌担忧。<br>李鸿章是悲剧。让李鸿章出现的时代也是悲剧。土地上的亭台阁楼建起来了，时代的大屋子，去只能靠这位苍老的裱糊匠孤独的修补。那个风雨飘摇中踽踽独行的背影，是不是不应该那么熟悉？</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">随笔</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2016/09/18/essay0/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-underscore-4" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/09/07/underscore-4/">underscore源码阅读笔记（4）： eq(cont.)</a>
-    </h1>
-  
-
-        
-        <a href="/2016/09/07/underscore-4/" class="archive-article-date">
-  	<time datetime="2016-09-07T03:01:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-09-07</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="javascript判断变量类型的方法"><a href="#javascript判断变量类型的方法" class="headerlink" title="javascript判断变量类型的方法"></a>javascript判断变量类型的方法</h2><blockquote>
-<p>javascript中 一切皆对象</p>
-</blockquote>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(toString.call([<span class="number">123</span>]));<span class="comment">//[object Array]</span></div><div class="line"><span class="built_in">console</span>.log(toString.call(<span class="string">'123'</span>));<span class="comment">//[object String]</span></div><div class="line"><span class="built_in">console</span>.log(toString.call(&#123;a: <span class="string">'123'</span>&#125;));<span class="comment">//[object Object]</span></div><div class="line"><span class="built_in">console</span>.log(toString.call(<span class="regexp">/123/</span>));<span class="comment">//[object RegExp]</span></div><div class="line"><span class="built_in">console</span>.log(toString.call(<span class="number">123</span>));<span class="comment">//[object Number]</span></div><div class="line"><span class="built_in">console</span>.log(toString.call(<span class="literal">undefined</span>));<span class="comment">//[object Undefined]</span></div><div class="line"><span class="built_in">console</span>.log(toString.call(<span class="literal">null</span>));<span class="comment">//[object Null]</span></div></pre></td></tr></table></figure>
-<h2 id="eq函数中不同类型的“相等”判断"><a href="#eq函数中不同类型的“相等”判断" class="headerlink" title="eq函数中不同类型的“相等”判断"></a>eq函数中不同类型的“相等”判断</h2><h3 id="RegExp和string"><a href="#RegExp和string" class="headerlink" title="RegExp和string"></a>RegExp和string</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Strings, numbers, regular expressions, dates, and booleans are compared by value.</span></div><div class="line"><span class="keyword">case</span> <span class="string">'[object RegExp]'</span>:</div><div class="line"><span class="comment">// RegExps are coerced to strings for comparison (Note: '' + /a/i === '/a/i')</span></div><div class="line"><span class="keyword">case</span> <span class="string">'[object String]'</span>:</div><div class="line">  <span class="comment">// Primitives and their corresponding object wrappers are equivalent; thus, `"5"` is</span></div><div class="line">  <span class="comment">// equivalent to `new String("5")`.</span></div><div class="line">  <span class="keyword">return</span> <span class="string">''</span> + a === <span class="string">''</span> + b;</div><div class="line">·</div></pre></td></tr></table></figure>
-<p><strong> 以下“相等”均表示eq返回true </strong></p>
-<ul>
-<li>一个正则表达式 加上’’ 仍让与原来相等</li>
-<li>“abc”和new String(‘abc’)是相等的</li>
-</ul>
-<h3 id="Number"><a href="#Number" class="headerlink" title="Number"></a>Number</h3><p>·<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">case</span> <span class="string">'[object Number]'</span>:</div><div class="line">        <span class="comment">// `NaN`s are equivalent, but non-reflexive.</span></div><div class="line">        <span class="comment">// Object(NaN) is equivalent to NaN</span></div><div class="line">        <span class="keyword">if</span> (+a !== +a) <span class="keyword">return</span> +b !== +b;</div><div class="line">        <span class="comment">// An `egal` comparison is performed for other numeric values.</span></div><div class="line">        <span class="keyword">return</span> +a === <span class="number">0</span> ? <span class="number">1</span> / +a === <span class="number">1</span> / b : +a === +b;</div></pre></td></tr></table></figure></p>
-<ul>
-<li>js中 +NaN === +NaN 为false</li>
-<li>Object(NaN)和NaN相等</li>
-</ul>
-<h3 id="Date-Boolean"><a href="#Date-Boolean" class="headerlink" title="Date/Boolean"></a>Date/Boolean</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">case &apos;[object Date]&apos;:</div><div class="line">case &apos;[object Boolean]&apos;:</div><div class="line">  // Coerce dates and booleans to numeric primitive values. Dates are compared by their</div><div class="line">  // millisecond representations. Note that invalid dates with millisecond representations</div><div class="line">  // of `NaN` are not equivalent.</div><div class="line">  return +a === +b;</div></pre></td></tr></table></figure>
-<p>To be continued</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">javascript</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2016/09/07/underscore-4/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-css-position" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/09/02/css-position/">css中的定位</a>
-    </h1>
-  
-
-        
-        <a href="/2016/09/02/css-position/" class="archive-article-date">
-  	<time datetime="2016-09-02T12:30:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-09-02</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>css的position属性定义元素的定位类型，Position属性有四个值：static、fixed、absolute和relative。主流的浏览器都是支持所有值的。</p>
-<p><strong> 著名坑爹货：任何的版本的 Internet Explorer （包括 IE8）都不支持属性值 “inherit”。 </strong></p>
-<h2 id="static"><a href="#static" class="headerlink" title="static"></a>static</h2><p>默认值 表示一个元素不会被positioned 仍然放在正常文档流中（“正常”是什么东西见上一篇关于浮动的）</p>
-<h2 id="relative"><a href="#relative" class="headerlink" title="relative"></a>relative</h2><p>基本的表现和static一样 不同的是可以用top bottom left right属性来控制元素位置的偏移</p>
-<h2 id="fixed"><a href="#fixed" class="headerlink" title="fixed"></a>fixed</h2><p>相对于视窗定位 就是说 即使页面滚动 元素的位置仍然不会改变</p>
-<h2 id="absulote"><a href="#absulote" class="headerlink" title="absulote"></a>absulote</h2><p>absolute 与 fixed 的表现类似，除了它不是相对于视窗而是相对于最近的“positioned”祖先元素。如果绝对定位（position属性的值为absolute）的元素没有“positioned”祖先元素，那么它是相对于文档的 body 元素，并且它会随着页面滚动而移动。</p>
-<blockquote>
-<p>一个“positioned”元素是指position 值不是 static 的元素。</p>
-</blockquote>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">css</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2016/09/02/css-position/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
   
   
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
-    </nav>
+  
+
+  
+
+  
+
   
 
 
@@ -1092,8 +326,8 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: true,
-		isPost: false,
+		isHome: false,
+		isPost: true,
 		isArchive: false,
 		isTag: false,
 		isCategory: false,

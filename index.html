@@ -142,6 +142,70 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="blog-try-finally-return" class="article article-type-blog  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/08/08/try-finally-return/">Javascript - try/catch/finally return statement</a>
+    </h1>
+  
+
+        
+        <a href="/2018/08/08/try-finally-return/" class="archive-article-date">
+  	<time datetime="2018-08-08T04:01:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-08</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span> <span class="title">example</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">finally</span> &#123;</div><div class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">    &#125;</div><div class="line">&#125;)()</div><div class="line"></div><div class="line"><span class="comment">// returns false</span></div></pre></td></tr></table></figure>
+<p>在try catch 语句中 finally block里的东西 永远都会被执行！</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/08/08/try-finally-return/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-mock-import" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1122,110 +1186,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2018/03/22/react-backbone-dev-experience/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-react-controlled-component" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/12/29/react-controlled-component/">React.js Forms - Controlled Components</a>
-    </h1>
-  
-
-        
-        <a href="/2017/12/29/react-controlled-component/" class="archive-article-date">
-  	<time datetime="2017-12-29T06:53:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-12-29</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>(自行脑补评书起手式)话说上回咱们说到，UI = f(r(state, action))。这回咱们把这个r按下不表，单讲这个f…（评书听的少编不下去了=。=||）</p>
-<p>不卖关子了，一个很很受欢迎和好评的f自然是react.js，其中一个很能体现f(state) = UI的概念就是controlled components。汉化过后好像叫受控组件，挺绕口的就不管了。道理都讲过，但是具体怎么写呢？有哪些坑？写一篇整理一下。</p>
-<p><a href="https://github.com/lorenseanstewart/react-controlled-form-components" target="_blank" rel="external">快速通往code和demo的传送门</a><br><a href="https://reactjs.org/docs/forms.html#controlled-components" target="_blank" rel="external">官方文档</a></p>
-<h1 id="从-UI-f-state-说起"><a href="#从-UI-f-state-说起" class="headerlink" title="从 UI = f(state) 说起"></a>从 UI = f(state) 说起</h1><p>之前的那篇长文，很详细的阐述了单项数据流和UI as function if states的原则。然而，理想很丰满，现实很骨感。HTML中的表单元素，input,textarea,select都不是stateless的。相反，他们很典型的维护了自己的inner state。比如说一个checkbox,它的checked就是一个内部状态。用户的点击会修改它，UI的状态，也就是有没有打上那个小勾，受内部状态的影响。怎么样体现UI = f(state)呢，就是这里要说的UI = f(state)</p>
-<p>做法其实很简单：</p>
-<p>UI不应该受内部状态影响。所以说，我们可以强行指定一个input的value，这样，不管你如何点击输入，都会被忽略。因为value被指定了。或者说，it is controlled. It is a controlled component.</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;input type=<span class="string">"text"</span> value=&#123;<span class="keyword">this</span>.state.value&#125; /&gt;</div></pre></td></tr></table></figure>
-<p>那功能呢？总不能说用户输入啥都没反应吧。很简单啊，构造一个action发给相应的r。本次话题与r无关，这里不做展开，我们就用一个简单的handleChange表示</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;input type=<span class="string">"text"</span> value=&#123;<span class="keyword">this</span>.state.value&#125; onChange=&#123;<span class="keyword">this</span>.handleChange&#125; /&gt;</div></pre></td></tr></table></figure>
-<p>最最简单的情况（也是我们没有引入例如redux，mobx之类很fancy的r最常见的情况）</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">handleChange(event) &#123;</div><div class="line">  <span class="keyword">this</span>.setState(&#123;value: event.target.value.toUpperCase()&#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h1 id="具体的几种form-component"><a href="#具体的几种form-component" class="headerlink" title="具体的几种form component"></a>具体的几种form component</h1><h2 id="checkbox"><a href="#checkbox" class="headerlink" title="checkbox"></a>checkbox</h2><p>我们要控制的，不是value，用checked就行了。</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;input type=<span class="string">"checkbox"</span> checked=&#123;<span class="keyword">this</span>.state.isChecked&#125; onChange=&#123;<span class="keyword">this</span>.handleChange&#125; /&gt;</div><div class="line"></div><div class="line">handleChange(event) &#123;</div><div class="line">  <span class="keyword">this</span>.setState(&#123; isChecked: !<span class="keyword">this</span>.state.isChecked&#125; );</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>也可以用value实现，但是不要问怎么做，不知道对你比较好。</p>
-<h2 id="textarea"><a href="#textarea" class="headerlink" title="textarea"></a>textarea</h2><p>在HTML中，textarea的text使用children来定义的。而React提供了一个小小的语法糖，统一成了value这个prop来保持接口一致</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;textarea value=&#123;<span class="keyword">this</span>.state.value&#125; onChange=&#123;<span class="keyword">this</span>.handleChange&#125; /&gt;</div></pre></td></tr></table></figure>
-<h2 id="select"><a href="#select" class="headerlink" title="select"></a>select</h2><p>其实直接贴例子就够了</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;select value=&#123;this.state.value&#125; onChange=&#123;this.handleChange&#125;&gt;</div><div class="line">  &lt;option value="grapefruit"&gt;Grapefruit&lt;/option&gt;</div><div class="line">  &lt;option value="lime"&gt;Lime&lt;/option&gt;</div><div class="line">  &lt;option value="coconut"&gt;Coconut&lt;/option&gt;</div><div class="line">  &lt;option value="mango"&gt;Mango&lt;/option&gt;</div><div class="line">&lt;/select&gt;</div></pre></td></tr></table></figure>
-<h1 id="Multiple-Inputs"><a href="#Multiple-Inputs" class="headerlink" title="Multiple Inputs"></a>Multiple Inputs</h1><p>通常在表单中都有一堆form components，当然你可以用上面的做法一个一个实现，通常也不麻烦。这里介绍一种避免大量重复代码的做法。</p>
-<p>我们用到了ES6中的computed property names这个语法(其实用es5也没有麻烦到哪里去)</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">this</span>.setState(&#123;</div><div class="line">  [name]: value</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<p>然后给form components一个那么属性就行了</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Reservation</span> <span class="keyword">extends</span> <span class="title">React</span>.<span class="title">Component</span> </span>&#123;</div><div class="line">  <span class="keyword">constructor</span>(props) &#123;</div><div class="line">    <span class="keyword">super</span>(props);</div><div class="line">    <span class="keyword">this</span>.state = &#123;</div><div class="line">      isGoing: <span class="literal">true</span>,</div><div class="line">      numberOfGuests: <span class="number">2</span></div><div class="line">    &#125;;</div><div class="line"></div><div class="line">    <span class="keyword">this</span>.handleInputChange = <span class="keyword">this</span>.handleInputChange.bind(<span class="keyword">this</span>);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  handleInputChange(event) &#123;</div><div class="line">    <span class="keyword">const</span> target = event.target;</div><div class="line">    <span class="keyword">const</span> value = target.type === <span class="string">'checkbox'</span> ? target.checked : target.value;</div><div class="line">    <span class="keyword">const</span> name = target.name;</div><div class="line"></div><div class="line">    <span class="keyword">this</span>.setState(&#123;</div><div class="line">      [name]: value</div><div class="line">    &#125;);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  render() &#123;</div><div class="line">    <span class="keyword">return</span> (</div><div class="line">      &lt;form&gt;</div><div class="line">        &lt;label&gt;</div><div class="line">          Is going:</div><div class="line">          &lt;input</div><div class="line">            name="isGoing"</div><div class="line">            type="checkbox"</div><div class="line">            checked=&#123;this.state.isGoing&#125;</div><div class="line">            onChange=&#123;this.handleInputChange&#125; /&gt;</div><div class="line">        &lt;/label&gt;</div><div class="line">        &lt;br /&gt;</div><div class="line">        &lt;label&gt;</div><div class="line">          Number of guests:</div><div class="line">          &lt;input</div><div class="line">            name="numberOfGuests"</div><div class="line">            type="number"</div><div class="line">            value=&#123;this.state.numberOfGuests&#125;</div><div class="line">            onChange=&#123;this.handleInputChange&#125; /&gt;</div><div class="line">        &lt;/label&gt;</div><div class="line">      &lt;/form&gt;</div><div class="line">    );</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h1 id="有个坑"><a href="#有个坑" class="headerlink" title="有个坑"></a>有个坑</h1><p>如果你忘了初始化value（checked）,那样react就会认为收到一个undefined。或者说，它会认为这是一个uncontrolled component</p>
-<p>比如说你收到了这样的error</p>
-<p>| Warning: Input is changing a controlled input of type text to be uncontrolled. Input elements should not switch from controlled to uncontrolled (or vice versa). Decide between using a controlled or uncontrolled input element for the lifetime of the component</p>
-<p>那大概率就是这个问题。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">framework</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">React</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/12/29/react-controlled-component/">展开全文 >></a>
         </p>
       
 
