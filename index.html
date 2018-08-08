@@ -142,6 +142,72 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-mock-import" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/08/08/mock-import/">Mocking ES6 module import</a>
+    </h1>
+  
+
+        
+        <a href="/2018/08/08/mock-import/" class="archive-article-date">
+  	<time datetime="2018-08-08T01:28:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-08-08</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// feature.js module</span></div><div class="line"><span class="keyword">import</span> &#123; fetchData &#125; <span class="keyword">from</span> <span class="string">'./backend'</span>;</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">doSomething</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="comment">// some code which calls fetchData</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// feature.test.js module</span></div><div class="line"><span class="keyword">import</span> &#123; expect &#125; <span class="keyword">from</span> <span class="string">'chai'</span>;</div><div class="line"><span class="keyword">import</span> sinon <span class="keyword">from</span> <span class="string">'sinon'</span>;</div><div class="line"><span class="keyword">import</span> &#123; doSomething &#125; <span class="keyword">from</span> <span class="string">'./feature'</span>;</div><div class="line"><span class="keyword">import</span> * <span class="keyword">as</span> Backend <span class="keyword">from</span> <span class="string">'./backend'</span>;</div><div class="line"></div><div class="line">describe.only(<span class="string">'doSomething'</span>, () =&gt; &#123;</div><div class="line">  it(<span class="string">'does something meaningful'</span>, () =&gt; &#123;</div><div class="line">    sinon.stub(Backend, <span class="string">'fetchData'</span>);</div><div class="line">    <span class="comment">// use doSomething with mocked fetchData</span></div><div class="line">  &#125;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h2 id="Mocking-with-Dependency-Injection"><a href="#Mocking-with-Dependency-Injection" class="headerlink" title="Mocking with Dependency Injection"></a>Mocking with Dependency Injection</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// feature.js module</span></div><div class="line"><span class="keyword">import</span> &#123; fetchData <span class="keyword">as</span> originalFetchData &#125; <span class="keyword">from</span> <span class="string">'./backend'</span>;</div><div class="line"></div><div class="line"><span class="keyword">let</span> fetchData = originalFetchData;</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">mock</span>(<span class="params">mockedFetchData</span>) </span>&#123;</div><div class="line">  fetchData = mockedFetchData || originalFetchData;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">doSomething</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="comment">// some code which calls fetchData</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// feature.test.js module</span></div><div class="line"><span class="keyword">import</span> &#123; expect &#125; <span class="keyword">from</span> <span class="string">'chai'</span>;</div><div class="line"><span class="keyword">import</span> &#123; mock, doSomething &#125; <span class="keyword">from</span> <span class="string">'./feature'</span>;</div><div class="line"></div><div class="line"><span class="keyword">const</span> dummyFetchData = () =&gt; &#123;&#125;;</div><div class="line"></div><div class="line">describe(<span class="string">'doSomething'</span>, () =&gt; &#123;</div><div class="line">  beforeEach(() =&gt; &#123; mock(dummyFetchData); &#125;);</div><div class="line">  afterEach(() =&gt; &#123; mock(); &#125;);</div><div class="line"></div><div class="line">  it(<span class="string">'does something meaningful'</span>, () =&gt; &#123;</div><div class="line">    <span class="comment">// use doSomething with mocked fetchData</span></div><div class="line">  &#125;);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h2 id="Mocking-Module"><a href="#Mocking-Module" class="headerlink" title="Mocking Module"></a>Mocking Module</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="number">3</span></div><div class="line"><span class="number">4</span></div><div class="line"><span class="number">5</span></div><div class="line"><span class="number">6</span></div><div class="line"><span class="number">7</span></div><div class="line"><span class="number">8</span></div><div class="line"><span class="number">9</span></div><div class="line"><span class="number">10</span></div><div class="line"><span class="comment">// feature.js module</span></div><div class="line"><span class="keyword">import</span> * <span class="keyword">as</span> Backend <span class="keyword">from</span> <span class="string">'./backend'</span>;</div><div class="line"></div><div class="line"><span class="keyword">let</span> &#123; fetchData, saveData, deleteData &#125; = Backend;</div><div class="line"></div><div class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">mock</span>(<span class="params">mockedBackend</span>) </span>&#123;</div><div class="line">  (&#123; fetchData, saveData, deleteData &#125; = mockedBackend || Backend);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// some code which calls functions from Backend</span></div></pre></td></tr></table></figure>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/08/08/mock-import/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-eslint" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1189,282 +1255,6 @@
 
 
   
-    <article id="post-Functional-UI" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/12/25/Functional-UI/">Functional approach to frontend development</a>
-    </h1>
-  
-
-        
-        <a href="/2017/12/25/Functional-UI/" class="archive-article-date">
-  	<time datetime="2017-12-25T01:29:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-12-25</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="前端很难吗？"><a href="#前端很难吗？" class="headerlink" title="前端很难吗？"></a>前端很难吗？</h1><p>为什么想讲这个话题，因为咱们作为前端开发者，经常有被其他领域的工程师质疑：“你整天都在忙啥。不就是画个UI有那么难么？”当然我们可以找出很多例子来证明UI真的可以很难很高科技，比如说天猫那个魔术一般的navigation bar，但是我们加班真的在忙这些东西吗？我猜测绝大多数人跟我一样，头疼的task和bug都来自于无穷无尽的业务逻辑，表单，表格当中。所以我个人是很想赞同他们的质疑：“前端真的有那么难吗？”</p>
-<p>很多技术都是出现的时候十分难，经过科学家和工程师们的不断努力，越来越强大，却反而越来越友好，比如说编程本身，功能已经无处不在，却早已不是那个只有尖端科学家才能学习的稀罕东西。web开发似乎是个例外，功能上的爆炸式增长的同时，javascript似乎变得越来越难以捉摸。</p>
-<h1 id="田园时代"><a href="#田园时代" class="headerlink" title="田园时代"></a>田园时代</h1><p>西方的诗歌喜欢怀念田园时代，就是那个城市高楼手机汽车要啥没啥但是因为简单美好让大家觉得是遗失的天堂。古时候的Web开发也有这么一个时代，我们连JavaScript都没有，和我们提起前端脑子里“蹭”就冒出javascript可完全不一样。但我们确实可以完全不用JavaScript进行Web开发，比如经典的structs，spring，asp.net。这里我们姑且称那时为web开发的田园时代，简单，清晰，让人觉得舒服和美好。</p>
-<p>虽然不是百分之百的场景还原，但是让我们花一分钟感受一下依赖ROR如何开发一个最基本的Web上的用户登录。用ruby是因为不用为一大堆花括号排版ppt，请大家不要关注语言谢谢。</p>
-<p>这是很纯粹的一个MVC pattern的server side rendering,Model和Controller都是在服务器上运行的代码，View是在server端渲染好，再以html的形式返回给浏览器呈现给用户。Model的作用 ，是用来管理数据。这个例子中，我们建了一张用户表，有name和password两个字段。当然实际项目如果这么存password后果比较严重，大家不要模仿，User Model描述了我们需要校验name存在以及一个大写的变换。 View的作用，是把model用人类可交互的方式在网页上display给用户，比如绘制了一个form，并且将model中的相应字段填进去并且指定了表单提交的地址，我们在这里省略了关于样式和页面上的细节组件。 Controller用来handler business logic。这个例子里，我们只完成了认证通过的部分：将id计入session，redirect到landing url。虽然这是很业余的一种做法，只是为了demo方便，但是实际项目中也无非是用真实的持久化登陆状态的过程替换，完整的计算出一个user info并且交给landing view来渲染。(下一页)没有JavaScript，我们完成这样一个登陆的web页面。</p>
-<p>建表(当然production中这么建表被fire了后果自负)</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="keyword">user</span> (</div><div class="line">  <span class="keyword">id</span> <span class="built_in">int</span>(<span class="number">11</span>) NNOT <span class="literal">NULL</span> auto_increment,</div><div class="line">  <span class="keyword">name</span> <span class="built_in">varchar</span>(<span class="number">255</span>),</div><div class="line">  <span class="keyword">password</span> <span class="built_in">varchar</span>(<span class="number">255</span>),</div><div class="line">  PRIMARY <span class="keyword">KEY</span> (<span class="keyword">id</span>)</div><div class="line">);</div></pre></td></tr></table></figure>
-<p>model</p>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span> &lt; ApplicationRecord</span></div><div class="line">  validates <span class="symbol">:name</span>, <span class="symbol">presence:</span> <span class="literal">true</span></div><div class="line"></div><div class="line">  before_create <span class="keyword">do</span></div><div class="line">    <span class="keyword">self</span>.name = login.capitalize <span class="keyword">if</span> name.blank?</div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
-<p>view</p>
-<figure class="highlight erb"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;%=<span class="ruby"> form_tag(<span class="string">"/login"</span>, <span class="symbol">method:</span> <span class="string">"post"</span>) <span class="keyword">do</span> </span>%&gt;</div><div class="line">  &lt;%=<span class="ruby"> text_field_tag(<span class="symbol">:name</span>) </span>%&gt;</div><div class="line">  &lt;%=<span class="ruby"> password_field_tag(<span class="symbol">:password</span>) </span>%&gt;</div><div class="line">  &lt;%=<span class="ruby"> submit_tag(<span class="string">"Search"</span>) </span>%&gt;</div><div class="line">&lt;%<span class="ruby"> <span class="keyword">end</span> </span>%&gt;</div></pre></td></tr></table></figure>
-<figure class="highlight erb"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;h1&gt;Welcome&lt;/h1&gt;</div><div class="line">&lt;h3&gt;Hello: &lt;%=<span class="ruby"> user.name </span>%&gt;&lt;/h3&gt;</div></pre></td></tr></table></figure>
-<p>controller</p>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">LoginsController</span> &lt; ApplicationController</span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">create</span></span></div><div class="line">    <span class="keyword">if</span> user = User.authenticate(params[<span class="symbol">:username</span>], params[<span class="symbol">:password</span>])</div><div class="line">      session[<span class="symbol">:current_user_id</span>] = user.id</div><div class="line">      redirect_to landing_url</div><div class="line">    <span class="keyword">end</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
-<h2 id="UI和业务逻辑没有太多耦合"><a href="#UI和业务逻辑没有太多耦合" class="headerlink" title="UI和业务逻辑没有太多耦合"></a>UI和业务逻辑没有太多耦合</h2><p>这就是我们所描述的田园时代，简单清晰。展示层，或者我们所说的View和业务逻辑，就是那段controller代码，只是通过model的字段定义有数据接口上的约定，没有其余的耦合。Controller处理业务逻辑，操作我们的model。View用来展示model。想象我们现在不用ejs作为模板引擎了，比如说用pug，controller基本不用啥改动。同样的，现在我们把db用mongodb替代mysql（事实上，我推荐个人小项目这么干），view基本不用改。即使业务变复杂，这个原则不会改变。</p>
-<h2 id="换成knockout呢。。。"><a href="#换成knockout呢。。。" class="headerlink" title="换成knockout呢。。。"></a>换成knockout呢。。。</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">data-bind</span>=<span class="string">"css: &#123; profitWarning: currentProfit() &lt; 0, majorHighlight: isSevere &#125;"</span>&gt;</span></div></pre></td></tr></table></figure>
-<h1 id="工业文明：欢迎来到JavaScript和SPA的世界"><a href="#工业文明：欢迎来到JavaScript和SPA的世界" class="headerlink" title="工业文明：欢迎来到JavaScript和SPA的世界"></a>工业文明：欢迎来到JavaScript和SPA的世界</h1><p>但是为什么我们现在都move到了JavaScript的世界，都采用SPA来开发？人们做生意都不想做赔本生意，这里也是，我们为了好处和解决问题而来。</p>
-<p>首先，服务端渲染的performance很差。我们需要在服务端操作model，渲染出整个页面，然后以html的形式返回给前端，效果很差。哪怕计算的结果是刚才的login form下面只多了一行字：“对不起，您的密码有误”<br>另外，重画整个页面除了很差的perf，对用户体验的副作用也是很大的，原来focus在密码框里的光标会lose focus，重新填写还要再点一下。就像刚才Shixin讲的，这是一个ui friction<br>此外，没有ajax，我们无法做到异步操作。我们等待密码验证的时候什么事都干不了。<br>从开发者的角度，在浏览器上debug和连上服务器debug，体验不可同日而语。比如说，对于lsr，连上prod server去打断点不会是一个美好的回忆。</p>
-<ul>
-<li>Server side rendering has poor performance</li>
-<li>Whole page redrawing has bad user experience</li>
-<li>Cannot do asynchronous tasks</li>
-<li>Difficult to debug on servers</li>
-</ul>
-<h2 id="代价"><a href="#代价" class="headerlink" title="代价"></a>代价</h2><p>就像现代文明会带来环境污染一样，我们付出了代价。</p>
-<p>一个严重的问题，就是UI和业务逻辑开始深度耦合。现在我们不黑ko了，这是angular官网上的例子当然angular是一个优秀的框架，涉及到了和今天的topic无关的设计哲学，咱们这里就不讨论了。</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"ctrl-as-exmpl"</span> <span class="attr">ng-controller</span>=<span class="string">"SettingsController1 as settings"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">label</span>&gt;</span>Name: <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">ng-model</span>=<span class="string">"settings.name"</span>/&gt;</span><span class="tag">&lt;/<span class="name">label</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">button</span> <span class="attr">ng-click</span>=<span class="string">"settings.greet()"</span>&gt;</span>greet<span class="tag">&lt;/<span class="name">button</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>/&gt;</span></div><div class="line">  Contact:</div><div class="line">  <span class="tag">&lt;<span class="name">ul</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">li</span> <span class="attr">ng-repeat</span>=<span class="string">"contact in settings.contacts"</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">select</span> <span class="attr">ng-model</span>=<span class="string">"contact.type"</span> <span class="attr">aria-label</span>=<span class="string">"Contact method"</span> <span class="attr">id</span>=<span class="string">"select_&#123;&#123;$index&#125;&#125;"</span>&gt;</span></div><div class="line">         <span class="tag">&lt;<span class="name">option</span>&gt;</span>phone<span class="tag">&lt;/<span class="name">option</span>&gt;</span></div><div class="line">         <span class="tag">&lt;<span class="name">option</span>&gt;</span>email<span class="tag">&lt;/<span class="name">option</span>&gt;</span></div><div class="line">      <span class="tag">&lt;/<span class="name">select</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">ng-model</span>=<span class="string">"contact.value"</span> <span class="attr">aria-labelledby</span>=<span class="string">"select_&#123;&#123;$index&#125;&#125;"</span> /&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">button</span> <span class="attr">ng-click</span>=<span class="string">"settings.clearContact(contact)"</span>&gt;</span>clear<span class="tag">&lt;/<span class="name">button</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">button</span> <span class="attr">ng-click</span>=<span class="string">"settings.removeContact(contact)"</span> <span class="attr">aria-label</span>=<span class="string">"Remove"</span>&gt;</span>X<span class="tag">&lt;/<span class="name">button</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span><span class="tag">&lt;<span class="name">button</span> <span class="attr">ng-click</span>=<span class="string">"settings.addContact()"</span>&gt;</span>add<span class="tag">&lt;/<span class="name">button</span>&gt;</span><span class="tag">&lt;/<span class="name">li</span>&gt;</span></div><div class="line"> <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
-<h3 id="debug-更难诊断"><a href="#debug-更难诊断" class="headerlink" title="debug: 更难诊断"></a>debug: 更难诊断</h3><p>这样的第一个后果，出现在deBug上。确实，用浏览器比起连上server，打断点的体验好一些。但是打几个断点？在哪打断点？传统的MVC，debug很难，但是，找到rootcause很简单。刚才的例子啊，名字变到hello之前了，那我们知道在view里出问题了。发现那么不是我们想要的，ok看下controll里findUserById的调用处打断点。现在混合之后，页面上的元素组织甚至在和model或者viewmodel里数据的拓扑结构绑定，我们无从查起。更不用说，所有data binding为基础的框架，我们更多的看到这样的error message所以，来到浏览器上，我们开始debug不难了，但是，还是得加班</p>
-<h3 id="扩展：难以refactor和修改设计"><a href="#扩展：难以refactor和修改设计" class="headerlink" title="扩展：难以refactor和修改设计"></a>扩展：难以refactor和修改设计</h3><p>第二个问题，就是我们的修改，变麻烦了。讲这样一个故事啊，我们的campaign creation，也就是让advertiser创建campaign流程中，需要用户设置自己campaign的budget。这个要求即使对于初学者也是小菜一碟。</p>
-<p>我们的campaign creation分为4个大的步骤。PM想到了，他在中间步骤的时候会重新考量自己的业务，这样在最后一步，他经常发现在第一步设置的budget需要修改。当然，依然还有很多advertiser对于自己有多少钱是心中有数的，所以想在第一步设置好。所以，我们解决ui friction的办法就是，两边都放上。</p>
-<p>对于以前的模式，这不是问题，在最后一步view里面加一个budget input，把model填进去，搞定。如果你在用什么java ant tomcat，那就敲一下f5然后出去吃夜宵。</p>
-<p>现在的话，嗯，比方这样一个问题啊：</p>
-<p>如果我们让这两个budget control是一个instance:因为每一步的next和back button都会validate当前step所有的form,那么实际上，第一步和第四步的都执行了自己步骤以外的validation，这导致了很多bug；如果让他们是不同的instance，需要构造两次不说，其他受budget影响的component都需要监听或者分辨来自不同budget control的事件，或者判断传入的instance是不是当前想要的。数据和validation同步也是可能导致问题的。</p>
-<p>我们这个讨论还没结束呢，另一个crew开始找我们集成shared budget。业务上来说，几个campaign可以用同一个shared budget；工程上来说，就是我们原来写的budget的control成为了新的budget panel的子组件。在viewmodel里，hierarchy同时影响了页面上的布局和逻辑里的关系，牵一发而动全身。</p>
-<p>另外一方面，如果将来我们有更多的选项，需要用dropdown替换radio button，显然这种UI和业务逻辑耦合的做法会带来更多的困扰</p>
-<h3 id="新问题：引入异步带来的坑"><a href="#新问题：引入异步带来的坑" class="headerlink" title="新问题：引入异步带来的坑"></a>新问题：引入异步带来的坑</h3><p>再就是concurency。新加入的功能引来了新的问题。</p>
-<p>我们的render和destroy方法都是同步的。因为lazy loading的需求，我们需要在render的时候再加载一个第三方库，加载成功之后会创建一系列新的实体在其子节点上。destroy的时候，需要讲他们一一销毁：这时，一个很容易出bug的问题诞生了：你怎么知道destroy的时候render及其异步操作已经全部完成。稍不小心就会让程序进入无法预测的异常状态。</p>
-<ol>
-<li>改框架，render和destroy都支持promise。<ul>
-<li>好主意，加油（微笑）争取明年release（doge）</li>
-</ul>
-</li>
-<li>加全局flag<ul>
-<li>我们确实很多时候是怎么干的。</li>
-<li>异步之后又fork出新的异步task怎么办</li>
-<li>你怎么能保证线程安全？怎么能保证flag不被修改？如果之后的业务告诉你确实要修改flag怎么办？比如说，有两个同时进行的lazy loading。掀桌。</li>
-</ul>
-</li>
-</ol>
-<h1 id="文艺复兴"><a href="#文艺复兴" class="headerlink" title="文艺复兴"></a>文艺复兴</h1><p>我们付出的这些代价，就是可以讨论的可以改进的空间。我们想变得更好。原来简单，清晰。我们要重新变简单，变清晰。</p>
-<p>那么，当时move到JavaScript SPA的时候，不就是把server sider rendering换成client side rendering嘛，其他的逻辑组织一切都不变，完全平移到client side。或者说用javascript强行写一个ror或者asp.net搁浏览器里跑，可行吗？</p>
-<p>可行倒是可行，但是频繁的重画整个dom tree，依然让perf和体验不理想，可以归结为ui friction。</p>
-<p>那为什么现在我们又能重新讨论这个话题了呢？上周关于react的分享中，我们知道了virtual dom这个概念。这个想法太赞了，我们在code里不管怎样重新render都没有关系，多了一层来帮我们计算delta来作partial rendering，即使我们让数据一圈一圈转起来，都不用担心perf 都不用担心ux了。<br>另一方面，现在的UI，组件话已经越来愈好，对于很多局部的小控件，其实啊，重画是完全可以接受的，并不是ui friction，比方说，你就是一个小小的date picker之类的。<br>好了，现在我们可以回头找一下那一些被迫放弃的田园时代的美好吧。不过千万不要忘了，异步的问题是新带来的，我们还需要解决</p>
-<h2 id="如何思考？"><a href="#如何思考？" class="headerlink" title="如何思考？"></a>如何思考？</h2><p>既然已经打出了文艺复兴的旗号啊，接下来咱们就会在把那些以前落了灰的东西翻出来，收拾收拾里面精华的思想，然后总结一套 让我们的开发重新变简单 的思路和方法。</p>
-<p>实际上react分享的时候，已经有这样的问题被提出来，如果我把view model中引起问题的那个数据流方向干掉，是不是就可以实现跟react类似的功能。perf问题？没关系，也有很好的开源的virtual dom技术。</p>
-<p>why not？没错，我们今天的topic，不需要任何新的framework也好 library也好。当然，有些跟我熟一点的知道我是某些新东西的粉丝。放心，我不是来传销他们的。如果你有听过启发我讲这个topic的那些新东西，希望你能理解 原来是这个原因 我才喜欢他 如果你不知道那是啥 更好 希望你能知道 啊 原来老的代码里 还能这样想。</p>
-<h3 id="Business-requirements-gt-mathematic-problems-gt-code"><a href="#Business-requirements-gt-mathematic-problems-gt-code" class="headerlink" title="Business requirements -&gt; mathematic problems -&gt; code"></a>Business requirements -&gt; mathematic problems -&gt; code</h3><p>我们上班是来干嘛的？</p>
-<p>我们是来解决问题的 然后用解决问题的能力兑换成薪水</p>
-<p>程序员怎么解决问题？</p>
-<p>我们把实际的业务抽象成数学问题 然后把解决这个数学问题的方案用代码写出来</p>
-<h2 id="从田园controller开始"><a href="#从田园controller开始" class="headerlink" title="从田园controller开始"></a>从田园controller开始</h2><p>重温一下什么是controller：它是用来handle业务逻辑的，具体的，干了两件事：第一，操作model，用时髦的说法，这句话很重要：执行model的状态转移。第二，根据业务，把相应的model交给相应的view，进行渲染</p>
-<h3 id="我们的业务逻辑"><a href="#我们的业务逻辑" class="headerlink" title="我们的业务逻辑"></a>我们的业务逻辑</h3><ul>
-<li>描述model的状态转移：实际上就是根据一些条件，对model执行了一个函数，得到了一个新的model</li>
-<li>重复一遍：执行了一个函数，得到了一个新的model：而不是执行了一条命令，修改了model。</li>
-<li>为了让问题更简单，我们做一个尝试，让刚才说的“一些条件”全部由操作时的parameter来表示，其他因素要么放进去，要么被忽略。</li>
-<li>我们还想要更进一步的简单和清晰。OK，model里有字段，还有描述model变换的方法。我们不要，我们只需要一个最最简单的数据结构，比如说，简单到就是一个简单的plain object。我们给它一个更准确描述这个plain object的名字： state</li>
-<li>对于parameters 推广到普遍适用的情况，我们给他的名字叫 action，动作，来自哪里的动作？我不关心</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">state_next  =  r(state, actions)</div></pre></td></tr></table></figure>
-<h3 id="我们的UI"><a href="#我们的UI" class="headerlink" title="我们的UI"></a>我们的UI</h3><p>再来看controller的另一个任务：把相应的model交给相应的view，进行渲染。</p>
-<ul>
-<li>What is a view?<ul>
-<li>To display model</li>
-</ul>
-</li>
-</ul>
-<p>也就是说，View是什么？View就是把model扔在屏幕上，使其可以和用户交互的一种映射。回忆一下高中数学，把model可能的状态看成定义域，UI所有可能的显示看成值域，这是什么？一个函数</p>
-<p>跟之前一样的解释：model拓广到states 我们得到了</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">UI = f(state)</div></pre></td></tr></table></figure>
-<p>是的 UI只听state的</p>
-<p>你想说 我的页面，要在晚上10：00到早上8：00把页面弄成适合夜间的尿黄色。OK，请在state里描述时间。<br>我的页面，在中国用高德map，在美国用google map。OK，请在state里描述location。</p>
-<p>UI就干你改干的事，清清楚楚。</p>
-<p>state怎么这么累？f说，我不知道，你问r去</p>
-<p>这就是今天我想阐述的核心</p>
-<p><strong>敲黑板重点</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">UI = f(r(state, action))</div></pre></td></tr></table></figure>
-<h1 id="UI-f-r-state-action-欢迎来到函数的世界"><a href="#UI-f-r-state-action-欢迎来到函数的世界" class="headerlink" title="UI = f(r(state, action)): 欢迎来到函数的世界"></a>UI = f(r(state, action)): 欢迎来到函数的世界</h1><h2 id="我们的工作"><a href="#我们的工作" class="headerlink" title="我们的工作"></a>我们的工作</h2><ul>
-<li>怎么描述一个时间点上静态的状态？这是state的问题</li>
-<li>怎么描述发生的一切和其他实体，比如用户的交互？这是action</li>
-<li>怎么让state和action相互作用，完成业务逻辑的要求？找一个合适的r。我会忍住不说我最喜欢的那个很新的r，我后面会证明，你们正在用的那些被嫌弃的老技术，也可以是很好的r</li>
-<li>怎么在真正的页面上让state说人话？找一个合适的f，同样的，别看不起你们现在用的。</li>
-</ul>
-<p>更进一步解释我给出的这个式子。</p>
-<p>第一件事情：前面已有说明，f和r就是数学意义上真正的函数，不是我们平时干的写作function用成command或这procedure的那些假冒伪劣产品。在编程上 我们称为纯函数。<br>第二件事情：只是再强调一遍，我不是来推销某个framework的，这种pattern，对所有的中立。<br>第三件事情：这种pattern，实际上已经解决了开始提出的一个重要的问题：UI和business logic耦合</p>
-<h2 id="我们的数学基础"><a href="#我们的数学基础" class="headerlink" title="我们的数学基础"></a>我们的数学基础</h2><h3 id="范畴论-Category-theory"><a href="#范畴论-Category-theory" class="headerlink" title="范畴论 Category theory"></a>范畴论 Category theory</h3><p>首先是范畴论：将这些概念形式化成一组组的“物件”及“态射”</p>
-<ul>
-<li>解释了为什么pure function对干扰免疫，没有副作用</li>
-<li>思考问题的时候，一定注意把pure function理解成pipe，而不是execute，重点！pipe！</li>
-</ul>
-<p>这就是函数式编程最基本的模型：函数就是箭头，值就是点（后面λ演算可以更丧（gan）心（de）病（piao）狂（liang）的指出值也是函数），除了两个点，这就是一个纯粹的数学模型，不会和任何其他的点或者箭头发生交互。<br>这个箭头不会吃掉它出发的点，不会改变它到达的点，它就是像一跟管道一样。<br>没错，一定要把函数理解成管道，不要理解成命令！我们的思维在这里转变。</p>
-<h3 id="λ演算-λ-calculus"><a href="#λ演算-λ-calculus" class="headerlink" title="λ演算 λ calculus"></a>λ演算 λ calculus</h3><p>λ-terms（解释了为什么“函数是一等公民”）形象的说，就解释了函数，不仅是箭头，也可以是点。函数本身就是一种值的类型。<br>evaluation（解释了柯里化的数学原理，解释了FP对于异步和并行的优势，启发我们不要用传统的考虑“值”的思路（call by value）去理解而是call by name）<br>λ表达式只允许一个参数，柯里化可多个。<br>函数应用可以把函数整体代入，不是先要求值：这就是我们天天写的callback啊</p>
-<h2 id="我们的工具"><a href="#我们的工具" class="headerlink" title="我们的工具"></a>我们的工具</h2><p><strong>纯函数 pure functions</strong></p>
-<p>重温一下pure funciton的概念，之前react的分享里已经提到过的</p>
-<p>两个要求：第一：输入确定，则输出确定。第二：没有副作用，或者说，它只能干一件事请，就是输出一个值，其他什么改一个全局变量啊全都不行。</p>
-<p>换句话说，pure function就是纯数学意义上的函数，编程上是stateless function，没有internal state。</p>
-<h3 id="我们建造新大厦的砖块"><a href="#我们建造新大厦的砖块" class="headerlink" title="我们建造新大厦的砖块"></a>我们建造新大厦的砖块</h3><p>在这个pattern中，pure function就是我们编程的砖块。为什么选择这个当砖块？因为它最简单，也最容易复用。</p>
-<p>首先，它完全对这样一大类bug免疫，就是一堆人在改同一个可变的东西，什么out of sync或者inconsistent的问题。因为每块砖只关心自己的输入。<br>另外因为这个特性，它一定是并行编程的很好的候选方案。<br>第三，它完全不关注自己受谁的影响，自己会影响谁。在哪都一样，很容易的就搬来搬去。</p>
-<p>我猜有人会用随机数生成的问题来challenge。没问题，只需要知道随机数需要seed就好了。</p>
-<p>当然，等真的写code的时候，我们想的一定是怎么解决实际问题，而不是怎么套用design pattern，我们想的是怎么用pure function的思想提高我们思考的效率，而不是绞尽脑汁套pure function来降低我们思考的效率，be smart</p>
-<blockquote>
-<p>Javascript并不是一门非常适合函数式编程的语言</p>
-</blockquote>
-<h2 id="我们的动机"><a href="#我们的动机" class="headerlink" title="我们的动机"></a>我们的动机</h2><ul>
-<li>We want UI to be predicable</li>
-<li>We want states transforming be predicable</li>
-<li>Reusability, Flexibility and Extensibility</li>
-</ul>
-<h2 id="我们的做法"><a href="#我们的做法" class="headerlink" title="我们的做法"></a>我们的做法</h2><h3 id="Immutable"><a href="#Immutable" class="headerlink" title="Immutable"></a>Immutable</h3><p>不推荐的</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">function selectionProjectionHandler(state, config, model) &#123;</div><div class="line">  if (config.selectable) &#123;</div><div class="line">    // ...</div><div class="line">  &#125; else &#123;</div><div class="line">    state.errorCode = 'error_unselectable’;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>推荐的</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">function selectionProjectionHandler(state, config, model) &#123;</div><div class="line">  if (config.selectable) &#123;</div><div class="line">    return /* compose new state with item selection */</div><div class="line">  &#125;</div><div class="line">  // Immutable</div><div class="line">  return Object.assign(&#123;&#125;, state, &#123;</div><div class="line">    errorCode: 'error_unselectable’,</div><div class="line">  &#125;);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>其实很简单 别改 返回一个新的</p>
-<p>当然这个例子说明了一个问题是 如果你的目标是学习函数式编程 显然JavaScript不是一个合适的选择 这里的语法看起来不太直观 甚至可以说 是一个work around： 因为那个新的对象 其实就是这个空的花括号修饰出来的 没错 这不是immutable 我们产生了修改这个空object的副作用 强调一遍 我想讲的是怎么借助这些思想让我们开发变简单</p>
-<p>而immutablejs这个库的作用 就是强制copy on write 对于map array set这些基础的结构做了封装</p>
-<p>recap一个pure function： 干且仅干一件事情 接受一个输入 给一个输出</p>
-<h3 id="Partial-applying"><a href="#Partial-applying" class="headerlink" title="Partial applying"></a>Partial applying</h3><p>偏函数解决这样的问题：如果我们有函数是多个参数的，我们希望能固定其中某几个参数的值</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">log</span>(<span class="params">status, context, message</span>) </span>&#123;</div><div class="line">  <span class="comment">// fancy logging code here</span></div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">info</span>(<span class="params">context, message</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> log(<span class="string">'info'</span>, context, message);</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">dbInfo</span>(<span class="params">message</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> info(<span class="string">'db'</span>, message);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<h3 id="Currying-柯里化"><a href="#Currying-柯里化" class="headerlink" title="Currying 柯里化"></a>Currying 柯里化</h3><p>下面来讲柯里化 因为λ演算表现成code 最纯净的函数定义是一个参数进去 一个参数出来 但是我们实际业务很容易描述成具有多个参数的情形 所以我们需要柯里化 只提供一个参数 其他的参数作为这个函数的“环境”来创建，来回归原始</p>
-<p>大家回想一下自己备战高考的岁月啊 数学里函数的部分占了大头对吧 大家重温一下只有一个参数的题的难度 和有多个参数的题的难度 应该就有一个感性的认识了 现在我们做项目 不就是两步：先把实际问题数学化 再把数学解答代码化？好 想展开一个话题 随便google一篇文章都比我这讲得好 就不浪费时间了</p>
-<p>柯里化是把接受多个参数的函数变换成接受一个单一参数（最初函数的第一个参数）的函数，并且返回接受余下的参数而且返回结果的新函数的技术。指的是将一个具有多个参数的函数，转换成能够通过一系列的函数链式调用，其中每一个函数都只有一个参数</p>
-<p>我们还是拿log这个例子来说明</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">function log(status) &#123;</div><div class="line">  return function(context) &#123;</div><div class="line">    return function(message) &#123;</div><div class="line">      // fancy logging code here</div><div class="line">    &#125;;</div><div class="line">  &#125;;</div><div class="line">&#125;</div><div class="line">const info = log('info’);</div><div class="line">info('db-context')('message');</div><div class="line">const dbInfo = info('db'); // create a new function again</div><div class="line">dbInfo('something happened’);</div><div class="line">log('other level')('some context')('a message');</div></pre></td></tr></table></figure>
-<p>这就是柯里化 其实没那么玄乎 我们把一个关注三个参数的问题 变成了三个分别只有一个参数的函数的链式调用</p>
-<p>我们想要创建之前的info函数 就把status=info理解成创建这个新函数需要的环境</p>
-<p>请看 这很生动的说明了函数作为一等公民 充当返回值这个角色 现在我们想打一条log 就是调用这个新函数</p>
-<p>或者说 我们还想把dbInfo这个新函数创建出来 道理也是一样的 不过这里我们又可以强调一下了 一定要是纯函数 如果不是 比如说dbInfo调用的时候有可能有对info甚至log产生副作用 这整个体系就崩塌了</p>
-<p>可以说 柯里化就是这样一个神奇的工具 我们几乎可以只依靠它 又简洁又优雅的的解决特性与共性的问题 给予我们代码良好的复用性 灵活性 扩展性 理解起来 我们只需要牢牢记住 函数是一等公民</p>
-<h3 id="Function-compose"><a href="#Function-compose" class="headerlink" title="Function compose"></a>Function compose</h3><p>我们来复习高中知识 啥叫函数组合？很简单 f(x)是函数 那么 f(g(x))就是函数组合</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">UI = f(r(state, action))</div></pre></td></tr></table></figure>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> compose = <span class="function"><span class="keyword">function</span>(<span class="params">f, g</span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">x</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> f(g(x));</div><div class="line">  &#125;;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<h2 id="我们的收获"><a href="#我们的收获" class="headerlink" title="我们的收获"></a>我们的收获</h2><ol>
-<li>Reasonable</li>
-</ol>
-<p>很多人相信使用纯函数最大的好处是引用透明性（referential transparency）。如果一段代码可以替换成它执行所得的结果，而且是在不改变整个程序行为的前提下替换的，那么我们就说这段代码是引用透明的。<br>由于纯函数总是能够根据相同的输入返回相同的输出，所以它们就能够保证总是返回同一个结果，这也就保证了引用透明性。</p>
-<ol>
-<li>Cacheable</li>
-</ol>
-<p>首先，纯函数总能够根据输入来做缓存。实现缓存的一种典型方式是 memoize 技术</p>
-<ul>
-<li>值得注意的一点是，可以通过延迟执行的方式把不纯的函数转换为纯函数：</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> pureHttpCall = memoize(<span class="function"><span class="keyword">function</span>(<span class="params">url, params</span>)</span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; <span class="keyword">return</span> $.getJSON(url, params); &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
-<ol>
-<li>Portable / Self-Documenting</li>
-</ol>
-<p>纯函数是完全自给自足的，它需要的所有东西都能轻易获得。</p>
-<p>在 JavaScript 的设定中，可移植性可以意味着把函数序列化（serializing）并通过 socket 发送。也可以意味着代码能够在 web workers 中运行。总之，可移植性是一个非常强大的特性。<br>命令式编程中“典型”的方法和过程都深深地根植于它们所在的环境中，通过状态、依赖和有效作用（available effects）达成；纯函数与此相反，它与环境无关，只要我们愿意，可以在任何地方运行它。<br>你上一次把某个类方法拷贝到新的应用中是什么时候？我最喜欢的名言之一是 Erlang 语言的作者 Joe Armstrong 说的这句话：“面向对象语言的问题是，它们永远都要随身携带那些隐式的环境。你只需要一个香蕉，但却得到一个拿着香蕉的大猩猩…以及整个丛林”。</p>
-<ol>
-<li>Testable</li>
-</ol>
-<p>纯函数让测试更加容易。我们不需要伪造一个“真实的”支付网关，或者每一次测试之前都要配置、之后都要断言状态（assert the state）。只需简单地给函数一个输入，然后断言输出就好了。</p>
-<ol>
-<li>Parallel</li>
-</ol>
-<p>最后一点，也是决定性的一点：我们可以并行运行任意纯函数。因为纯函数根本不需要访问共享的内存，而且根据其定义，纯函数也不会因副作用而进入竞争态（race condition）</p>
-<h1 id="One-more-thing"><a href="#One-more-thing" class="headerlink" title="One more thing"></a>One more thing</h1><h2 id="Flux-pattern"><a href="#Flux-pattern" class="headerlink" title="Flux pattern"></a>Flux pattern</h2><ul>
-<li>View: representation layer. Controller views.</li>
-<li>Action: raise actions from representational layer.</li>
-<li>Dispatcher: receive actions and invoke callbacks.</li>
-<li>Store: respond to dispatched actions.</li>
-</ul>
-<h2 id="Views-controllers-pattern"><a href="#Views-controllers-pattern" class="headerlink" title="Views controllers pattern"></a>Views controllers pattern</h2><ul>
-<li>Separate controllers(container components) and views(representational components)</li>
-</ul>
-<h1 id="几个肯定会被问到的问题："><a href="#几个肯定会被问到的问题：" class="headerlink" title="几个肯定会被问到的问题："></a>几个肯定会被问到的问题：</h1><p><strong>Q: In big team co-work, how to break projects down?</strong></p>
-<p>(如果我们用函数式思考，一切非常自然)</p>
-<p>回答这个问题，我建议大家先来这样思考我们的项目，想象成一个表格，或者数据库表，也就是一个二维的矩阵，一个维度是不同的业务实体，在这里就是不同种类的campaign；另一个维度与它垂直，就像是auth, i18n, theming，routing等等，你每一行代码的作用，就都可以用一个向量来表示：我这一行，是处理DSA的i18n。那么两种思考问题的方式其实就是一个地方不一样：把哪个维度看成行，把哪个维度看成列。</p>
-<p>传统的方法是根据业务来思考的。而这里推荐的另一个看问题的角度，是通过可扩展性，可维护性，（说人话：呼应标题，让前端开发变简单）的方面来思考。这和数据库很类似：行扩展很简单，一条SQL语句即可，列扩展相对麻烦。所以我们用middleware来描述我们的列:<br>一方面，借助柯里化，当我们需要扩展列（增加新的middleware）时，代价不那么大<br>另一方面，当我们增加业务实体时（这是我们的主要工作，除了架构师）进行简单的行扩展</p>
-<p>比方说 auth, i18n, theming，routing等等作为middleware避免了大量重复代码。我们平时在处理这些逻辑的时候，就算不是copy paste，互相之间的差别也不大，基本上是配置上的差别。</p>
-<p>那么我们会问这样一个问题，如果我要在我们的项目中加入一个新的entity，举个例子，我们已经有了几种campaign，search campaign，shopping campaign等等，现在我们又要加入DSA campaign.</p>
-<p>传统的做法是加入一个DSACampaignController,里面包含CRUD的actions，然后创建相应的View，templates，和campaignMT，adInsight MT integrate之后release，当然这些和之前其他campaign的code会有很多重复但是我们似乎也能接受（其实是习惯了）</p>
-<p>按照上面的做法，是不是说我要在auth里添加一点DSA的配置，i18n里添加几个DSA的规则，说起来不用写完整的重复的controller啊之类的，但是这种散弹式的修改真的不是团队协作的毒药吗？怎么不像上面说的“行扩展”那样简单啊？<br>回答：</p>
-<ol>
-<li>设计出声明式编程的接口很难吗？设计出集中配置项的语法糖很难吗？最最简单的，有一个middleware来派送config给不同的middleware总能做到吧。</li>
-<li>flux pattern中一个重要的角色是dispatcher，具体的应用中不同框架有不同的设计，但是功能都是：把不同的action分发到不同的store或者store里的不同字段。比方说一个简单的设计，不就是hash map吗？添加新的DSA campaign type，可以设计成为为这个新的entity action添加新的reducer（就是前面讲到的r的组件，或新的一组reducer）</li>
-</ol>
-<p>当然由此还会有一个问题：如果维度不够用怎么办？拿业务上说就是：我们的business entity不一定是扁平的结构，就比如说，我们有不同type的campaign，这是一层，不同type的adgroup，ads， keywords等等，然后campaign,ads,keywords这些又是拿到一层考虑：</p>
-<p>flatten：可能很多时候我们并不需要关系这些业务上的树形关系，共性和特性就是柯里化中的小技巧了。<br>数学上的分形，或者结合micro service的理念，通过子APP的方式来完成。</p>
-<p>可能还是有点抽象，还是举projection grid中的例子吧：</p>
-<p>不同场景下，datasource的不同，toolbar构造的不同，只体现在配置不同上。<br>功能上的扩展，对于开发者来说，考虑两件事情（1）在哪里插入projection（2）插入什么样的projection 比如说，我们在product groups 中要用table的rows来体现业务上的树状层级，我们就加入一个tree-plugin（与product groups业务本身无关），我们考虑的是：<br>在哪里pipe：修改structure projection pipe啥：加入parent node row<br>在哪里pipe：修改content projection pipe啥：添加icon和缩进描述层级关系</p>
-<p><strong>How to compose async actions?</strong></p>
-<p>我只想回答这么一句话</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">f_async(…args)  ≡  f(condition, …args)</div></pre></td></tr></table></figure>
-<p><strong>How to share components to public?</strong></p>
-<ul>
-<li>We share widgets and controls. we should not share business.</li>
-<li>We can share universal helper functions in typical pure function way.</li>
-<li>Pure functions are even easier to share: No side effects. Predicable</li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">functional programming</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">design pattern</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/12/25/Functional-UI/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -1562,7 +1352,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Frameworks</a>
+                <a href="javascript:void(0)" class="js-tag color1">Javascript</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1574,7 +1364,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Javascript</a>
+                <a href="javascript:void(0)" class="js-tag color1">Frameworks</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1586,15 +1376,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">ES6(ES2015)</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">framework</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">data binding</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">ES6(ES2015)</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1607,6 +1397,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">html</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">ES6</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1631,10 +1425,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Events</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ES6</a>
               </li>
              
               <li class="article-tag-list-item">
