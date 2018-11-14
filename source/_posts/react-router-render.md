@@ -7,7 +7,7 @@ tags:
 - Javascript
 ---
 
-## react中的mount就行是什么意思。
+## react中的mount是什么意思。
 
 在react中经常出现这个词，尤其是很多lifecycle方法中。究竟是什么意思呢？
 
