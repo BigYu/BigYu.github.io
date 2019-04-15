@@ -215,3 +215,79 @@ describe("MyInput", () => {
 });
 
 ```
+
+## Coverage report
+
+- Jest: does not have perfect coverage support for typescript yet.
+- ts-jest: lack of jest@24 support. (jest@24 has more friendly typescript support)
+
+### Using Mocha as the approach
+
+1. install Mocha and chai
+2. install nyc(Istanbul's state of the art command line interface)
+3. install source-map-support, which will also require that you have sourcemaps configured in your tsconfig.json.
+4. update package.json
+
+```json
+  "scripts": {
+    "test": "nyc mocha",
+  },
+  "nyc": {
+    "include": [
+      "src/**/*.ts",
+      "src/**/*.tsx"
+    ],
+    "extension": [
+      ".ts",
+      ".tsx"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "reporter": [
+      "text-summary",
+      "html"
+    ],
+    "sourceMap": true,
+    "instrument": true
+  },
+```
+
+5. config Mocha:
+
+```
+--compilers ts-node/register
+--require source-map-support/register
+--full-trace
+--bail
+src/**/*.test.ts src/**/*.test.tsx
+```
+
+6. enable snapshot testing for Mocha: https://www.npmjs.com/package/mocha-snapshots
+
+## watch mode
+
+--watch in cli options
+
+## Debugging in VS Code
+
+```json
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Jest Tests",
+      "type": "node",
+      "request": "launch",
+      "runtimeArgs": [
+        "--inspect-brk",
+        "${workspaceRoot}/node_modules/jest/bin/jest.js",
+        "--runInBand"
+      ],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "port": 9229
+    }
+  ]
+}
+```
