@@ -143,6 +143,89 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-generator-build" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/01/generator-build/">generator-react-lib: 我创建的用typescript写react库的脚手架</a>
+    </h1>
+  
+
+        
+        <a href="/2020/03/01/generator-build/" class="archive-article-date">
+  	<time datetime="2020-03-01T06:39:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="关于Yeoman"><a href="#关于Yeoman" class="headerlink" title="关于Yeoman"></a>关于Yeoman</h1><p>简单的说，就是用来开发脚手架的脚手架。具体见：<a href="https://yeoman.io/" target="_blank" rel="noopener">https://yeoman.io/</a></p>
+<h1 id="为什么需要脚手架"><a href="#为什么需要脚手架" class="headerlink" title="为什么需要脚手架"></a>为什么需要脚手架</h1><p>工作中处于各种各样的理由，我们需要把自己编写的代码打包成单独的npm包发布出去，再在相关的工程中使用，比如复用场景比较多的ui组件之类。因为一些原因，我们使用某个版本的typescript编写，但是使用者完全可能因为不同的原因，并没有使用typescript或者使用的不兼容的typescript版本。因此我们需要打包成npm包，暴露出umd来实现。这个generator，针对的就是使用typescript开发的react库。</p>
+<h1 id="为什么不用create-react-app"><a href="#为什么不用create-react-app" class="headerlink" title="为什么不用create-react-app"></a>为什么不用create-react-app</h1><p>CRA是用来创建app的。有些创建库的时候需要的体验缺乏，比如说typescript definition的输出。又有很多创建app的时候需要的创建库的时候并不需要，比如说生产环境的部署。</p>
+<h1 id="这个generator做了什么事情"><a href="#这个generator做了什么事情" class="headerlink" title="这个generator做了什么事情"></a>这个generator做了什么事情</h1><ul>
+<li>自动生成package.json,添加了编写一个基于typescript的react组件库一定会用到的依赖。</li>
+<li>自动生成webpack配置，用于库的build</li>
+<li>自动生成lint配置，内置了个人推荐的lint规则。使用者可以根据需要自行修改。</li>
+<li>自动生成基于storybook的开发和测试环境，用于库的开发。</li>
+<li>添加了用于vscode的开发配置。</li>
+</ul>
+<p>之后会写更多的post来具体解释上面做的事情。</p>
+<h1 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h1><p>直接贴Readme吧：</p>
+<h2 id="Installation"><a href="#Installation" class="headerlink" title="Installation"></a>Installation</h2><p>Install Yeoman first:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g yo</span><br></pre></td></tr></table></figure>
+<p>Then you can install this generator</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g generator-react-lib-ts</span><br></pre></td></tr></table></figure>
+<p>Done!</p>
+<p>Of course you can also do it with Yarn or integrate it into your npm/yarn scripts</p>
+<h2 id="Generating-a-new-component"><a href="#Generating-a-new-component" class="headerlink" title="Generating a new component"></a>Generating a new component</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># make sure yo and generator-react-lib-ts is installed globally or let npm/scripts to do it.</span></span><br><span class="line">yo react-lib-ts</span><br><span class="line"></span><br><span class="line"><span class="comment"># Then the generator will ask you to input the name of your library, the path for your lib folder,</span></span><br><span class="line"><span class="comment"># and let you choose the type for your library.</span></span><br></pre></td></tr></table></figure>
+<h2 id="Usage"><a href="#Usage" class="headerlink" title="Usage"></a>Usage</h2><p>The following commands are available in your project:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># build your library. The output is uglified umd bundle with source map files.</span></span><br><span class="line">yarn build</span><br><span class="line"></span><br><span class="line"><span class="comment"># run tests. Powered by jest.</span></span><br><span class="line">yarn <span class="built_in">test</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># linting your code.</span></span><br><span class="line">yarn lint</span><br><span class="line"></span><br><span class="line"><span class="comment"># start local storybook demos</span></span><br><span class="line">yarn storybook</span><br><span class="line"></span><br><span class="line"><span class="comment"># build local static storybook output</span></span><br><span class="line">yarn build:demo</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/01/generator-build/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-no-default-export" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -1000,86 +1083,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2018/11/13/react-hooks/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-react-element-instance-of" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/30/react-element-instance-of/">为什么不能在proptypes的intanceof来检查React component类型</a>
-    </h1>
-  
-
-        
-        <a href="/2018/09/30/react-element-instance-of/" class="archive-article-date">
-  	<time datetime="2018-09-30T02:58:07.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-09-30</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">propTypes: &#123;</span><br><span class="line">  children: React.PropTypes.instanceOf(OtherComponent)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这样写是不起作用的。<othercomponent> 在instanceOf的检查中是不通过的。</othercomponent></p>
-<h1 id="为什么？"><a href="#为什么？" class="headerlink" title="为什么？"></a>为什么？</h1><p>看一下React源码：<a href="https://github.com/facebook/react/blob/master/packages/react/src/ReactElement.js#L171" target="_blank" rel="noopener">https://github.com/facebook/react/blob/master/packages/react/src/ReactElement.js#L171</a></p>
-<p>可以看到<othercomponent> 并不是单纯new出来的，当然不能用简单的instanceOf来检查了</othercomponent></p>
-<h1 id="Children是什么"><a href="#Children是什么" class="headerlink" title="Children是什么"></a>Children是什么</h1><p>测试代码见： <a href="https://github.com/BigYu/react-perf-test/blob/940ab0dabd406af0a32dccb5c025833816c3bfab/instance-of-component/src/App.js#L12" target="_blank" rel="noopener">https://github.com/BigYu/react-perf-test/blob/940ab0dabd406af0a32dccb5c025833816c3bfab/instance-of-component/src/App.js#L12</a></p>
-<p>结果：</p>
-<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">(<span class="number">2</span>) [&#123;…&#125;, &#123;…&#125;]</span><br><span class="line"><span class="number">0</span>:</span><br><span class="line">$$<span class="keyword">typeof</span>: <span class="built_in">Symbol</span>(react.element)</span><br><span class="line">key: <span class="literal">null</span></span><br><span class="line">props: &#123;<span class="attr">children</span>: <span class="string">" This is child Title"</span>&#125;</span><br><span class="line">ref: <span class="literal">null</span></span><br><span class="line">type: <span class="string">"h1"</span></span><br><span class="line">_owner: FiberNode &#123;<span class="attr">tag</span>: <span class="number">2</span>, <span class="attr">key</span>: <span class="literal">null</span>, <span class="attr">type</span>: ƒ, <span class="attr">stateNode</span>: App, <span class="attr">return</span>: FiberNode, …&#125;</span><br><span class="line">_store: &#123;<span class="attr">validated</span>: <span class="literal">true</span>&#125;</span><br><span class="line">_self: App &#123;<span class="attr">props</span>: &#123;…&#125;, <span class="attr">context</span>: &#123;…&#125;, <span class="attr">refs</span>: &#123;…&#125;, <span class="attr">updater</span>: &#123;…&#125;, <span class="attr">_reactInternalFiber</span>: FiberNode, …&#125;</span><br><span class="line">_source: &#123;<span class="attr">fileName</span>: <span class="string">"D:\CodeBase\react-perf-test\instance-of-component\src\App.js"</span>, <span class="attr">lineNumber</span>: <span class="number">10</span>&#125;</span><br><span class="line">__proto__: <span class="built_in">Object</span></span><br><span class="line"><span class="number">1</span>:</span><br><span class="line">$$<span class="keyword">typeof</span>: <span class="built_in">Symbol</span>(react.element)</span><br><span class="line">key: <span class="literal">null</span></span><br><span class="line">props: &#123;&#125;</span><br><span class="line">ref: <span class="literal">null</span></span><br><span class="line">type: ƒ GrandChild()</span><br><span class="line">_owner: FiberNode &#123;<span class="attr">tag</span>: <span class="number">2</span>, <span class="attr">key</span>: <span class="literal">null</span>, <span class="attr">type</span>: ƒ, <span class="attr">stateNode</span>: App, <span class="attr">return</span>: FiberNode, …&#125;</span><br><span class="line">_store: &#123;<span class="attr">validated</span>: <span class="literal">true</span>&#125;</span><br><span class="line">_self: App &#123;<span class="attr">props</span>: &#123;…&#125;, <span class="attr">context</span>: &#123;…&#125;, <span class="attr">refs</span>: &#123;…&#125;, <span class="attr">updater</span>: &#123;…&#125;, <span class="attr">_reactInternalFiber</span>: FiberNode, …&#125;</span><br><span class="line">_source: &#123;<span class="attr">fileName</span>: <span class="string">"D:\CodeBase\react-perf-test\instance-of-component\src\App.js"</span>, <span class="attr">lineNumber</span>: <span class="number">11</span>&#125;</span><br><span class="line">__proto__: <span class="built_in">Object</span></span><br><span class="line">length: <span class="number">2</span></span><br><span class="line">__proto__: <span class="built_in">Array</span>(<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
-<h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><ul>
-<li>可以用shape来进行精确的检查<ul>
-<li>不要偷懒用object或者any，那样等于没有检查。</li>
-</ul>
-</li>
-<li>希望proptypes尽快支持原生检查<ul>
-<li>本来还想自己contribute一下的，已经被别人先做了： <a href="https://github.com/facebook/prop-types/pull/211" target="_blank" rel="noopener">https://github.com/facebook/prop-types/pull/211</a> 不知道哪天能merge然后release</li>
-</ul>
-</li>
-<li>其实吧，personally, I prefer render function over elements.</li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/09/30/react-element-instance-of/">展开全文 >></a>
         </p>
       
 

@@ -6,20 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>JavaScript Modules: stop default exporting | Yucong&#39;s Blog</title>
+  <title>generator-react-lib: 我创建的用typescript写react库的脚手架 | Yucong&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="遇到了这样一条eslint规则：no-default-export 不允许使用default export,于是就好奇：1.为什么js modules里同时有named export和default export。 2. 到底应该用哪种。当然，还有一条完全相反的规则：import/prefer-default-export 搜了一圈，这篇文章是最能说服我的：https://humanwhocode">
-<meta name="keywords" content="JavaScript,JavaScript Modules">
+  <meta name="description" content="关于Yeoman简单的说，就是用来开发脚手架的脚手架。具体见：https://yeoman.io/ 为什么需要脚手架工作中处于各种各样的理由，我们需要把自己编写的代码打包成单独的npm包发布出去，再在相关的工程中使用，比如复用场景比较多的ui组件之类。因为一些原因，我们使用某个版本的typescript编写，但是使用者完全可能因为不同的原因，并没有使用typescript或者使用的不兼容的type">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JavaScript Modules: stop default exporting">
-<meta property="og:url" content="http://yoursite.com/2019/06/20/no-default-export/index.html">
+<meta property="og:title" content="generator-react-lib: 我创建的用typescript写react库的脚手架">
+<meta property="og:url" content="http://yoursite.com/2020/03/01/generator-build/index.html">
 <meta property="og:site_name" content="Yucong&#39;s Blog">
-<meta property="og:description" content="遇到了这样一条eslint规则：no-default-export 不允许使用default export,于是就好奇：1.为什么js modules里同时有named export和default export。 2. 到底应该用哪种。当然，还有一条完全相反的规则：import/prefer-default-export 搜了一圈，这篇文章是最能说服我的：https://humanwhocode">
+<meta property="og:description" content="关于Yeoman简单的说，就是用来开发脚手架的脚手架。具体见：https://yeoman.io/ 为什么需要脚手架工作中处于各种各样的理由，我们需要把自己编写的代码打包成单独的npm包发布出去，再在相关的工程中使用，比如复用场景比较多的ui组件之类。因为一些原因，我们使用某个版本的typescript编写，但是使用者完全可能因为不同的原因，并没有使用typescript或者使用的不兼容的type">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-03-01T06:35:53.228Z">
+<meta property="og:updated_time" content="2020-03-02T13:20:07.813Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JavaScript Modules: stop default exporting">
-<meta name="twitter:description" content="遇到了这样一条eslint规则：no-default-export 不允许使用default export,于是就好奇：1.为什么js modules里同时有named export和default export。 2. 到底应该用哪种。当然，还有一条完全相反的规则：import/prefer-default-export 搜了一圈，这篇文章是最能说服我的：https://humanwhocode">
+<meta name="twitter:title" content="generator-react-lib: 我创建的用typescript写react库的脚手架">
+<meta name="twitter:description" content="关于Yeoman简单的说，就是用来开发脚手架的脚手架。具体见：https://yeoman.io/ 为什么需要脚手架工作中处于各种各样的理由，我们需要把自己编写的代码打包成单独的npm包发布出去，再在相关的工程中使用，比如复用场景比较多的ui组件之类。因为一些原因，我们使用某个版本的typescript编写，但是使用者完全可能因为不同的原因，并没有使用typescript或者使用的不兼容的type">
   
     <link rel="alternative" href="/atom.xml" title="Yucong&#39;s Blog" type="application/atom+xml">
   
@@ -143,82 +142,47 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-no-default-export" class="article article-type-post " itemscope itemprop="blogPost">
+            <article id="post-generator-build" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      JavaScript Modules: stop default exporting
+      generator-react-lib: 我创建的用typescript写react库的脚手架
     </h1>
   
 
         
-        <a href="/2019/06/20/no-default-export/" class="archive-article-date">
-  	<time datetime="2019-06-20T05:58:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-06-20</time>
+        <a href="/2020/03/01/generator-build/" class="archive-article-date">
+  	<time datetime="2020-03-01T06:39:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-01</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>遇到了这样一条eslint规则：<a href="https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/no-default-export.md" target="_blank" rel="noopener">no-default-export</a> 不允许使用default export,于是就好奇：1.为什么js modules里同时有named export和default export。 2. 到底应该用哪种。当然，还有一条完全相反的规则：<a href="https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/prefer-default-export.md" target="_blank" rel="noopener">import/prefer-default-export</a></p>
-<p>搜了一圈，这篇文章是最能说服我的：<a href="https://humanwhocodes.com/blog/2019/01/stop-using-default-exports-javascript-module/" target="_blank" rel="noopener">https://humanwhocodes.com/blog/2019/01/stop-using-default-exports-javascript-module/</a> 这篇文章的作者是eslint的作者。</p>
-<h2 id="从CommonJS到ES6-modules"><a href="#从CommonJS到ES6-modules" class="headerlink" title="从CommonJS到ES6 modules"></a>从CommonJS到ES6 modules</h2><p>default export最初来源于CommonJS中：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LinkedList</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = LinkedList;</span><br></pre></td></tr></table></figure>
-<p>这段简单的code export了LinkedList，但是别人在用的时候，并没有指定名字。比方说这个文件名是linked-list.js，你在另一个CommonJs Module中,可以这样引用：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> LinkedList = <span class="built_in">require</span>(<span class="string">"./linked-list"</span>);</span><br></pre></td></tr></table></figure>
-<p>这里的require函数的返回值可以和我刚才eport的一致，也叫LinkedList，但是，我也可以把这个变量名叫别的：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Dog = <span class="built_in">require</span>(<span class="string">"./linked-list"</span>);</span><br></pre></td></tr></table></figure>
-<p>CommonJs标准十分流行，所以es6的module定义也支了这种pattern</p>
-<blockquote>
-<p>ES6 favors the single/default export style, and gives the sweetest syntax to importing the default.<br>— David Herman June 19, 2014</p>
-</blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> <span class="class"><span class="keyword">class</span> <span class="title">LinkedList</span> </span>&#123;&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> LinkedList <span class="keyword">from</span> <span class="string">"./linked-list.js"</span></span><br></pre></td></tr></table></figure>
-<p>也可以</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Dog <span class="keyword">from</span> <span class="string">"./linked-list.js"</span></span><br></pre></td></tr></table></figure>
-<h2 id="named-export"><a href="#named-export" class="headerlink" title="named export"></a>named export</h2><p>CommonJs和JavaScript Modules都支持named export. 在named export<br>中，可以export function, class, 变量。</p>
-<h3 id="named-export-in-CommonJs"><a href="#named-export-in-CommonJs" class="headerlink" title="named export in CommonJs"></a>named export in CommonJs</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exports.LinkedList = <span class="class"><span class="keyword">class</span> <span class="title">LinkedList</span> </span>&#123;&#125;;</span><br></pre></td></tr></table></figure>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> LinkedList = <span class="built_in">require</span>(<span class="string">"./linked-list"</span>).LinkedList;</span><br></pre></td></tr></table></figure>
-<p>当然 这里你把前面的变量名写成Dog也是可以的。</p>
-<h3 id="named-export-in-JavaScript-modules"><a href="#named-export-in-JavaScript-modules" class="headerlink" title="named export in JavaScript modules"></a>named export in JavaScript modules</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="class"><span class="keyword">class</span> <span class="title">LinkedList</span> </span>&#123;&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; LinkedList &#125; <span class="keyword">from</span> <span class="string">"./linked-list.js"</span>;</span><br></pre></td></tr></table></figure>
-<p>这里就不能乱起名字了。</p>
-<h2 id="Personal-preference-from-Nicholas"><a href="#Personal-preference-from-Nicholas" class="headerlink" title="Personal preference from Nicholas"></a>Personal preference from Nicholas</h2><p>原文作者提到了他个人的peronal preference。这是几条普遍适用的准则，无论你在用什么编程语言</p>
-<p>1· Explicit over implicit.</p>
-<ol start="2">
-<li><p>Names should be consistent throughout all files.</p>
-</li>
-<li><p>Throw errors early and often.</p>
-</li>
-<li><p>Fewer decisions mean faster development.</p>
-</li>
-<li><p>Side trips slow down development（Whenever you have to stop and look. something up in the middle of coding, I call that a side trip.）.</p>
-</li>
-<li><p>Cognitive overhead slows down development.</p>
-</li>
-</ol>
-<h2 id="default-export的问题"><a href="#default-export的问题" class="headerlink" title="default export的问题"></a>default export的问题</h2><h3 id="What-is-that-thing"><a href="#What-is-that-thing" class="headerlink" title="What is that thing?"></a>What is that thing?</h3><p>还是这个例子：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> list = <span class="built_in">require</span>(<span class="string">"./list"</span>);</span><br></pre></td></tr></table></figure>
-<p>在这个上下文中，如果你对list这个module不熟悉，一定会一脸懵逼：list是个啥？显然不太像一个primitive value，那这是一个function？class？或者是别的object类型？搞清楚这件事就是上面说的side trip。</p>
-<ul>
-<li>如果你own list.js,就得去看看自己之前写的code，看看export的是啥。</li>
-<li>如果这是别人写的module，那就得去查文档。</li>
+        <h1 id="关于Yeoman"><a href="#关于Yeoman" class="headerlink" title="关于Yeoman"></a>关于Yeoman</h1><p>简单的说，就是用来开发脚手架的脚手架。具体见：<a href="https://yeoman.io/" target="_blank" rel="noopener">https://yeoman.io/</a></p>
+<h1 id="为什么需要脚手架"><a href="#为什么需要脚手架" class="headerlink" title="为什么需要脚手架"></a>为什么需要脚手架</h1><p>工作中处于各种各样的理由，我们需要把自己编写的代码打包成单独的npm包发布出去，再在相关的工程中使用，比如复用场景比较多的ui组件之类。因为一些原因，我们使用某个版本的typescript编写，但是使用者完全可能因为不同的原因，并没有使用typescript或者使用的不兼容的typescript版本。因此我们需要打包成npm包，暴露出umd来实现。这个generator，针对的就是使用typescript开发的react库。</p>
+<h1 id="为什么不用create-react-app"><a href="#为什么不用create-react-app" class="headerlink" title="为什么不用create-react-app"></a>为什么不用create-react-app</h1><p>CRA是用来创建app的。有些创建库的时候需要的体验缺乏，比如说typescript definition的输出。又有很多创建app的时候需要的创建库的时候并不需要，比如说生产环境的部署。</p>
+<h1 id="这个generator做了什么事情"><a href="#这个generator做了什么事情" class="headerlink" title="这个generator做了什么事情"></a>这个generator做了什么事情</h1><ul>
+<li>自动生成package.json,添加了编写一个基于typescript的react组件库一定会用到的依赖。</li>
+<li>自动生成webpack配置，用于库的build</li>
+<li>自动生成lint配置，内置了个人推荐的lint规则。使用者可以根据需要自行修改。</li>
+<li>自动生成基于storybook的开发和测试环境，用于库的开发。</li>
+<li>添加了用于vscode的开发配置。</li>
 </ul>
-<p>至于用IDE抬杠的。。作者在原文中解释的是很有道理的。我自己没怎么用过那些高级的ide，就不乱转了。</p>
-<h2 id="Name-matching-problems"><a href="#Name-matching-problems" class="headerlink" title="Name matching problems"></a>Name matching problems</h2><p>在上面的李子中，如果选择了named export,那么你只要全局搜LinkedList，就很容易找到所有用到了它的地方。但是如果使用default export话，就不一定了。由于default export没有限制使用时的名字，所以在用的时候，还需要花额外的精力来想一下命名。如果是多人合作的项目，为了保证大家同同样的名字描述同一件事，还需要额外的communication。</p>
-<p>即使因为需求，需要给import的东西换个名字，也不影响上述结论：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> MyList = <span class="built_in">require</span>(<span class="string">"./list"</span>).LinkedList;</span><br></pre></td></tr></table></figure>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; LinkedList <span class="keyword">as</span> MyList &#125; <span class="keyword">from</span> <span class="string">"./list.js"</span>;</span><br></pre></td></tr></table></figure>
-<p>在一个项目中，整个codebase下保持名字一致很重要：</p>
-<ul>
-<li>高效的全局搜索</li>
-<li>Refactor的时候轻松多了</li>
-</ul>
-<h2 id="Importing-the-wrong-thing"><a href="#Importing-the-wrong-thing" class="headerlink" title="Importing the wrong thing"></a>Importing the wrong thing</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123; LinkedList &#125; <span class="keyword">from</span> <span class="string">"./list.js"</span></span><br></pre></td></tr></table></figure>
-<p>如果说LinkedList不存在的话，使用named export可以更早的报出错误。</p>
+<p>之后会写更多的post来具体解释上面做的事情。</p>
+<h1 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h1><p>直接贴Readme吧：</p>
+<h2 id="Installation"><a href="#Installation" class="headerlink" title="Installation"></a>Installation</h2><p>Install Yeoman first:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g yo</span><br></pre></td></tr></table></figure>
+<p>Then you can install this generator</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g generator-react-lib-ts</span><br></pre></td></tr></table></figure>
+<p>Done!</p>
+<p>Of course you can also do it with Yarn or integrate it into your npm/yarn scripts</p>
+<h2 id="Generating-a-new-component"><a href="#Generating-a-new-component" class="headerlink" title="Generating a new component"></a>Generating a new component</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># make sure yo and generator-react-lib-ts is installed globally or let npm/scripts to do it.</span></span><br><span class="line">yo react-lib-ts</span><br><span class="line"></span><br><span class="line"><span class="comment"># Then the generator will ask you to input the name of your library, the path for your lib folder,</span></span><br><span class="line"><span class="comment"># and let you choose the type for your library.</span></span><br></pre></td></tr></table></figure>
+<h2 id="Usage"><a href="#Usage" class="headerlink" title="Usage"></a>Usage</h2><p>The following commands are available in your project:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># build your library. The output is uglified umd bundle with source map files.</span></span><br><span class="line">yarn build</span><br><span class="line"></span><br><span class="line"><span class="comment"># run tests. Powered by jest.</span></span><br><span class="line">yarn <span class="built_in">test</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># linting your code.</span></span><br><span class="line">yarn lint</span><br><span class="line"></span><br><span class="line"><span class="comment"># start local storybook demos</span></span><br><span class="line">yarn storybook</span><br><span class="line"></span><br><span class="line"><span class="comment"># build local static storybook output</span></span><br><span class="line">yarn build:demo</span><br></pre></td></tr></table></figure>
 
       
 
@@ -258,21 +222,6 @@
     <div class="article-info article-info-index">
       
       
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">JavaScript</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">JavaScript Modules</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
       
 
       
@@ -323,7 +272,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2019/06/20/no-default-export/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2020/03/01/generator-build/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -337,18 +286,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2020/03/01/generator-build/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          generator-react-lib: 我创建的用typescript写react库的脚手架
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/04/07/react-ut/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">React component unit testing</div>
+    <a href="/2019/06/20/no-default-export/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">JavaScript Modules: stop default exporting</div>
       <i class="icon-circle-right"></i>
     </a>
   

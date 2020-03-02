@@ -143,6 +143,108 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-on-vs-listenTo" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/07/10/on-vs-listenTo/">Backbone model- on vs listenTo</a>
+    </h1>
+  
+
+        
+        <a href="/2017/07/10/on-vs-listenTo/" class="archive-article-date">
+  	<time datetime="2017-07-10T09:06:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-10</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>发现好久没有写blog了 要捡回来这个好习惯：）</p>
+<p>今天遇到了一个bug，给一个全局的（不要吐槽,legacy code留下来的全局的东西没那么好消灭干净）添加了一个事件的callback，大致代码是这样</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">aGlobalModel.on(<span class="string">'a-event'</span>, () =&gt; &#123;</span><br><span class="line">  someView.doSomething();</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>原因是，someView被remove的时候，忘了call gGlabal.off. Ok, 加上off逻辑当然不难，但是：</p>
+<ol>
+<li>直接call off会清理掉所有的handler。这坑爹货是全局的。。。。</li>
+<li>可以指定off哪一个callback，所以这个callback会被传来传去。。比方说有很多处会remove的情况。on 并不是在someView里定义的。</li>
+</ol>
+<p>事实上，listenTo是一个更好的选择。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">someView.listenTo(aGlobalModel, <span class="string">'a-event'</span>, () =&gt; &#123;</span><br><span class="line">  <span class="comment">// ...code</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>当someView的remove被call到的时候 会自动的执行stopListening.</p>
+<h3 id="看一下Backbone源码"><a href="#看一下Backbone源码" class="headerlink" title="看一下Backbone源码"></a>看一下Backbone源码</h3><ul>
+<li>on</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Bind an event to a `callback` function. Passing `"all"` will bind</span></span><br><span class="line"><span class="comment">// the callback to all events fired.</span></span><br><span class="line">Events.on = <span class="function"><span class="keyword">function</span>(<span class="params">name, callback, context</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">this</span>._events = eventsApi(onApi, <span class="keyword">this</span>._events || &#123;&#125;, name, callback, &#123;</span><br><span class="line">    context: context,</span><br><span class="line">    ctx: <span class="keyword">this</span>,</span><br><span class="line">    listening: _listening</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (_listening) &#123;</span><br><span class="line">    <span class="keyword">var</span> listeners = <span class="keyword">this</span>._listeners || (<span class="keyword">this</span>._listeners = &#123;&#125;);</span><br><span class="line">    listeners[_listening.id] = _listening;</span><br><span class="line">    <span class="comment">// Allow the listening to use a counter, instead of tracking</span></span><br><span class="line">    <span class="comment">// callbacks for library interop</span></span><br><span class="line">    _listening.interop = <span class="literal">false</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>listenTo</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Inversion-of-control versions of `on`. Tell *this* object to listen to</span></span><br><span class="line"><span class="comment">// an event in another object... keeping track of what it's listening to</span></span><br><span class="line"><span class="comment">// for easier unbinding later.</span></span><br><span class="line">Events.listenTo = <span class="function"><span class="keyword">function</span>(<span class="params">obj, name, callback</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (!obj) <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">  <span class="keyword">var</span> id = obj._listenId || (obj._listenId = _.uniqueId(<span class="string">'l'</span>));</span><br><span class="line">  <span class="keyword">var</span> listeningTo = <span class="keyword">this</span>._listeningTo || (<span class="keyword">this</span>._listeningTo = &#123;&#125;);</span><br><span class="line">  <span class="keyword">var</span> listening = _listening = listeningTo[id];</span><br><span class="line"></span><br><span class="line">  <span class="comment">// This object is not listening to any other events on `obj` yet.</span></span><br><span class="line">  <span class="comment">// Setup the necessary references to track the listening callbacks.</span></span><br><span class="line">  <span class="keyword">if</span> (!listening) &#123;</span><br><span class="line">    <span class="keyword">this</span>._listenId || (<span class="keyword">this</span>._listenId = _.uniqueId(<span class="string">'l'</span>));</span><br><span class="line">    listening = _listening = listeningTo[id] = <span class="keyword">new</span> Listening(<span class="keyword">this</span>, obj);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Bind callbacks on obj.</span></span><br><span class="line">  <span class="keyword">var</span> error = tryCatchOn(obj, name, callback, <span class="keyword">this</span>);</span><br><span class="line">  _listening = <span class="keyword">void</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (error) <span class="keyword">throw</span> error;</span><br><span class="line">  <span class="comment">// If the target obj is not Backbone.Events, track events manually.</span></span><br><span class="line">  <span class="keyword">if</span> (listening.interop) listening.on(name, callback);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>上述代码中用到的eventsApi,是标准的事件，回调迭代器：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Iterates over the standard `event, callback` (as well as the fancy multiple</span></span><br><span class="line"><span class="comment">// space-separated events `"change blur", callback` and jQuery-style event</span></span><br><span class="line"><span class="comment">// maps `&#123;event: callback&#125;`).</span></span><br><span class="line"><span class="keyword">var</span> eventsApi = <span class="function"><span class="keyword">function</span>(<span class="params">iteratee, events, name, callback, opts</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> i = <span class="number">0</span>, names;</span><br><span class="line">  <span class="keyword">if</span> (name &amp;&amp; <span class="keyword">typeof</span> name === <span class="string">'object'</span>) &#123;</span><br><span class="line">    <span class="comment">// Handle event maps.</span></span><br><span class="line">    <span class="keyword">if</span> (callback !== <span class="keyword">void</span> <span class="number">0</span> &amp;&amp; <span class="string">'context'</span> <span class="keyword">in</span> opts &amp;&amp; opts.context === <span class="keyword">void</span> <span class="number">0</span>) opts.context = callback;</span><br><span class="line">    <span class="keyword">for</span> (names = _.keys(name); i &lt; names.length ; i++) &#123;</span><br><span class="line">      events = eventsApi(iteratee, events, names[i], name[names[i]], opts);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> <span class="keyword">if</span> (name &amp;&amp; eventSplitter.test(name)) &#123;</span><br><span class="line">    <span class="comment">// Handle space-separated event names by delegating them individually.</span></span><br><span class="line">    <span class="keyword">for</span> (names = name.split(eventSplitter); i &lt; names.length; i++) &#123;</span><br><span class="line">      events = iteratee(events, names[i], callback, opts);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// Finally, standard events.</span></span><br><span class="line">    events = iteratee(events, name, callback, opts);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> events;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Framework</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Backbone</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Events</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/07/10/on-vs-listenTo/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-es6-generator" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -929,124 +1031,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2016/12/03/underscore-5/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-code-convention" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/10/13/code-convention/">Airbnb JavaScript Style Guide</a>
-    </h1>
-  
-
-        
-        <a href="/2016/10/13/code-convention/" class="archive-article-date">
-  	<time datetime="2016-10-13T01:25:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-10-13</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li>Note that both let and const are block-scoped.</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// const and let only exist in the blocks they are defined in.</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">let</span> a = <span class="number">1</span>;</span><br><span class="line">  <span class="keyword">const</span> b = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(a); <span class="comment">// ReferenceError</span></span><br><span class="line"><span class="built_in">console</span>.log(b); <span class="comment">// ReferenceError</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li>Use computed property names when creating objects with dynamic property names.</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getKey</span>(<span class="params">k</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">`a key named <span class="subst">$&#123;k&#125;</span>`</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// bad</span></span><br><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  id: <span class="number">5</span>,</span><br><span class="line">  name: <span class="string">'San Francisco'</span>,</span><br><span class="line">&#125;;</span><br><span class="line">obj[getKey(<span class="string">'enabled'</span>)] = <span class="literal">true</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// good</span></span><br><span class="line"><span class="keyword">const</span> obj = &#123;</span><br><span class="line">  id: <span class="number">5</span>,</span><br><span class="line">  name: <span class="string">'San Francisco'</span>,</span><br><span class="line">  [getKey(<span class="string">'enabled'</span>)]: <span class="literal">true</span>,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>Do not call Object.prototype methods directly, such as hasOwnProperty, propertyIsEnumerable, and isPrototypeOf.</li>
-</ul>
-<blockquote>
-<p>Why? These methods may be shadowed by properties on the object in question - consider { hasOwnProperty: false } - or, the object may be a null object (Object.create(null)).</p>
-</blockquote>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// bad</span></span><br><span class="line"><span class="built_in">console</span>.log(object.hasOwnProperty(key));</span><br><span class="line"></span><br><span class="line"><span class="comment">// good</span></span><br><span class="line"><span class="built_in">console</span>.log(<span class="built_in">Object</span>.prototype.hasOwnProperty.call(object, key));</span><br><span class="line"></span><br><span class="line"><span class="comment">// best</span></span><br><span class="line"><span class="keyword">const</span> has = <span class="built_in">Object</span>.prototype.hasOwnProperty; <span class="comment">// cache the lookup once, in module scope.</span></span><br><span class="line"><span class="comment">/* or */</span></span><br><span class="line"><span class="keyword">const</span> has = <span class="built_in">require</span>(<span class="string">'has'</span>);</span><br><span class="line">…</span><br><span class="line"><span class="built_in">console</span>.log(has.call(object, key));</span><br></pre></td></tr></table></figure>
-<ul>
-<li>Use array spreads … to copy arrays.</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// bad</span></span><br><span class="line"><span class="keyword">const</span> len = items.length;</span><br><span class="line"><span class="keyword">const</span> itemsCopy = [];</span><br><span class="line"><span class="keyword">let</span> i;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line">  itemsCopy[i] = items[i];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// good</span></span><br><span class="line"><span class="keyword">const</span> itemsCopy = [...items];</span><br></pre></td></tr></table></figure>
-<ul>
-<li>Use object destructuring when accessing and using multiple properties of an object. jscs:</li>
-</ul>
-<blockquote>
-<p>Why? Destructuring saves you from creating temporary references for those properties.</p>
-</blockquote>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// bad</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getFullName</span>(<span class="params">user</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> firstName = user.firstName;</span><br><span class="line">  <span class="keyword">const</span> lastName = user.lastName;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;firstName&#125;</span> <span class="subst">$&#123;lastName&#125;</span>`</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// good</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getFullName</span>(<span class="params">user</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; firstName, lastName &#125; = user;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;firstName&#125;</span> <span class="subst">$&#123;lastName&#125;</span>`</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// best</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getFullName</span>(<span class="params">&#123; firstName, lastName &#125;</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;firstName&#125;</span> <span class="subst">$&#123;lastName&#125;</span>`</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>Use array destructuring. jscs: requireArrayDestructuring</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>];</span><br><span class="line"></span><br><span class="line"><span class="comment">// bad</span></span><br><span class="line"><span class="keyword">const</span> first = arr[<span class="number">0</span>];</span><br><span class="line"><span class="keyword">const</span> second = arr[<span class="number">1</span>];</span><br><span class="line"></span><br><span class="line"><span class="comment">// good</span></span><br><span class="line"><span class="keyword">const</span> [first, second] = arr;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>Strings that cause the line to go over 100 characters should not be written across multiple lines using string concatenation.</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// bad</span></span><br><span class="line"><span class="keyword">const</span> errorMessage = <span class="string">'This is a super long error that was thrown because \</span></span><br><span class="line"><span class="string">of Batman. When you stop to think about how Batman had anything to do \</span></span><br><span class="line"><span class="string">with this, you would get nowhere \</span></span><br><span class="line"><span class="string">fast.'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// bad</span></span><br><span class="line"><span class="keyword">const</span> errorMessage = <span class="string">'This is a super long error that was thrown because '</span> +</span><br><span class="line">  <span class="string">'of Batman. When you stop to think about how Batman had anything to do '</span> +</span><br><span class="line">  <span class="string">'with this, you would get nowhere fast.'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// good</span></span><br><span class="line"><span class="keyword">const</span> errorMessage = <span class="string">'This is a super long error that was thrown because of Batman. When you stop to think about how Batman had anything to do with this, you would get nowhere fast.'</span>;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>Do not unnecessarily escape characters in strings. eslint: no-useless-escape</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// bad</span></span><br><span class="line"><span class="keyword">const</span> foo = <span class="string">'\'this\' \i\s \"quoted\"'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// good</span></span><br><span class="line"><span class="keyword">const</span> foo = <span class="string">'\'this\' is "quoted"'</span>;</span><br><span class="line"><span class="keyword">const</span> foo = <span class="string">`'this' is "quoted"`</span>;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>Use named function expressions instead of function declarations. eslint: func-style jscs:</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// bad</span></span><br><span class="line"><span class="keyword">const</span> foo = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// bad</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">foo</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// good</span></span><br><span class="line"><span class="keyword">const</span> foo = <span class="function"><span class="keyword">function</span> <span class="title">bar</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>Prefer the use of the spread operator … to call variadic functions. eslint: prefer-spread</li>
-</ul>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// bad</span></span><br><span class="line"><span class="keyword">const</span> x = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];</span><br><span class="line"><span class="built_in">console</span>.log.apply(<span class="built_in">console</span>, x);</span><br><span class="line"></span><br><span class="line"><span class="comment">// good</span></span><br><span class="line"><span class="keyword">const</span> x = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];</span><br><span class="line"><span class="built_in">console</span>.log(...x);</span><br><span class="line"></span><br><span class="line"><span class="comment">// bad</span></span><br><span class="line"><span class="keyword">new</span> (<span class="built_in">Function</span>.prototype.bind.apply(<span class="built_in">Date</span>, [<span class="literal">null</span>, <span class="number">2016</span>, <span class="number">08</span>, <span class="number">05</span>]));</span><br><span class="line"></span><br><span class="line"><span class="comment">// good</span></span><br><span class="line"><span class="keyword">new</span> <span class="built_in">Date</span>(...[<span class="number">2016</span>, <span class="number">08</span>, <span class="number">05</span>]);</span><br></pre></td></tr></table></figure>
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Javascript</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2016/10/13/code-convention/">展开全文 >></a>
         </p>
       
 
