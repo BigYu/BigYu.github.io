@@ -143,6 +143,75 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-generator-webpack" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/03/04/generator-webpack/">generator-react-lib-ts: build</a>
+    </h1>
+  
+
+        
+        <a href="/2020/03/04/generator-webpack/" class="archive-article-date">
+  	<time datetime="2020-03-04T12:35:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-03-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在上一篇中提到，用generator-react-lib-ts生成了自己的npm包之后，可以使用yarn build/npm build 来把自己的源代码build成dist下的输出，这里具体解释一下这个脚手架为使用者自动添加的配置文件和具体做的事情。</p>
+<p>在package.json的scripts section中，添加了两个script：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&quot;build&quot;: &quot;webpack &amp;&amp; node ./scripts/build-dts.js&quot;,</span><br><span class="line">&quot;build:dts&quot;: &quot;node ./scripts/build-dts.js&quot;,</span><br></pre></td></tr></table></figure>
+<p>对应的就是yarn build/yarn build:dts之后做的事情。</p>
+<p>其中，第二个和build命令中的后一半一样，就是执行了build-dts这个脚本，生成了typescript的类型文件。用到了这个库: <a href="https://github.com/TypeStrong/dts-bundle" target="_blank" rel="noopener">https://github.com/TypeStrong/dts-bundle</a>. 其中，因为我认为最终的输出是一个module，所以打开了outputAsModuleFolder这个开关。使用者如果有别的意见可以根据自己的情况调整。</p>
+<p>build的主体就是webpack。大部分都是很主流的配置。其中要解释的是，我在之前的版本尝试过使用awesome-typescript-loader和babel来解析ts文件，这次还是选用的官方的ts-loader. babel的解决方案目前还不完善，有不少类型上的bug，也没有办法输出类型生命文件。awesome-typescript-loader则是作者劝退。</p>
+<p>加入了两个plugin，一个ForkTsCheckerWebpackPlugin，使用fork出来的线程做类型检查，提高build速度。<br>BundleAnalyzerPlugin的作用是每次build之后可以直观的看到自己的bundle是怎么变大的，是不是应该剔除一些不必要的external dependencies。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2020/03/04/generator-webpack/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-generator-build" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -971,11 +1040,11 @@
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Framework</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">React</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">React</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">Framework</a>
         		</li>
       		
 		</ul>
@@ -1015,106 +1084,9 @@
 
 
   
-    <article id="post-react-hooks" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/13/react-hooks/">尝试react-hooks过程中踩过的坑</a>
-    </h1>
-  
-
-        
-        <a href="/2018/11/13/react-hooks/" class="archive-article-date">
-  	<time datetime="2018-11-13T03:41:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-11-13</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="报错“TypeError-dispatcher-useState-is-not-a-function”"><a href="#报错“TypeError-dispatcher-useState-is-not-a-function”" class="headerlink" title="报错“TypeError: dispatcher.useState is not a function”"></a>报错“TypeError: dispatcher.useState is not a function”</h3><ul>
-<li>除了react版本要升级到16.7.0-alpha.0之外，react-dom也要升级到相应的版本。</li>
-</ul>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">"dependencies": &#123;</span><br><span class="line">  "react": "16.7.0-alpha.0",</span><br><span class="line">  "react-dom": "16.7.0-alpha.0",</span><br><span class="line">  "react-scripts": "2.1.1"</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
-<h3 id="useEffect和直接写有什么不同"><a href="#useEffect和直接写有什么不同" class="headerlink" title="useEffect和直接写有什么不同"></a>useEffect和直接写有什么不同</h3><ul>
-<li>useEffect相当于componentDidMount and componentDidUpdate，发生在render之后。时序不一样</li>
-<li>In React class components, the render method itself shouldn’t cause side effects. It would be too early — we typically want to perform our effects after React has updated the DOM. This is why in React classes, we put side effects into componentDidMount and componentDidUpdate.</li>
-</ul>
-<h3 id="如何避免不必要的effect对performance的负面影响"><a href="#如何避免不必要的effect对performance的负面影响" class="headerlink" title="如何避免不必要的effect对performance的负面影响"></a>如何避免不必要的effect对performance的负面影响</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">useEffect(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="built_in">document</span>.title = <span class="string">`You clicked <span class="subst">$&#123;count&#125;</span> times`</span>;</span><br><span class="line">&#125;, [count]); <span class="comment">// Only re-run the effect if count changes</span></span><br></pre></td></tr></table></figure>
-<h3 id="如何在不同的hooks之间共享数据"><a href="#如何在不同的hooks之间共享数据" class="headerlink" title="如何在不同的hooks之间共享数据"></a>如何在不同的hooks之间共享数据</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> [recipientID, setRecipientID] = useState(<span class="number">1</span>);</span><br><span class="line"><span class="keyword">const</span> isRecipientOnline = useFriendStatus(recipientID);</span><br></pre></td></tr></table></figure>
-<h3 id="用function-component怎样实现PureComponent？"><a href="#用function-component怎样实现PureComponent？" class="headerlink" title="用function component怎样实现PureComponent？"></a>用function component怎样实现PureComponent？</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Button = React.memo(<span class="function">(<span class="params">props</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// your component</span></span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>useMemo：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> memoizedValue = useMemo(<span class="function"><span class="params">()</span> =&gt;</span> computeExpensiveValue(a, b), [a, b]);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Parent</span>(<span class="params">&#123; a, b &#125;</span>) </span>&#123;</span><br><span class="line">  <span class="comment">// Only re-rendered if `a` changes:</span></span><br><span class="line">  <span class="keyword">const</span> child1 = useMemo(<span class="function"><span class="params">()</span> =&gt;</span> <span class="xml"><span class="tag">&lt;<span class="name">Child1</span> <span class="attr">a</span>=<span class="string">&#123;a&#125;</span> /&gt;</span></span>, [a]);</span><br><span class="line">  <span class="comment">// Only re-rendered if `b` changes:</span></span><br><span class="line">  <span class="keyword">const</span> child2 = useMemo(<span class="function"><span class="params">()</span> =&gt;</span> <span class="xml"><span class="tag">&lt;<span class="name">Child2</span> <span class="attr">b</span>=<span class="string">&#123;b&#125;</span> /&gt;</span></span>, [b]);</span><br><span class="line">  <span class="keyword">return</span> (</span><br><span class="line">    &lt;&gt;</span><br><span class="line">      &#123;child1&#125;</span><br><span class="line">      &#123;child2&#125;</span><br><span class="line">    &lt;<span class="regexp">/&gt;</span></span><br><span class="line"><span class="regexp">  )</span></span><br><span class="line"><span class="regexp">&#125;</span></span><br></pre></td></tr></table></figure>
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">javascript</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">framework</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">React</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Functional Programming</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/11/13/react-hooks/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
     </nav>
   
 
@@ -1209,10 +1181,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Frameworks</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">css</a>
               </li>
              
@@ -1222,6 +1190,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Javascript</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Frameworks</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1237,15 +1209,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Dom</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">html</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">随笔</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1265,6 +1237,10 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">React</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">JavaScript Modules</a>
               </li>
              
@@ -1281,10 +1257,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">React</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">Functional Programming</a>
               </li>
              
@@ -1297,7 +1269,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">Vue.js</a>
+                <a href="javascript:void(0)" class="js-tag color5">recompose</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">Design pattern</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">Functional programming</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1309,15 +1289,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">recompose</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">Design pattern</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">Functional programming</a>
+                <a href="javascript:void(0)" class="js-tag color2">Vue.js</a>
               </li>
              
               <li class="article-tag-list-item">
